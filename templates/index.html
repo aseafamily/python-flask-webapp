@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello to Blue House Mall</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <title>Welcome to Blue House Mall</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/test.css') }}">
 </head>
 <body>
     <main>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center">
-                    <img class="img-fluid mb-4" src="{{ url_for('static', filename='images/bhm.png') }}" alt="BHM Logo" width="200" height="200">
-                    <h1 class="display-6 fw-bold text-primary">Welcome to Blue House Mall's Web Site</h1>
-                    <ul class="list-unstyled">
-                        <li><a href="/todo">Emily's TODO</a></li>
+        <div>
+            <div>
+                <div>
+                    <h1 class="title">Welcome to the Blue House Mall Web Site</h1>
+                    <img class="houseimg" src="{{ url_for('static', filename='images/bhm.png') }}" alt="BHM Logo">
+                    <ul class="links">
+                        <li><a href="/todo">Emily's To-Do List</a></li>
                         <li><a href="/serve?u=2">Emily's Serve Practice</a></li>
                         <li><a href="/serve?u=1">Andrew's Serve Practice</a></li>
                     </ul>
