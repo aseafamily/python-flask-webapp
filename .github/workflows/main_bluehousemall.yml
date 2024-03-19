@@ -61,9 +61,6 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      - name: Remove test.db file
-        run: rm -f test.db
-      
       - name: Login to Azure
         uses: azure/login@v1
         with:
