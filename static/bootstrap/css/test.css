@@ -1,0 +1,23 @@
+.title {
+    color: black;
+    font-family: Verdana, sans-serif;
+    text-align: center;
+}
+
+.houseimg {
+    width: 400px;
+    height: 250px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    aspect-ratio: auto 350 / 200;
+}
+
+.links {
+    font-family: Verdana, sans-serif;
+    text-align: center;
+    list-style-type: none;
+}
+

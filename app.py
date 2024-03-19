@@ -68,7 +68,7 @@ def serve_index():
 
     if request.method == 'GET':
         serves_all = Serve.query.filter_by(player=player_id ).order_by(Serve.date.desc()).all()
-        current_date = datetime.now()
+        current_date = datetime.now() - timedelta(hours=8)
 
         # Query to get total serves, total duration, and count of records for the player per week
         weekly_results = Serve.query.with_entities(extract('year', Serve.date).label('year'),
