@@ -14,7 +14,7 @@
     <div class="form">
         <form action="{% block form_action %}{% endblock %}?u={{ u }}" method="POST">
             <table>
-                <tr>
+                <tr style="background-color: lightgrey;">
                     <td>Date:</td>
                     <td><input type="text" name="date" id="date" value="{% block form_date %}{% endblock %}"></td>
                 </tr>
@@ -26,7 +26,7 @@
                     <td class="user_input">First Serve Out:</td>
                     <td><input type="text" name="first_serve_out" id="first_serve_out" value="{% block form_first_serve_out %}{% endblock %}" inputmode="numeric"></td>
                 </tr>
-                <tr>
+                <tr style="background-color:lightgray;">
                     <td>First Serve Percent:</td>
                     <td class="serve-percent"><input type="text" name="first_serve_in_percent" id="first_serve_in_percent" value="{% block form_first_serve_in_percent %}{% endblock %}" inputmode="numeric"><span>%</span></td>
                 </tr>
@@ -38,7 +38,7 @@
                     <td class="user_input">Second Serve Out:</td>
                     <td><input type="text" name="second_serve_out" id="second_serve_out" value="{% block form_second_serve_out %}{% endblock %}" inputmode="numeric"></td>
                 </tr>
-                <tr>
+                <tr style="background-color:lightgray;">
                     <td>Second Serve Percent:</td>
                     <td class="serve-percent"><input type="text" name="second_serve_in_percent" id="second_serve_in_percent" value="{% block form_second_serve_in_percent %}{% endblock %}" inputmode="numeric"><span>%</span></td>
                 </tr>
@@ -50,7 +50,7 @@
                     <td class="user_input">Total Serve Out:</td>
                     <td><input type="text" name="total_serve_out" id="total_serve_out" value="{% block form_total_serve_out %}{% endblock %}" inputmode="numeric"></td>
                 </tr>
-                <tr>
+                <tr style="background-color:lightgray;">
                     <td>Total Serve Percent:</td>
                     <td class="serve-percent"><input type="text" name="total_serve_percent" id="total_serve_percent" value="{% block form_total_serve_percent %}{% endblock %}" inputmode="numeric"><span>%</span></td>
                 </tr>
