@@ -6,7 +6,7 @@
     {% else %}
     {% set days_since_last_serve = (now.date() - serves[0].date.date()).days %}
     <h4 style="text-align: center; color: {% if days_since_last_serve < 3 %}green{% elif days_since_last_serve < 6 %}black{% else %}red{% endif %};">
-        <p>It has been {{ days_since_last_serve }} days since last practice.</p>
+        <p>It has been {{ days_since_last_serve }} days since your last practice.</p>
         {% if days_since_last_serve < 3 %}
         <p>Good job! You have worked hard!</p>
         {% elif days_since_last_serve < 6 %}
@@ -48,6 +48,7 @@
 
         <div style="margin-left: 10px; margin-top: 20px; margin-bottom: 20px;">
             <a href="/serve/diagram?u={{ u }}">Diagram</a>
+            <hr>
             <a href="/serve/analysis?u={{ u }}">Analysis</a>
         </div>
 

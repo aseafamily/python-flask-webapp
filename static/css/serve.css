@@ -1,6 +1,6 @@
 body, html {
     margin: 0;
-    font-family: sans-serif;
+    font-family: Verdana, sans-serif;
 }
 
 .content {
@@ -46,6 +46,5 @@ td {
 }
 
 .user_input {
-    font-weight: bold;
     color: blue;
 }
