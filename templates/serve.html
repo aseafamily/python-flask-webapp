@@ -70,12 +70,18 @@
             </tr>
             {% for serve in serves %}
                 <tr>
-                    <td>{{ serve.date.date() }}</td>
+                    {% set weekday_abbr = serve.date.strftime('%a') %}
+                    {% if weekday_abbr in ['Mon', 'Wed', 'Fri'] %}
+                        {% set weekday_abbr = weekday_abbr[:1] %}
+                    {% elif weekday_abbr in ['Tue', 'Thu', 'Sat', 'Sun'] %}
+                        {% set weekday_abbr = weekday_abbr[:2] %}
+                    {% endif %}
+                    <td>{{ serve.date.date() }} {{ weekday_abbr }}</td>
                     <td>{{ serve.total_serve }}</td>
                     <td>{{ serve.total_serve_percent }}</td>
                     <td>{{ serve.location }}</td>
                     <td>
-                        <a href="/serve/update/{{serve.id}}?u={{ u }}" style="margin-left: 19px; margin-right: 20px;">U</a>
+                        <a href="/serve/update/{{serve.id}}?u={{ u }}" style="margin-left: 10px; margin-right: 20px;">U</a>
                         <a href="#" onclick="confirmDelete('{{ serve.id }}', '{{ u }}')">D</a>
                     </td>
                 </tr>
