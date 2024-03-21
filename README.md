@@ -25,4 +25,4 @@ Sample applications are available for the other frameworks here:
 If you need an Azure account, you can [create one for free](https://azure.microsoft.com/en-us/free/).
 
 
-# Merge PR test
+# Exclue db changes 2
