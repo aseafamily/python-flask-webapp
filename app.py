@@ -34,6 +34,18 @@ class Serve(db.Model):
     duration = db.Column(db.Integer, default=0)
     location = db.Column(db.String(200))
     comment = db.Column(db.String(1000))
+    first_serve_in_deuce = db.Column(db.Integer, default=0)
+    first_serve_out_deuce = db.Column(db.Integer, default=0)
+    second_serve_in_deuce = db.Column(db.Integer, default=0)
+    second_serve_out_deuce = db.Column(db.Integer, default=0)
+    first_serve_in_percent_deuce = db.Column(db.Integer, default=0)
+    second_serve_in_percent_deuce = db.Column(db.Integer, default=0)
+    first_serve_in_ad = db.Column(db.Integer, default=0)
+    first_serve_out_ad = db.Column(db.Integer, default=0)
+    second_serve_in_ad = db.Column(db.Integer, default=0)
+    second_serve_out_ad = db.Column(db.Integer, default=0)
+    first_serve_in_percent_ad = db.Column(db.Integer, default=0)
+    second_serve_in_percent_ad = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return '<Serve %r>' % self.id
@@ -146,6 +158,18 @@ def serve_index():
         location = request.form['location']
         comment = request.form['comment']
         player = player_id
+        first_serve_in_deuce = request.form['first_serve_in_deuce']
+        first_serve_out_deuce = request.form['first_serve_out_deuce']
+        first_serve_in_percent_deuce = request.form['first_serve_in_percent_deuce']
+        second_serve_in_deuce = request.form['second_serve_in_deuce']
+        second_serve_out_deuce = request.form['second_serve_out_deuce']
+        second_serve_in_percent_deuce = request.form['second_serve_in_percent_deuce']
+        first_serve_in_ad = request.form['first_serve_in_ad']
+        first_serve_out_ad = request.form['first_serve_out_ad']
+        first_serve_in_percent_ad = request.form['first_serve_in_percent_ad']
+        second_serve_in_ad = request.form['second_serve_in_ad']
+        second_serve_out_ad = request.form['second_serve_out_ad']
+        second_serve_in_percent_ad = request.form['second_serve_in_percent_ad']
 
         # Create an instance of Serve class
         serve_instance = Serve(
@@ -165,7 +189,19 @@ def serve_index():
             duration=duration,
             location=location,
             comment=comment,
-            player = player
+            player = player,
+            first_serve_in_deuce=first_serve_in_deuce,
+            first_serve_out_deuce=first_serve_out_deuce,
+            second_serve_in_deuce=second_serve_in_deuce,
+            second_serve_out_deuce=second_serve_out_deuce,
+            first_serve_in_percent_deuce=first_serve_in_percent_deuce,
+            second_serve_in_percent_deuce=second_serve_in_percent_deuce,
+            first_serve_in_ad=first_serve_in_ad,
+            first_serve_out_ad=first_serve_out_ad,
+            second_serve_in_ad=second_serve_in_ad,
+            second_serve_out_ad=second_serve_out_ad,
+            first_serve_in_percent_ad=first_serve_in_percent_ad,
+            second_serve_in_percent_ad=second_serve_in_percent_ad
         )
 
         # Add the instance to the database
@@ -205,6 +241,18 @@ def serve_update(id):
         serve.duration = request.form['duration']
         serve.location = request.form['location']
         serve.comment = request.form['comment']
+        serve.first_serve_in_deuce = request.form['first_serve_in_deuce']
+        serve.first_serve_out_deuce = request.form['first_serve_out_deuce']
+        serve.first_serve_in_percent_deuce = request.form['first_serve_in_percent_deuce']
+        serve.second_serve_in_deuce = request.form['second_serve_in_deuce']
+        serve.second_serve_out_deuce = request.form['second_serve_out_deuce']
+        serve.second_serve_in_percent_deuce = request.form['second_serve_in_percent_deuce']
+        serve.first_serve_in_ad = request.form['first_serve_in_ad']
+        serve.first_serve_out_ad = request.form['first_serve_out_ad']
+        serve.first_serve_in_percent_ad = request.form['first_serve_in_percent_ad']
+        serve.second_serve_in_ad = request.form['second_serve_in_ad']
+        serve.second_serve_out_ad = request.form['second_serve_out_ad']
+        serve.second_serve_in_percent_ad = request.form['second_serve_in_percent_ad']
 
         try:
             db.session.commit()

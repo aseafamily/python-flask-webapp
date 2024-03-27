@@ -23,24 +23,72 @@
                     <td><input type="text" name="first_serve_in" id="first_serve_in" value="{% block form_first_serve_in %}{% endblock %}" inputmode="numeric"></td>
                 </tr>
                 <tr>
+                    <td class="sub_serve">Deuce:</td>
+                    <td><input type="text" name="first_serve_in_deuce" id="first_serve_in_deuce" value="{% block form_first_serve_in_deuce %}{% endblock %}" inputmode="numeric"></td>
+                </tr>
+                <tr>
+                    <td class="sub_serve">Advantage:</td>
+                    <td><input type="text" name="first_serve_in_ad" id="first_serve_in_ad" value="{% block form_first_serve_in_ad %}{% endblock %}" inputmode="numeric"></td>
+                </tr>
+                <tr>
                     <td class="user_input">First Serve Out:</td>
                     <td><input type="text" name="first_serve_out" id="first_serve_out" value="{% block form_first_serve_out %}{% endblock %}" inputmode="numeric"></td>
+                </tr>
+                <tr>
+                    <td class="sub_serve">Deuce:</td>
+                    <td><input type="text" name="first_serve_out_deuce" id="first_serve_out_deuce" value="{% block form_first_serve_out_deuce %}{% endblock %}" inputmode="numeric"></td>
+                </tr>
+                <tr>
+                    <td class="sub_serve">Advantage:</td>
+                    <td><input type="text" name="first_serve_out_ad" id="first_serve_out_ad" value="{% block form_first_serve_out_ad %}{% endblock %}" inputmode="numeric"></td>
                 </tr>
                 <tr style="background-color:lightgray;">
                     <td>First Serve Percent:</td>
                     <td class="serve-percent"><input type="text" name="first_serve_in_percent" id="first_serve_in_percent" value="{% block form_first_serve_in_percent %}{% endblock %}" inputmode="numeric"><span>%</span></td>
+                </tr>
+                <tr style="background-color:lightgray;">
+                    <td class="sub_serve">Deuce:</td>
+                    <td class="serve-percent"><input type="text" name="first_serve_in_percent_deuce" id="first_serve_in_percent_deuce" value="{% block form_first_serve_in_percent_deuce %}{% endblock %}" inputmode="numeric"><span>%</span></td>
+                </tr>
+                <tr style="background-color:lightgray;">
+                    <td class="sub_serve">Advantage:</td>
+                    <td class="serve-percent"><input type="text" name="first_serve_in_percent_ad" id="first_serve_in_percent_ad" value="{% block form_first_serve_in_percent_ad %}{% endblock %}" inputmode="numeric"><span>%</span></td>
                 </tr>
                 <tr>
                     <td class="user_input">Second Serve In:</td>
                     <td><input type="text" name="second_serve_in" id="second_serve_in" value="{% block form_second_serve_in %}{% endblock %}" inputmode="numeric"></td>
                 </tr>
                 <tr>
+                    <td class="sub_serve">Deuce:</td>
+                    <td><input type="text" name="second_serve_in_deuce" id="second_serve_in_deuce" value="{% block form_second_serve_in_deuce %}{% endblock %}" inputmode="numeric"></td>
+                </tr>
+                <tr>
+                    <td class="sub_serve">Advantage:</td>
+                    <td><input type="text" name="second_serve_in_ad" id="second_serve_in_ad" value="{% block form_second_serve_in_ad %}{% endblock %}" inputmode="numeric"></td>
+                </tr>
+                <tr>
                     <td class="user_input">Second Serve Out:</td>
                     <td><input type="text" name="second_serve_out" id="second_serve_out" value="{% block form_second_serve_out %}{% endblock %}" inputmode="numeric"></td>
+                </tr>
+                <tr>
+                    <td class="sub_serve">Deuce:</td>
+                    <td><input type="text" name="second_serve_out_deuce" id="second_serve_out_deuce" value="{% block form_second_serve_out_deuce %}{% endblock %}" inputmode="numeric"></td>
+                </tr>
+                <tr>
+                    <td class="sub_serve">Advantage:</td>
+                    <td><input type="text" name="second_serve_out_ad" id="second_serve_out_ad" value="{% block form_second_serve_out_ad %}{% endblock %}" inputmode="numeric"></td>
                 </tr>
                 <tr style="background-color:lightgray;">
                     <td>Second Serve Percent:</td>
                     <td class="serve-percent"><input type="text" name="second_serve_in_percent" id="second_serve_in_percent" value="{% block form_second_serve_in_percent %}{% endblock %}" inputmode="numeric"><span>%</span></td>
+                </tr>
+                <tr style="background-color:lightgray;">
+                    <td class="sub_serve">Deuce:</td>
+                    <td class="serve-percent"><input type="text" name="second_serve_in_percent_deuce" id="second_serve_in_percent_deuce" value="{% block form_second_serve_in_percent_deuce %}{% endblock %}" inputmode="numeric"><span>%</span></td>
+                </tr>
+                <tr style="background-color:lightgray;">
+                    <td class="sub_serve">Advantage:</td>
+                    <td class="serve-percent"><input type="text" name="second_serve_in_percent_ad" id="second_serve_in_percent_ad" value="{% block form_second_serve_in_percent_ad %}{% endblock %}" inputmode="numeric"><span>%</span></td>
                 </tr>
                 <tr>
                     <td class="user_input">Total Serve In:</td>
@@ -187,6 +235,136 @@
     // Add event listeners to the input fields
     document.getElementById('total_serve_in').addEventListener('input', calculateTotalServe);
     document.getElementById('total_serve_out').addEventListener('input', calculateTotalServe);
+
+    // ============== first serve
+    function calculateFirstServe() {
+        var firstServeInDeuce = parseFloat(document.getElementById('first_serve_in_deuce').value);
+        var firstServeOutDeuce = parseFloat(document.getElementById('first_serve_out_deuce').value);
+        var firstServeInAd = parseFloat(document.getElementById('first_serve_in_ad').value);
+        var firstServeOutAd = parseFloat(document.getElementById('first_serve_out_ad').value);
+
+        var firstServeIn = (isNaN(firstServeInDeuce) ? 0 : firstServeInDeuce) + (isNaN(firstServeInAd) ? 0 : firstServeInAd);
+        if (firstServeIn > 0) {
+            document.getElementById('first_serve_in').value = firstServeIn;
+        }
+
+        var firstServeOut = (isNaN(firstServeOutDeuce) ? 0 : firstServeOutDeuce) + (isNaN(firstServeOutAd) ? 0 : firstServeOutAd);
+        if (firstServeOut > 0) {
+            document.getElementById('first_serve_out').value = firstServeOut;
+        }
+    }
+
+    // First Deuce
+    function calculateFirstServePercentageDeuce() {
+        var firstServeIn = parseFloat(document.getElementById('first_serve_in_deuce').value);
+        var firstServeOut = parseFloat(document.getElementById('first_serve_out_deuce').value);
+        
+        // Check if inputs are valid numbers
+        if (!isNaN(firstServeIn) && !isNaN(firstServeOut) && (firstServeIn + firstServeOut !== 0)) {
+            // Calculate the percentage and round it to the nearest integer
+            var percentage = Math.round((firstServeIn / (firstServeIn + firstServeOut)) * 100);
+            // Update the span with the calculated percentage
+            document.getElementById('first_serve_in_percent_deuce').value = percentage;
+        } else {
+            // If inputs are not valid, display an empty percentage
+            document.getElementById('first_serve_in_percent_deuce').value = "";
+        }
+
+        calculateFirstServe();
+        calculateFirstServePercentage();
+    }
+
+    // Add event listeners to the input fields
+    document.getElementById('first_serve_in_deuce').addEventListener('input', calculateFirstServePercentageDeuce);
+    document.getElementById('first_serve_out_deuce').addEventListener('input', calculateFirstServePercentageDeuce);
+
+    function calculateFirstServePercentageAd() {
+        var firstServeIn = parseFloat(document.getElementById('first_serve_in_ad').value);
+        var firstServeOut = parseFloat(document.getElementById('first_serve_out_ad').value);
+        
+        // Check if inputs are valid numbers
+        if (!isNaN(firstServeIn) && !isNaN(firstServeOut) && (firstServeIn + firstServeOut !== 0)) {
+            // Calculate the percentage and round it to the nearest integer
+            var percentage = Math.round((firstServeIn / (firstServeIn + firstServeOut)) * 100);
+            // Update the span with the calculated percentage
+            document.getElementById('first_serve_in_percent_ad').value = percentage;
+        } else {
+            // If inputs are not valid, display an empty percentage
+            document.getElementById('first_serve_in_percent_ad').value = "";
+        }
+
+        calculateFirstServe();
+        calculateFirstServePercentage();
+    }
+
+    // Add event listeners to the input fields
+    document.getElementById('first_serve_in_ad').addEventListener('input', calculateFirstServePercentageAd);
+    document.getElementById('first_serve_out_ad').addEventListener('input', calculateFirstServePercentageAd);
+
+    // ============== second serve
+    function calculateSecondServe() {
+        var firstServeInDeuce = parseFloat(document.getElementById('second_serve_in_deuce').value);
+        var firstServeOutDeuce = parseFloat(document.getElementById('second_serve_out_deuce').value);
+        var firstServeInAd = parseFloat(document.getElementById('second_serve_in_ad').value);
+        var firstServeOutAd = parseFloat(document.getElementById('second_serve_out_ad').value);
+
+        var firstServeIn = (isNaN(firstServeInDeuce) ? 0 : firstServeInDeuce) + (isNaN(firstServeInAd) ? 0 : firstServeInAd);
+        if (firstServeIn > 0) {
+            document.getElementById('second_serve_in').value = firstServeIn;
+        }
+
+        var firstServeOut = (isNaN(firstServeOutDeuce) ? 0 : firstServeOutDeuce) + (isNaN(firstServeOutAd) ? 0 : firstServeOutAd);
+        if (firstServeOut > 0) {
+            document.getElementById('second_serve_out').value = firstServeOut;
+        }
+    }
+
+    // Second Deuce
+    function calculateSecondServePercentageDeuce() {
+        var firstServeIn = parseFloat(document.getElementById('second_serve_in_deuce').value);
+        var firstServeOut = parseFloat(document.getElementById('second_serve_out_deuce').value);
+        
+        // Check if inputs are valid numbers
+        if (!isNaN(firstServeIn) && !isNaN(firstServeOut) && (firstServeIn + firstServeOut !== 0)) {
+            // Calculate the percentage and round it to the nearest integer
+            var percentage = Math.round((firstServeIn / (firstServeIn + firstServeOut)) * 100);
+            // Update the span with the calculated percentage
+            document.getElementById('second_serve_in_percent_deuce').value = percentage;
+        } else {
+            // If inputs are not valid, display an empty percentage
+            document.getElementById('second_serve_in_percent_deuce').value = "";
+        }
+
+        calculateSecondServe();
+        calculateSecondServePercentage();
+    }
+
+    // Add event listeners to the input fields
+    document.getElementById('second_serve_in_deuce').addEventListener('input', calculateSecondServePercentageDeuce);
+    document.getElementById('second_serve_out_deuce').addEventListener('input', calculateSecondServePercentageDeuce);
+
+    function calculateSecondServePercentageAd() {
+        var firstServeIn = parseFloat(document.getElementById('second_serve_in_ad').value);
+        var firstServeOut = parseFloat(document.getElementById('second_serve_out_ad').value);
+        
+        // Check if inputs are valid numbers
+        if (!isNaN(firstServeIn) && !isNaN(firstServeOut) && (firstServeIn + firstServeOut !== 0)) {
+            // Calculate the percentage and round it to the nearest integer
+            var percentage = Math.round((firstServeIn / (firstServeIn + firstServeOut)) * 100);
+            // Update the span with the calculated percentage
+            document.getElementById('second_serve_in_percent_ad').value = percentage;
+        } else {
+            // If inputs are not valid, display an empty percentage
+            document.getElementById('second_serve_in_percent_ad').value = "";
+        }
+
+        calculateSecondServe();
+        calculateSecondServePercentage();
+    }
+
+    // Add event listeners to the input fields
+    document.getElementById('second_serve_in_ad').addEventListener('input', calculateSecondServePercentageAd);
+    document.getElementById('second_serve_out_ad').addEventListener('input', calculateSecondServePercentageAd);
 </script>
 
     {% block bottom_part %}
