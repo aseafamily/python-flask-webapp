@@ -57,7 +57,7 @@ class ServeAnalysis:
 user_dict = {
     '1': 'Andrew',
     '2': 'Emily',
-    '3': 'Alex'
+    '0': 'Alex'
 }
 
 # Define a context processor to include the "u" query string parameter and the corresponding user name

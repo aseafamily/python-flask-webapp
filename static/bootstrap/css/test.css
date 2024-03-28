@@ -21,3 +21,38 @@
     list-style-type: none;
 }
 
+/* Center the div on the screen */
+.centered-div {
+    display: flex;
+    justify-content: center;
+    height: 100vh; /* Full height of the viewport */
+  }
+  
+  /* Style for the list */
+  .nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left; /* Left-align the list */
+  }
+  
+  /* Style for list items */
+  .nav-links li {
+    margin-bottom: 10px; /* Adjust spacing between list items */
+  }
+  
+  /* Style for links */
+  .nav-links li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+  }
+  
+  /* Hover effect for links */
+  .nav-links li a:hover {
+    background-color: #ddd;
+  }
+  
