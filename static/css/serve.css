@@ -53,3 +53,25 @@ td {
     text-align: right;
     color: skyblue;
 }
+
+/* Style for the iPhone-friendly button */
+.iphone-button {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 15px 20px;
+  font-size: 16px;
+  background-color: #007bff; /* Blue color, adjust as needed */
+  color: white;
+  border-radius: 5px;
+}
+
+/* Center the button */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
