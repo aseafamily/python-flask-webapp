@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="3600">
+<style>
+    /* Default table styles */
+    table {
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+    }
+
+    body, html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black; /* Set background color */
+    }
+    
+    body {
+        font-size: 24px; /* Adjust font size for better readability */
+        background-color: #000000; /* Black background for header */
+        color: #ffffff; /* White text color for header */
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+    }
+    table {
+        margin-top: 20px; /* Add space above the table */
+    }
+    th, td {
+        padding: 10px; /* Increase padding for better spacing */
+    }
+    
+</style>
+</head>
+<body>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Total</th>
+        <th>%</th>
+        <th>Days since last</th>
+        <th>Week</th>
+        <th>Week %</th>
+    </tr>
+    <tr>
+        <td>{{ status1.player_name }}</td>
+        <td>{{ status1.total_serves }}</td>
+        <td>{{ status1.total_serve_percentage }}%</td>
+        <td style="color: {% if status1.days_since_last_serve < 3 %}green{% elif status1.days_since_last_serve < 6 %}white{% else %}red{% endif %};">{{ status1.days_since_last_serve }}</td>
+        <td>{{ status1.records_this_week }}</td>
+        <td>{{ status1.serve_percentage_this_week }}%</td>
+    </tr>
+    <tr>
+        <td>{{ status2.player_name }}</td>
+        <td>{{ status2.total_serves }}</td>
+        <td>{{ status2.total_serve_percentage }}%</td>
+        <td style="color: {% if status2.days_since_last_serve < 3 %}green{% elif status2.days_since_last_serve < 6 %}white{% else %}red{% endif %};">{{ status2.days_since_last_serve }}</td>
+        <td>{{ status2.records_this_week }}</td>
+        <td>{{ status2.serve_percentage_this_week }}%</td>
+    </tr>
+</table>
+
+</body>
+</html>

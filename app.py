@@ -53,6 +53,9 @@ class Serve(db.Model):
 class ServeAnalysis:
     pass  # Empty class definition
 
+class ServeStatus:
+    pass  # Empty class definition
+
 # Hardcoded dictionary mapping user IDs to names
 user_dict = {
     '1': 'Andrew',
@@ -317,6 +320,62 @@ def get_week_range(date):
     end_of_week = start_of_week + timedelta(days=6)
     return start_of_week, end_of_week
 
+@app.route('/serve/status')
+def serve_status():
+    status1 = get_serve_status(1)
+    status2 = get_serve_status(2)
+    return render_template('serve_status.html', status1=status1, status2=status2)
+
+def get_serve_status(player_id):
+    status = ServeStatus()
+    status.player_name = user_dict.get(str(player_id), '')
+    status.total_serves = calculate_total_serves(player_id)
+    status.total_serve_percentage = calculate_total_serve_percentage(player_id)
+    status.days_since_last_serve = calculate_days_since_last_serve(player_id)
+    status.records_this_week = calculate_records_this_week(player_id)
+    status.serve_percentage_this_week = calculate_serve_percentage_this_week(player_id)
+    return status
+
+def calculate_total_serves(player_id):
+    total_serves = Serve.query.filter_by(player=player_id).with_entities(db.func.sum(Serve.total_serve)).scalar()
+    return total_serves if total_serves is not None else 0
+
+def calculate_total_serve_percentage(player_id):
+    total_serves = calculate_total_serves(player_id)
+    total_serve_in = Serve.query.filter_by(player=player_id).with_entities(db.func.sum(Serve.total_serve_in)).scalar()
+    total_serve_percentage = (total_serve_in / total_serves) * 100
+    return int(total_serve_percentage)
+
+def calculate_days_since_last_serve(player_id):
+    last_serve_date = Serve.query.filter_by(player=player_id).order_by(Serve.date.desc()).first().date
+    days_since_last_serve = (datetime.utcnow() - timedelta(hours=8) - last_serve_date).days
+    return days_since_last_serve
+
+def calculate_records_this_week(player_id):
+    today = datetime.utcnow()
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+    records_this_week = Serve.query.filter_by(player=player_id).filter(Serve.date.between(start_of_week, end_of_week)).count()
+    return records_this_week
+
+def calculate_serve_percentage_this_week(player_id):
+    today = datetime.utcnow()
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+    
+    serves_this_week = Serve.query.filter_by(player=player_id).filter(Serve.date.between(start_of_week, end_of_week)).all()
+    
+    if not serves_this_week:
+        return 0  # Return 0 if no serves recorded this week
+    
+    total_serves_this_week = sum(serve.total_serve for serve in serves_this_week)
+    total_serve_in_this_week = sum(serve.total_serve_in for serve in serves_this_week)
+    
+    if total_serves_this_week == 0:
+        return 0  # Avoid division by zero
+    
+    serve_percentage_this_week = (total_serve_in_this_week / total_serves_this_week) * 100
+    return int(serve_percentage_this_week)  # Cast to integer
 
 @app.route('/serve/diagram')
 def serve_diagram():
