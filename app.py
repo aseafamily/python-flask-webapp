@@ -333,6 +333,7 @@ def get_serve_status(player_id):
     status.total_serve_percentage = calculate_total_serve_percentage(player_id)
     status.days_since_last_serve = calculate_days_since_last_serve(player_id)
     status.records_this_week = calculate_records_this_week(player_id)
+    status.serve_this_week = calculate_serve_this_week(player_id)
     status.serve_percentage_this_week = calculate_serve_percentage_this_week(player_id)
     return status
 
@@ -357,6 +358,19 @@ def calculate_records_this_week(player_id):
     end_of_week = start_of_week + timedelta(days=6)
     records_this_week = Serve.query.filter_by(player=player_id).filter(Serve.date.between(start_of_week, end_of_week)).count()
     return records_this_week
+
+def calculate_serve_this_week(player_id):
+    today = datetime.utcnow()
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+    
+    serves_this_week = Serve.query.filter_by(player=player_id).filter(Serve.date.between(start_of_week, end_of_week)).all()
+    
+    if not serves_this_week:
+        return 0  # Return 0 if no serves recorded this week
+    
+    total_serves_this_week = sum(serve.total_serve for serve in serves_this_week)
+    return total_serves_this_week
 
 def calculate_serve_percentage_this_week(player_id):
     today = datetime.utcnow()

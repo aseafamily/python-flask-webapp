@@ -56,7 +56,7 @@
         <td>{{ status1.total_serves }}</td>
         <td>{{ status1.total_serve_percentage }}%</td>
         <td style="color: {% if status1.days_since_last_serve < 3 %}green{% elif status1.days_since_last_serve < 6 %}white{% else %}red{% endif %};">{{ status1.days_since_last_serve }}</td>
-        <td>{{ status1.records_this_week }}</td>
+        <td>{{ status1.records_this_week }}<br>{{ status1.serve_this_week }}</td>
         <td>{{ status1.serve_percentage_this_week }}%</td>
     </tr>
     <tr>
@@ -64,7 +64,7 @@
         <td>{{ status2.total_serves }}</td>
         <td>{{ status2.total_serve_percentage }}%</td>
         <td style="color: {% if status2.days_since_last_serve < 3 %}green{% elif status2.days_since_last_serve < 6 %}white{% else %}red{% endif %};">{{ status2.days_since_last_serve }}</td>
-        <td>{{ status2.records_this_week }}</td>
+        <td>{{ status2.records_this_week }}<br>{{ status2.serve_this_week }}</td>
         <td>{{ status2.serve_percentage_this_week }}%</td>
     </tr>
 </table>
