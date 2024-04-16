@@ -320,7 +320,8 @@ def get_week_range(date):
     end_of_week = start_of_week + timedelta(days=6)
     return start_of_week, end_of_week
 
-@app.route('/all_status')
+#@app.route('/all_status')
+@app.route('/serve/status')
 def all_status():
     status1 = get_serve_status(1)
     status2 = get_serve_status(2)
