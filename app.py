@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, send_file
+from flask import Flask, render_template, url_for, request, redirect, send_file, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
@@ -542,6 +542,12 @@ class TennisAnalysis:
 
 class TennisStatus:
     pass  # Empty class definition
+
+@app.route('/categories', methods=['GET'])
+def get_categories():
+    categories = Tennis.query.with_entities(Tennis.category).distinct().all()
+    categories_list = [category[0] for category in categories]
+    return jsonify(categories_list)
 
 @app.route('/tennis', methods=['POST', 'GET'])
 def tennis_index():

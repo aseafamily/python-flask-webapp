@@ -27,7 +27,9 @@
                 </tr>
                 <tr>
                     <td class="user_input">Category:</td>
-                    <td><input type="text" name="category" id="category" value="{% block form_category %}{% endblock %}"></td>
+                    <td>
+                        <input type="text" name="category" id="category" value="{% block form_category %}{% endblock %}">
+                    </td>
                 </tr>
                 <tr>
                     <td class="user_input">Details:</td>
@@ -53,6 +55,36 @@
     if (!document.getElementById('date').value) {
         document.getElementById('date').value = formattedDate;
     }
+</script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#category').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+        $('#category').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: '/categories',
+                    dataType: 'json',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#category').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
 </script>
 
     {% block bottom_part %}
