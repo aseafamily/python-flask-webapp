@@ -408,21 +408,24 @@ def calculate_days_since_last_entry(player_id):
 def calculate_records_this_week(player_id):
     today = datetime.utcnow()
     start_of_week = today - timedelta(days=today.weekday())
-    end_of_week = start_of_week + timedelta(days=6)
+    end_of_week = start_of_week + timedelta(days=7)
+    start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
     records_this_week = Serve.query.filter_by(player=player_id).filter(Serve.date.between(start_of_week, end_of_week)).count()
     return records_this_week
 
 def calculate_tennis_records_this_week(player_id):
     today = datetime.utcnow()
     start_of_week = today - timedelta(days=today.weekday())
-    end_of_week = start_of_week + timedelta(days=6)
+    end_of_week = start_of_week + timedelta(days=7)
+    start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
     records_this_week = Tennis.query.filter_by(player=player_id).filter(Tennis.date.between(start_of_week, end_of_week)).count()
     return records_this_week
 
 def calculate_serve_this_week(player_id):
     today = datetime.utcnow()
     start_of_week = today - timedelta(days=today.weekday())
-    end_of_week = start_of_week + timedelta(days=6)
+    start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_of_week = start_of_week + timedelta(days=7)
     
     serves_this_week = Serve.query.filter_by(player=player_id).filter(Serve.date.between(start_of_week, end_of_week)).all()
     
@@ -435,7 +438,8 @@ def calculate_serve_this_week(player_id):
 def calculate_tennis_this_week(player_id):
     today = datetime.utcnow()
     start_of_week = today - timedelta(days=today.weekday())
-    end_of_week = start_of_week + timedelta(days=6)
+    start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_of_week = start_of_week + timedelta(days=7)
     
     serves_this_week = Tennis.query.filter_by(player=player_id).filter(Tennis.date.between(start_of_week, end_of_week)).all()
     
