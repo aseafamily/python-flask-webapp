@@ -49,7 +49,7 @@ class Serve(db.Model):
 
     def __repr__(self):
         return '<Serve %r>' % self.id
-
+    
 class ServeAnalysis:
     pass  # Empty class definition
 
@@ -320,11 +320,20 @@ def get_week_range(date):
     end_of_week = start_of_week + timedelta(days=6)
     return start_of_week, end_of_week
 
-@app.route('/serve/status')
-def serve_status():
+@app.route('/all_status')
+def all_status():
     status1 = get_serve_status(1)
     status2 = get_serve_status(2)
-    return render_template('serve_status.html', status1=status1, status2=status2)
+    log0 = get_tennis_status(0)
+    log1 = get_tennis_status(1)
+    log2 = get_tennis_status(2)
+    return render_template('all_status.html', status1=status1, status2=status2, log0=log0, log1=log1, log2=log2)
+
+#@app.route('/serve/status')
+#def serve_status():
+#    status1 = get_serve_status(1)
+#    status2 = get_serve_status(2)
+#    return render_template('serve_status.html', status1=status1, status2=status2)
 
 def get_serve_status(player_id):
     status = ServeStatus()
@@ -337,9 +346,47 @@ def get_serve_status(player_id):
     status.serve_percentage_this_week = calculate_serve_percentage_this_week(player_id)
     return status
 
+def get_tennis_status(player_id):
+    status = TennisStatus()
+    status.player_name = user_dict.get(str(player_id), '')
+    status.total_duration = round(calculate_total_tennis_duration(player_id))
+    status.weekly_duration = round(calculate_weekly_tennis_duration(player_id))
+    status.days_since_last_entry = calculate_days_since_last_entry(player_id)
+    status.records_this_week = calculate_tennis_records_this_week(player_id)
+    status.duration_this_week = round(calculate_tennis_this_week(player_id))
+    return status
+
 def calculate_total_serves(player_id):
     total_serves = Serve.query.filter_by(player=player_id).with_entities(db.func.sum(Serve.total_serve)).scalar()
     return total_serves if total_serves is not None else 0
+
+def calculate_total_tennis_duration(player_id):
+    total_serves = Tennis.query.filter_by(player=player_id).with_entities(db.func.sum(Tennis.duration)).scalar()
+    return total_serves if total_serves is not None else 0
+
+def calculate_weekly_tennis_duration(player_id):
+    weekly_results = Tennis.query.with_entities(extract('year', Tennis.date).label('year'),
+                                                extract('week', Tennis.date).label('week'),
+                                                func.sum(Tennis.duration),
+                                                func.count(Tennis.id)) \
+                                    .filter(Tennis.player == player_id) \
+                                    .group_by('year', 'week') \
+                                    .all()
+    total_duration_weekly = 0
+    total_records_weekly = 0
+
+    # Iterate over the weekly results and calculate totals
+    for _, _, duration, records in weekly_results:
+        total_duration_weekly += duration or 0
+        total_records_weekly += records or 0
+
+    # Calculate the number of weeks
+    num_weeks = len(weekly_results)
+
+    # Calculate averages for weekly data
+    average_duration_per_week = total_duration_weekly / num_weeks if num_weeks > 0 else 0
+    
+    return average_duration_per_week
 
 def calculate_total_serve_percentage(player_id):
     total_serves = calculate_total_serves(player_id)
@@ -352,11 +399,23 @@ def calculate_days_since_last_serve(player_id):
     days_since_last_serve = (datetime.utcnow() - timedelta(hours=8) - last_serve_date).days
     return days_since_last_serve
 
+def calculate_days_since_last_entry(player_id):
+    last_serve_date = Tennis.query.filter_by(player=player_id).order_by(Tennis.date.desc()).first().date
+    days_since_last_serve = (datetime.utcnow() - timedelta(hours=8) - last_serve_date).days
+    return days_since_last_serve
+
 def calculate_records_this_week(player_id):
     today = datetime.utcnow()
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=6)
     records_this_week = Serve.query.filter_by(player=player_id).filter(Serve.date.between(start_of_week, end_of_week)).count()
+    return records_this_week
+
+def calculate_tennis_records_this_week(player_id):
+    today = datetime.utcnow()
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+    records_this_week = Tennis.query.filter_by(player=player_id).filter(Tennis.date.between(start_of_week, end_of_week)).count()
     return records_this_week
 
 def calculate_serve_this_week(player_id):
@@ -370,6 +429,19 @@ def calculate_serve_this_week(player_id):
         return 0  # Return 0 if no serves recorded this week
     
     total_serves_this_week = sum(serve.total_serve for serve in serves_this_week)
+    return total_serves_this_week
+
+def calculate_tennis_this_week(player_id):
+    today = datetime.utcnow()
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+    
+    serves_this_week = Tennis.query.filter_by(player=player_id).filter(Tennis.date.between(start_of_week, end_of_week)).all()
+    
+    if not serves_this_week:
+        return 0  # Return 0 if no serves recorded this week
+    
+    total_serves_this_week = sum(serve.duration for serve in serves_this_week)
     return total_serves_this_week
 
 def calculate_serve_percentage_this_week(player_id):
@@ -449,6 +521,141 @@ def serve_diagram():
         })
 
     return render_template('serve_diagram.html', serves=serves_all, weekly_stats=weekly_stats)
+
+# The tennis stuff =========================================================================
+
+class Tennis(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    player = db.Column(db.Integer, nullable=False)
+    duration = db.Column(db.Float)
+    location = db.Column(db.String(200))
+    category = db.Column(db.String(200))
+    details = db.Column(db.String(200))
+
+    def __repr__(self):
+        return '<Tennis %r>' % self.id
+
+class TennisAnalysis:
+    pass  # Empty class definition
+
+class TennisStatus:
+    pass  # Empty class definition
+
+@app.route('/tennis', methods=['POST', 'GET'])
+def tennis_index():
+    player_id = request.args.get('u')
+
+    if request.method == 'GET':
+        tennis_all = Tennis.query.filter_by(player=player_id ).order_by(Tennis.date.desc()).all()
+        current_date = datetime.now() - timedelta(hours=8)
+
+        weekly_results = Tennis.query.with_entities(extract('year', Tennis.date).label('year'),
+                                                extract('week', Tennis.date).label('week'),
+                                                func.sum(Tennis.duration),
+                                                func.count(Tennis.id)) \
+                                    .filter(Tennis.player == player_id) \
+                                    .group_by('year', 'week') \
+                                    .all()
+
+        # Initialize variables for weekly data
+        total_duration_weekly = 0
+        total_records_weekly = 0
+
+        # Iterate over the weekly results and calculate totals
+        for _, _, duration, records in weekly_results:
+            total_duration_weekly += duration or 0
+            total_records_weekly += records or 0
+
+        # Calculate the number of weeks
+        num_weeks = len(weekly_results)
+
+        # Calculate averages for weekly data
+        average_duration_per_week = total_duration_weekly / num_weeks if num_weeks > 0 else 0
+        average_records_per_week = total_records_weekly / num_weeks if num_weeks > 0 else 0
+
+        # Query to get total serves, total duration, and count of all records for the player
+        total_results = Tennis.query.with_entities(func.sum(Tennis.duration),
+                                                func.count(Tennis.id)) \
+                                    .filter(Tennis.player == player_id) \
+                                    .first()
+
+        # Extract values from the total results
+        total_duration = total_results[0] or 0
+        total_records = total_results[1] or 0
+
+        # Calculate the time since the first entry
+        first_entry = Tennis.query.filter_by(player=player_id).order_by(Tennis.date.asc()).first()
+        time_since_first_entry = datetime.now() - first_entry.date if first_entry else timedelta(0)
+
+        # Round up to days
+        time_since_first_entry_rounded = timedelta(days=time_since_first_entry.days)
+
+        # Create an instance of TennisAnalysis class
+        tennis_analysis = TennisAnalysis()
+        tennis_analysis.total_duration = total_duration
+        tennis_analysis.total_records = total_records
+        tennis_analysis.average_duration_per_week = average_duration_per_week
+        tennis_analysis.average_records_per_week = average_records_per_week
+        tennis_analysis.time_since_first_entry = time_since_first_entry_rounded
+
+        return render_template('tennis.html', tennis_all=tennis_all, now=current_date, tennis_analysis=tennis_analysis)
+    else:
+        # Retrieve form data
+        date = datetime.strptime(request.form['date'], '%Y-%m-%d')
+        duration = request.form['duration']
+        location = request.form['location']
+        category = request.form['category']
+        details = request.form['details']
+        player = player_id
+
+        # Create an instance of Tennis class
+        tennis_instance = Tennis(
+            date=date,
+            duration=duration,
+            location=location,
+            category=category,
+            details=details,
+            player = player
+        )
+
+        # Add the instance to the database
+        db.session.add(tennis_instance)
+        db.session.commit()
+        return redirect('/tennis?u=' + player_id)
+    
+@app.route('/tennis/delete/<int:id>')
+def tennis_delete(id):
+    tennis_to_delete = Tennis.query.get_or_404(id)
+    uid = request.args.get('u')
+
+    try:
+        db.session.delete(tennis_to_delete)
+        db.session.commit()
+        return redirect('/tennis?u=' + uid)
+    except:
+        return 'There was a problem deleting that task'
+    
+@app.route('/tennis/update/<int:id>', methods=['GET', 'POST'])
+def tennis_update(id):
+    tennis = Tennis.query.get_or_404(id)
+    uid = request.args.get('u')
+
+    if request.method == 'POST':
+        tennis.date = datetime.strptime(request.form['date'], '%Y-%m-%d')
+        tennis.duration = request.form['duration']
+        tennis.location = request.form['location']
+        tennis.category = request.form['category']
+        tennis.details = request.form['details']        
+
+        try:
+            db.session.commit()
+            return redirect('/tennis?u=' + uid)
+        except:
+            return 'There was an issue updating your task'
+
+    else:
+        return render_template('tennis_update.html', tennis=tennis)
 
 # The TODO App entries =====================================================================
 

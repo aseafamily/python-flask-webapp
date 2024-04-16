@@ -1,0 +1,75 @@
+{% extends 'tennis_form_base.html' %}
+
+{% block first_part %}
+    {% if tennis_all|length < 1 %}
+    <h4 style="text-align: center">You haven't practiced tennis yet. Do it now!</h4>
+    {% else %}
+    {% set days_since_last_serve = (now.date() - tennis_all[0].date.date()).days %}
+    <h4 style="text-align: center; color: {% if days_since_last_serve < 3 %}green{% elif days_since_last_serve < 6 %}black{% else %}red{% endif %};">
+        <p>It has been {{ days_since_last_serve }} days since your last practice.</p>
+        {% if days_since_last_serve < 3 %}
+        <p>Good job! You have worked hard!</p>
+        {% elif days_since_last_serve < 6 %}
+        <p>Practice again as soon as you can!</p>
+        {% else %}
+        <p>It's been a week you last practiced, you better do it now!</p>
+        {% endif %}
+    </h4>
+    {% endif %}
+{% endblock %}
+
+{% block form_action %}/tennis{% endblock %}
+
+{% block form_date %}{% endblock %}
+{% block form_duration %}{% endblock %}
+{% block form_location %}{% endblock %}
+{% block form_category %}{% endblock %}
+{% block form_details %}{% endblock %}
+
+{% block bottom_part %}
+    <div class="content" style="margin-top: 30px;">
+        <div>
+            {% if tennis_all|length >= 1 %}
+            <p>Total Practice: {{ tennis_analysis.total_records }}</p>
+            <p>Practice per week: {{ "{:.1f}".format(tennis_analysis.average_records_per_week) }}</p>
+            <p>Total Duration (hours): {{ tennis_analysis.total_duration }}</p>
+            <p>Duration per week (hours): {{ "{:.0f}".format(tennis_analysis.average_duration_per_week) }}</p>
+            <p>Started: {{ tennis_analysis.time_since_first_entry.days }} days ago</p>
+        </div>
+        <script>
+            function confirmDelete(entryId, u) {
+                var result = confirm("Are you sure you want to delete this entry?");
+                if (result) {
+                    window.location.href = "/tennis/delete/" + entryId + "?u=" + u;
+                }
+            }
+        </script>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Long</th>
+                <th>Type</th>
+                <th>Loc</th>
+            </tr>
+            {% for tennis in tennis_all %}
+                <tr>
+                    {% set weekday_abbr = tennis.date.strftime('%a') %}
+                    {% if weekday_abbr in ['Mon', 'Wed', 'Fri'] %}
+                        {% set weekday_abbr = weekday_abbr[:1] %}
+                    {% elif weekday_abbr in ['Tue', 'Thu', 'Sat', 'Sun'] %}
+                        {% set weekday_abbr = weekday_abbr[:2] %}
+                    {% endif %}
+                    <td>{{ tennis.date.date() }} {{ weekday_abbr }}</td>
+                    <td>{{ tennis.duration }}</td>
+                    <td>{{ tennis.category }}</td>
+                    <td>{{ tennis.location }}</td>
+                    <td>
+                        <a href="/tennis/update/{{tennis.id}}?u={{ u }}" style="margin-left: 10px; margin-right: 20px;">U</a>
+                        <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')">D</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+{% endblock %}

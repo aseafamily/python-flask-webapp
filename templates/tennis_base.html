@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/serve.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <h1 style="text-align: center">{{ user_name }}'s Tennis Log</h1>
+    {% block body %}
+    {% endblock %}
+    <h2 style="text-align: center"><a href="/">Home</a></h2>
+</body>
+</html>

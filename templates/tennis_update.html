@@ -1,0 +1,14 @@
+{% extends 'tennis_form_base.html' %}
+
+{% block first_part %}
+
+<p>ID: {{ tennis.id }}</p>
+    
+{% endblock %}
+
+{% block form_action %}/tennis/update/{{tennis.id}}{% endblock %}
+{% block form_date %}{{tennis.date.date()}}{% endblock %}
+{% block form_duration %}{{tennis.duration}}{% endblock %}
+{% block form_location %}{{tennis.location}}{% endblock %}
+{% block form_category %}{{tennis.category}}{% endblock %}
+{% block form_details %}{{tennis.details}}{% endblock %}

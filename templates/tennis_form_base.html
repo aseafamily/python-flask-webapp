@@ -1,0 +1,61 @@
+{% extends 'tennis_base.html' %}
+
+{% block head %}
+<title>{{ user_name }}'s Tennis Log</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    {% block first_part %}
+    {% endblock %}
+
+
+    <div class="form">
+        <form action="{% block form_action %}{% endblock %}?u={{ u }}" method="POST">
+            <table>
+                <tr style="background-color: lightgrey;">
+                    <td>Date:</td>
+                    <td><input type="text" name="date" id="date" value="{% block form_date %}{% endblock %}"></td>
+                </tr>
+                <tr>
+                    <td class="user_input">Duration in hours:</td>
+                    <td><input type="text" name="duration" id="duration" value="{% block form_duration %}{% endblock %}" inputmode="numeric"></td>
+                </tr>
+                <tr>
+                    <td class="user_input">Location:</td>
+                    <td><input type="text" name="location" id="location" value="{% block form_location %}{% endblock %}"></td>
+                </tr>
+                <tr>
+                    <td class="user_input">Category:</td>
+                    <td><input type="text" name="category" id="category" value="{% block form_category %}{% endblock %}"></td>
+                </tr>
+                <tr>
+                    <td class="user_input">Details:</td>
+                    <td><input type="text" name="details" id="details" value="{% block form_details %}{% endblock %}"></td>
+                </tr>
+            </table>
+            <br>
+            <div class="container">
+                <input class="iphone-button" type="submit" value="Submit">
+            </div>
+        </form>
+    </div>    
+</div>
+
+<script>
+    // Get today's date
+    var today = new Date();
+    
+    // Format the date as YYYY-MM-DD
+    var formattedDate = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
+    
+    // Set the value of the input field with today's date
+    if (!document.getElementById('date').value) {
+        document.getElementById('date').value = formattedDate;
+    }
+</script>
+
+    {% block bottom_part %}
+    {% endblock %}
+
+{% endblock %}
