@@ -32,8 +32,8 @@
             {% if tennis_all|length >= 1 %}
             <p>Total Practice: {{ tennis_analysis.total_records }}</p>
             <p>Practice per week: {{ "{:.1f}".format(tennis_analysis.average_records_per_week) }}</p>
-            <p>Total Duration (hours): {{ tennis_analysis.total_duration }}</p>
-            <p>Duration per week (hours): {{ "{:.0f}".format(tennis_analysis.average_duration_per_week) }}</p>
+            <p>Total Duration (hours): {{ "{:.1f}".format(tennis_analysis.total_duration / 60) }}</p>
+            <p>Duration per week (hours): {{ "{:.0f}".format(tennis_analysis.average_duration_per_week / 60) }}</p>
             <p>Started: {{ tennis_analysis.time_since_first_entry.days }} days ago</p>
         </div>
         <script>
@@ -61,13 +61,17 @@
                         {% set weekday_abbr = weekday_abbr[:2] %}
                     {% endif %}
                     <td>{{ tennis.date.date() }} {{ weekday_abbr }}</td>
-                    <td>{{ tennis.duration }}</td>
+                    <td>{{ "{:.1f}".format(tennis.duration / 60) }}</td>
                     <td>{{ tennis.category }}</td>
                     <td>{{ tennis.location }}</td>
                     <td>
                         <a href="/tennis/update/{{tennis.id}}?u={{ u }}" style="margin-left: 10px; margin-right: 20px;">U</a>
                         <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')">D</a>
                     </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="4">{{ tennis.details }}</td>
                 </tr>
             {% endfor %}
         </table>

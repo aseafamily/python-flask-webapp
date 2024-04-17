@@ -350,11 +350,11 @@ def get_serve_status(player_id):
 def get_tennis_status(player_id):
     status = TennisStatus()
     status.player_name = user_dict.get(str(player_id), '')
-    status.total_duration = round(calculate_total_tennis_duration(player_id))
-    status.weekly_duration = round(calculate_weekly_tennis_duration(player_id))
+    status.total_duration = round(calculate_total_tennis_duration(player_id)/60)
+    status.weekly_duration = round(calculate_weekly_tennis_duration(player_id)/60)
     status.days_since_last_entry = calculate_days_since_last_entry(player_id)
     status.records_this_week = calculate_tennis_records_this_week(player_id)
-    status.duration_this_week = round(calculate_tennis_this_week(player_id))
+    status.duration_this_week = round(calculate_tennis_this_week(player_id)/60)
     return status
 
 def calculate_total_serves(player_id):

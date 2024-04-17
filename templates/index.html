@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome to Blue House Mall</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/test.css') }}">
+    <style>
+        .emily {
+            background-color: black !important;
+            color: whitesmoke !important;
+        }
+        .andrew {
+            background-color: orange !important;
+        }
+        .alex {
+            background-color: lightblue !important;
+        }
+    </style>
 </head>
 <body>
     <main>
@@ -15,14 +27,14 @@
                     <img class="houseimg" src="{{ url_for('static', filename='images/bhm.png') }}" alt="BHM Logo">
                     <div class="centered-div">
                         <ul class="links nav-links">
-                            <li><a href="/tennis?u=2">Emily's Tennis Log</a></li>
-                            <li><a href="/serve?u=2">Emily's Serve Practice</a></li>
-                            <li><a href="/tennis?u=1">Andrew's Tennis Log</a></li>
-                            <li><a href="/serve?u=1">Andrew's Serve Practice</a></li>
-                            <li><a href="/tennis?u=0">Alex's Tennis Log</a></li>
-                            <li><a href="/serve?u=0">Alex's Serve Practice</a></li>
-                            <li><a href="/serve/status">All Status</a></li>
-                            <li><a href="/todo">Emily's To-Do List</a></li>
+                            <li><a class="emily" href="/tennis?u=2">Emily's Tennis Log</a></li>
+                            <li><a class="emily" href="/serve?u=2">Emily's Serve Practice</a></li>
+                            <li><a class="andrew" href="/tennis?u=1">Andrew's Tennis Log</a></li>
+                            <li><a class="andrew" href="/serve?u=1">Andrew's Serve Practice</a></li>
+                            <li><a class= "alex" href="/tennis?u=0">Alex's Tennis Log</a></li>
+                            <li><a class= "alex" href="/serve?u=0">Alex's Serve Practice</a></li>
+                            <li><a href="/serve/status">Tennis Status</a></li>
+                            <li><a href="/todo">To-Do List</a></li>
                         </ul>
                     </div>
                 </div>
