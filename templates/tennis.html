@@ -33,7 +33,11 @@
             <p>Total Practice: {{ tennis_analysis.total_records }}</p>
             <p>Practice per week: {{ "{:.1f}".format(tennis_analysis.average_records_per_week) }}</p>
             <p>Total Duration (hours): {{ "{:.1f}".format(tennis_analysis.total_duration / 60) }}</p>
-            <p>Duration per week (hours): {{ "{:.0f}".format(tennis_analysis.average_duration_per_week / 60) }}</p>
+            <p>Total Tennis Duration (hours): {{ "{:.1f}".format((tennis_analysis.total_duration - tennis_analysis.total_fitness_duration) / 60) }}</p>
+            <p>Total Fitness Duration (hours): {{ "{:.1f}".format(tennis_analysis.total_fitness_duration / 60) }}</p>
+            <p>Weekly Duration (hours): {{ "{:.0f}".format(tennis_analysis.average_duration_per_week / 60) }}</p>
+            <p>Weekly Tennis Duration (hours): {{ "{:.0f}".format((tennis_analysis.average_duration_per_week - tennis_analysis.average_fitness_duration_per_week) / 60) }}</p>
+            <p>Weekly Fitness Duration (hours): {{ "{:.0f}".format(tennis_analysis.average_fitness_duration_per_week / 60) }}</p>
             <p>Started: {{ tennis_analysis.time_since_first_entry.days }} days ago</p>
         </div>
         <script>

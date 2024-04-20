@@ -355,6 +355,7 @@ def get_tennis_status(player_id):
     status.days_since_last_entry = calculate_days_since_last_entry(player_id)
     status.records_this_week = calculate_tennis_records_this_week(player_id)
     status.duration_this_week = round(calculate_tennis_this_week(player_id)/60)
+    status.fitness_this_week = round(calculate_fitness_this_week(player_id)/60)
     return status
 
 def calculate_total_serves(player_id):
@@ -442,6 +443,20 @@ def calculate_tennis_this_week(player_id):
     end_of_week = start_of_week + timedelta(days=7)
     
     serves_this_week = Tennis.query.filter_by(player=player_id).filter(Tennis.date.between(start_of_week, end_of_week)).all()
+    
+    if not serves_this_week:
+        return 0  # Return 0 if no serves recorded this week
+    
+    total_serves_this_week = sum(serve.duration for serve in serves_this_week)
+    return total_serves_this_week
+
+def calculate_fitness_this_week(player_id):
+    today = datetime.utcnow()
+    start_of_week = today - timedelta(days=today.weekday())
+    start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_of_week = start_of_week + timedelta(days=7)
+    
+    serves_this_week = Tennis.query.filter_by(player=player_id).filter(Tennis.date.between(start_of_week, end_of_week)).filter(Tennis.category == 'Fitness').all()
     
     if not serves_this_week:
         return 0  # Return 0 if no serves recorded this week
@@ -599,6 +614,41 @@ def tennis_index():
         first_entry = Tennis.query.filter_by(player=player_id).order_by(Tennis.date.asc()).first()
         time_since_first_entry = datetime.now() - first_entry.date if first_entry else timedelta(0)
 
+        # Calculate fitness total
+        total_fitness_result = Tennis.query.with_entities(func.sum(Tennis.duration)) \
+                                    .filter(Tennis.player == player_id) \
+                                    .filter(Tennis.category == 'Fitness') \
+                                    .first()
+        
+        total_fitness_duration = total_fitness_result[0] or 0
+
+        # Calculate fitness weekly
+        fitness_weekly_results = Tennis.query.with_entities(extract('year', Tennis.date).label('year'),
+                                                extract('week', Tennis.date).label('week'),
+                                                func.sum(Tennis.duration),
+                                                func.count(Tennis.id)) \
+                                    .filter(Tennis.player == player_id) \
+                                    .filter(Tennis.category == 'Fitness') \
+                                    .group_by('year', 'week') \
+                                    .all()
+        
+        # Initialize variables for weekly data
+        total_fitness_duration_weekly = 0
+        total_fitness_records_weekly = 0
+
+        # Iterate over the weekly results and calculate totals
+        for _, _, duration, records in fitness_weekly_results:
+            total_fitness_duration_weekly += duration or 0
+            total_fitness_records_weekly += records or 0
+
+        # Calculate the number of weeks
+        num_weeks = len(fitness_weekly_results)
+
+        # Calculate averages for weekly data
+        average_fitness_duration_per_week = total_fitness_duration_weekly / num_weeks if num_weeks > 0 else 0
+        average_fitness_records_per_week = total_fitness_records_weekly / num_weeks if num_weeks > 0 else 0
+
+
         # Round up to days
         time_since_first_entry_rounded = timedelta(days=time_since_first_entry.days)
 
@@ -609,6 +659,8 @@ def tennis_index():
         tennis_analysis.average_duration_per_week = average_duration_per_week
         tennis_analysis.average_records_per_week = average_records_per_week
         tennis_analysis.time_since_first_entry = time_since_first_entry_rounded
+        tennis_analysis.total_fitness_duration = total_fitness_duration
+        tennis_analysis.average_fitness_duration_per_week = average_fitness_duration_per_week
 
         return render_template('tennis.html', tennis_all=tennis_all, now=current_date, tennis_analysis=tennis_analysis)
     else:

@@ -89,32 +89,32 @@
         <th>Total</th>
         <th>Weekly</th>
         <th>Last</th>
-        <th>This week</th>
-        <th>Week total</th>
+        <th>This tennis</th>
+        <th>This fitness</th>
     </tr>
     <tr>
         <td>{{ log1.player_name }}</td>
         <td>{{ log1.total_duration }}</td>
         <td>{{ log1.weekly_duration }}</td>
         <td style="color: {% if log1.days_since_last_entry < 3 %}green{% elif log1.days_since_last_entry < 6 %}white{% else %}red{% endif %};">{{ log1.days_since_last_entry }}</td>
-        <td>{{ log1.records_this_week }}</td>
-        <td>{{ log1.duration_this_week }}</td>
+        <td>{{ log1.duration_this_week - log1.fitness_this_week }}</td>
+        <td>{{ log1.fitness_this_week }}</td>
     </tr>
     <tr>
         <td>{{ log2.player_name }}</td>
         <td>{{ log2.total_duration }}</td>
         <td>{{ log2.weekly_duration }}</td>
         <td style="color: {% if log2.days_since_last_entry < 3 %}green{% elif log2.days_since_last_entry < 6 %}white{% else %}red{% endif %};">{{ log2.days_since_last_entry }}</td>
-        <td>{{ log2.records_this_week }}</td>
-        <td>{{ log2.duration_this_week }}</td>
+        <td>{{ log2.duration_this_week - log2.fitness_this_week }}</td>
+        <td>{{ log2.fitness_this_week }}</td>
     </tr>
     <tr>
         <td>{{ log0.player_name }}</td>
         <td>{{ log0.total_duration }}</td>
         <td>{{ log0.weekly_duration }}</td>
         <td style="color: {% if log0.days_since_last_entry < 3 %}green{% elif log0.days_since_last_entry < 6 %}white{% else %}red{% endif %};">{{ log0.days_since_last_entry }}</td>
-        <td>{{ log0.records_this_week }}</td>
-        <td>{{ log0.duration_this_week }}</td>
+        <td>{{ log0.duration_this_week - log0.fitness_this_week }}</td>
+        <td>{{ log0.fitness_this_week }}</td>
     </tr>
 </table>
 
