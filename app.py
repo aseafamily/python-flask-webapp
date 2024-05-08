@@ -554,7 +554,7 @@ class TennisStatus:
 
 @app.route('/categories', methods=['GET'])
 def get_categories():
-    categories = Tennis.query.with_entities(Tennis.category).distinct().order_by(Tennis.category).all()
+    categories = Tennis.query.with_entities(func.cast(Tennis.category, String)).distinct().order_by(func.cast(Tennis.category, String)).all()
     categories_list = [category[0] for category in categories]
     return jsonify(categories_list)
 
