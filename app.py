@@ -6,7 +6,7 @@ from sqlalchemy import cast, String
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://azureuser:T%nt0wn1@bhmtest.database.windows.net/myTest?driver=ODBC+Driver+17+for+SQL+Server'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://azureuser:T%nt0wn1@bhmtest.database.windows.net/myTest?driver=ODBC+Driver+17+for+SQL+Server&connect_timeout=10'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
