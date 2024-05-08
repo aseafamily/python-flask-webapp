@@ -2,9 +2,12 @@ from flask import Flask, render_template, url_for, request, redirect, send_file,
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
+from sqlalchemy import cast, String
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://azureuser:T%nt0wn1@bhmtest.database.windows.net/myTest?driver=ODBC+Driver+17+for+SQL+Server'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Todo(db.Model):
@@ -85,53 +88,33 @@ def serve_index():
         serves_all = Serve.query.filter_by(player=player_id ).order_by(Serve.date.desc()).all()
         current_date = datetime.now() - timedelta(hours=8)
 
-        # Query to get total serves, total duration, and count of records for the player per week
-        weekly_results = Serve.query.with_entities(extract('year', Serve.date).label('year'),
-                                                extract('week', Serve.date).label('week'),
-                                                func.sum(Serve.total_serve),
-                                                func.sum(Serve.duration),
-                                                func.count(Serve.id)) \
-                                    .filter(Serve.player == player_id) \
-                                    .group_by('year', 'week') \
-                                    .all()
+        # Calculate total serves, total duration, and total records
+        total_serves = db.session.query(func.sum(Serve.total_serve)).filter(Serve.player == player_id).scalar()
+        total_duration = db.session.query(func.sum(Serve.duration)).filter(Serve.player == player_id).scalar()
+        total_records = db.session.query(func.count(Serve.id)).filter(Serve.player == player_id).scalar()
 
-        # Initialize variables for weekly data
-        total_serves_weekly = 0
-        total_duration_weekly = 0
-        total_records_weekly = 0
+        # Calculate average serves per week, average duration per week, and average records per week
+        weekly_results = db.session.query(
+            func.extract('year', Serve.date).label('year'),
+            func.extract('week', Serve.date).label('week'),
+            func.sum(Serve.total_serve).label('total_serves_week'),
+            func.sum(Serve.duration).label('total_duration_week'),
+            func.count(Serve.id).label('total_records_week')
+        ).filter(Serve.player == player_id).group_by(func.extract('year', Serve.date), func.extract('week', Serve.date)).all()
 
-        # Iterate over the weekly results and calculate totals
-        for _, _, serves, duration, records in weekly_results:
-            total_serves_weekly += serves or 0
-            total_duration_weekly += duration or 0
-            total_records_weekly += records or 0
+        total_serves_per_week = sum(result.total_serves_week for result in weekly_results)
+        total_duration_per_week = sum(result.total_duration_week for result in weekly_results if result.total_duration_week is not None)
+        total_records_per_week = sum(result.total_records_week for result in weekly_results)
+        total_weeks = len(weekly_results)
 
-        # Calculate the number of weeks
-        num_weeks = len(weekly_results)
-
-        # Calculate averages for weekly data
-        average_serves_per_week = total_serves_weekly / num_weeks if num_weeks > 0 else 0
-        average_duration_per_week = total_duration_weekly / num_weeks if num_weeks > 0 else 0
-        average_records_per_week = total_records_weekly / num_weeks if num_weeks > 0 else 0
-
-        # Query to get total serves, total duration, and count of all records for the player
-        total_results = Serve.query.with_entities(func.sum(Serve.total_serve),
-                                                func.sum(Serve.duration),
-                                                func.count(Serve.id)) \
-                                    .filter(Serve.player == player_id) \
-                                    .first()
-
-        # Extract values from the total results
-        total_serves = total_results[0] or 0
-        total_duration = total_results[1] or 0
-        total_records = total_results[2] or 0
+        average_serves_per_week = total_serves_per_week / total_weeks if total_weeks > 0 else 0
+        average_duration_per_week = total_duration_per_week / total_weeks if total_weeks > 0 else 0
+        average_records_per_week = total_records_per_week / total_weeks if total_weeks > 0 else 0
 
         # Calculate the time since the first entry
-        first_entry = Serve.query.filter_by(player=player_id).order_by(Serve.date.asc()).first()
-        time_since_first_entry = datetime.now() - first_entry.date if first_entry else timedelta(0)
+        first_entry_date = db.session.query(func.min(Serve.date)).scalar()
+        time_since_first_entry = datetime.utcnow() - first_entry_date
 
-        # Round up to days
-        time_since_first_entry_rounded = timedelta(days=time_since_first_entry.days)
 
         # Create an instance of ServeAnalysis class
         serve_analysis = ServeAnalysis()
@@ -141,7 +124,7 @@ def serve_index():
         serve_analysis.average_serves_per_week = average_serves_per_week
         serve_analysis.average_duration_per_week = average_duration_per_week
         serve_analysis.average_records_per_week = average_records_per_week
-        serve_analysis.time_since_first_entry = time_since_first_entry_rounded
+        serve_analysis.time_since_first_entry = time_since_first_entry
 
         return render_template('serve.html', serves=serves_all, now=current_date, serve_analysis=serve_analysis)
     else:
@@ -367,12 +350,12 @@ def calculate_total_tennis_duration(player_id):
     return total_serves if total_serves is not None else 0
 
 def calculate_weekly_tennis_duration(player_id):
-    weekly_results = Tennis.query.with_entities(extract('year', Tennis.date).label('year'),
-                                                extract('week', Tennis.date).label('week'),
+    weekly_results = db.session.query(func.extract('year', Tennis.date).label('year'),
+                                                func.extract('week', Tennis.date).label('week'),
                                                 func.sum(Tennis.duration),
                                                 func.count(Tennis.id)) \
                                     .filter(Tennis.player == player_id) \
-                                    .group_by('year', 'week') \
+                                    .group_by(func.extract('year', Tennis.date), func.extract('week', Tennis.date)) \
                                     .all()
     total_duration_weekly = 0
     total_records_weekly = 0
@@ -393,13 +376,20 @@ def calculate_weekly_tennis_duration(player_id):
 def calculate_total_serve_percentage(player_id):
     total_serves = calculate_total_serves(player_id)
     total_serve_in = Serve.query.filter_by(player=player_id).with_entities(db.func.sum(Serve.total_serve_in)).scalar()
-    total_serve_percentage = (total_serve_in / total_serves) * 100
+    if total_serves is not None and total_serves != 0:
+        total_serve_percentage = (total_serve_in / total_serves) * 100
+    else:
+        total_serve_percentage = 0
+
     return int(total_serve_percentage)
 
 def calculate_days_since_last_serve(player_id):
-    last_serve_date = Serve.query.filter_by(player=player_id).order_by(Serve.date.desc()).first().date
-    days_since_last_serve = (datetime.utcnow() - timedelta(hours=8) - last_serve_date).days
-    return days_since_last_serve
+    last_serve_date_query = Serve.query.filter_by(player=player_id).order_by(Serve.date.desc()).first().date
+    if last_serve_date_query:
+        days_since_last_serve = (datetime.utcnow() - timedelta(hours=8) - last_serve_date_query).days
+        return days_since_last_serve
+    else:
+        return None
 
 def calculate_days_since_last_entry(player_id):
     last_serve_date = Tennis.query.filter_by(player=player_id).order_by(Tennis.date.desc()).first().date
@@ -456,7 +446,7 @@ def calculate_fitness_this_week(player_id):
     start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
     end_of_week = start_of_week + timedelta(days=7)
     
-    serves_this_week = Tennis.query.filter_by(player=player_id).filter(Tennis.date.between(start_of_week, end_of_week)).filter(Tennis.category == 'Fitness').all()
+    serves_this_week = Tennis.query.filter_by(player=player_id).filter(Tennis.date.between(start_of_week, end_of_week)).filter(cast(Tennis.category, String) == 'Fitness').all()
     
     if not serves_this_week:
         return 0  # Return 0 if no serves recorded this week
@@ -576,12 +566,12 @@ def tennis_index():
         tennis_all = Tennis.query.filter_by(player=player_id ).order_by(Tennis.date.desc()).all()
         current_date = datetime.now() - timedelta(hours=8)
 
-        weekly_results = Tennis.query.with_entities(extract('year', Tennis.date).label('year'),
-                                                extract('week', Tennis.date).label('week'),
+        weekly_results = db.session.query(func.extract('year', Tennis.date).label('year'),
+                                                func.extract('week', Tennis.date).label('week'),
                                                 func.sum(Tennis.duration),
                                                 func.count(Tennis.id)) \
                                     .filter(Tennis.player == player_id) \
-                                    .group_by('year', 'week') \
+                                    .group_by(func.extract('year', Tennis.date), func.extract('week', Tennis.date)) \
                                     .all()
 
         # Initialize variables for weekly data
@@ -617,19 +607,19 @@ def tennis_index():
         # Calculate fitness total
         total_fitness_result = Tennis.query.with_entities(func.sum(Tennis.duration)) \
                                     .filter(Tennis.player == player_id) \
-                                    .filter(Tennis.category == 'Fitness') \
+                                    .filter(cast(Tennis.category, String) == 'Fitness') \
                                     .first()
         
         total_fitness_duration = total_fitness_result[0] or 0
 
         # Calculate fitness weekly
-        fitness_weekly_results = Tennis.query.with_entities(extract('year', Tennis.date).label('year'),
-                                                extract('week', Tennis.date).label('week'),
+        fitness_weekly_results = db.session.query(func.extract('year', Tennis.date).label('year'),
+                                                func.extract('week', Tennis.date).label('week'),
                                                 func.sum(Tennis.duration),
                                                 func.count(Tennis.id)) \
                                     .filter(Tennis.player == player_id) \
-                                    .filter(Tennis.category == 'Fitness') \
-                                    .group_by('year', 'week') \
+                                    .filter(cast(Tennis.category, String) == 'Fitness') \
+                                    .group_by(func.extract('year', Tennis.date), func.extract('week', Tennis.date)) \
                                     .all()
         
         # Initialize variables for weekly data
@@ -728,12 +718,9 @@ def todo_index():
         task_content = request.form['content']
         new_task = Todo(content=task_content)
 
-        try:
-            db.session.add(new_task)
-            db.session.commit()
-            return redirect('/todo')
-        except:
-            return 'There was an issue adding your task'
+        db.session.add(new_task)
+        db.session.commit()
+        return redirect('/todo')
 
     else:
         tasks = Todo.query.order_by(Todo.date_created).all()
@@ -758,11 +745,8 @@ def todo_update(id):
     if request.method == 'POST':
         task.content = request.form['content']
 
-        try:
-            db.session.commit()
-            return redirect('/todo')
-        except:
-            return 'There was an issue updating your task'
+        db.session.commit()
+        return redirect('/todo')
 
     else:
         return render_template('todo_update.html', task=task)
