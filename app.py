@@ -8,6 +8,14 @@ app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://azureuser:T%nt0wn1@bhmtest.database.windows.net/myTest?driver=ODBC+Driver+17+for+SQL+Server&connect_timeout=10'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Enable connection pooling
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_size': 10,  # Adjust as needed
+    'pool_recycle': 3600,  # Optional: Recycle connections after 1 hour
+    'pool_timeout': 30,  # Optional: Maximum time to wait for a connection from the pool
+}
+
 db = SQLAlchemy(app)
 
 class Todo(db.Model):
