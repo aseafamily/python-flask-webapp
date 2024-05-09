@@ -93,7 +93,7 @@ def serve_index():
     player_id = request.args.get('u')
 
     if request.method == 'GET':
-        serves_all = Serve.query.filter_by(player=player_id ).order_by(Serve.date.desc()).all()
+        serves_all = Serve.query.filter_by(player=player_id ).order_by(Serve.date.desc(), Serve.id.desc()).all()
         current_date = datetime.now() - timedelta(hours=8)
 
         # Calculate total serves, total duration, and total records
@@ -571,7 +571,7 @@ def tennis_index():
     player_id = request.args.get('u')
 
     if request.method == 'GET':
-        tennis_all = Tennis.query.filter_by(player=player_id ).order_by(Tennis.date.desc()).all()
+        tennis_all = Tennis.query.filter_by(player=player_id ).order_by(Tennis.date.desc(), Tennis.id.desc()).all()
         current_date = datetime.now() - timedelta(hours=8)
 
         weekly_results = db.session.query(func.extract('year', Tennis.date).label('year'),
