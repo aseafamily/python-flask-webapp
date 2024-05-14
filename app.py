@@ -3,6 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
+from tenacity import retry, stop_after_attempt, wait_fixed
+from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -17,6 +20,28 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 }
 
 db = SQLAlchemy(app)
+
+# Retry decorator with exponential backoff
+@retry(stop=stop_after_attempt(5), wait=wait_fixed(2), retry_error_callback=lambda x: isinstance(x, OperationalError))
+def test_database_connection(uri):
+    print("Test: Attempting to connect to the database...")
+    engine = create_engine(uri)
+    try:
+        conn = engine.connect()
+        conn.close()
+        print("Test: Connection successful!")
+        return True
+    except OperationalError as e:
+        print(f"Test: Connection attempt failed: {e}")
+        raise e
+    
+def test_connection():
+    db_uri = app.config['SQLALCHEMY_DATABASE_URI']
+    try:
+        if test_database_connection(db_uri):
+            return "Connection successful!"
+    except OperationalError:
+        return "Connection failed."
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -314,6 +339,9 @@ def get_week_range(date):
 #@app.route('/all_status')
 @app.route('/serve/status')
 def all_status():
+    # test and retry connection
+    test_connection()
+
     status1 = get_serve_status(1)
     status2 = get_serve_status(2)
     log0 = get_tennis_status(0)
