@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, send_file, jsonify
+from flask import Flask, render_template, url_for, request, redirect, send_file, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
@@ -105,6 +105,11 @@ def inject_user():
     user_id = request.args.get('u', '')  # Get the "u" query string parameter from the request
     user_name = user_dict.get(user_id, '')  # Get the corresponding user name from the dictionary
     return dict(u=user_id, user_name=user_name)  # Return a dictionary with the user parameter and user name
+
+# Route to handle requests for favicon.ico
+@app.route('/favicon.ico')
+def favicon():
+    abort(404)
 
 
 @app.route('/')
