@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import Flask, render_template, url_for, request, redirect, send_file, jsonify, abort
+from flask import render_template, request, redirect
 from db import db
 from db_todo import Todo
 
