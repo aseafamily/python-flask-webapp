@@ -6,6 +6,8 @@ from sqlalchemy import cast, String
 from tenacity import retry, stop_after_attempt, wait_fixed
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
+from db import db
+from todo import todo_bp
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -19,7 +21,9 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_timeout': 30,  # Optional: Maximum time to wait for a connection from the pool
 }
 
-db = SQLAlchemy(app)
+db.init_app(app)
+
+app.register_blueprint(todo_bp)
 
 # Retry decorator with exponential backoff
 @retry(stop=stop_after_attempt(5), wait=wait_fixed(2), retry_error_callback=lambda x: isinstance(x, OperationalError))
@@ -43,14 +47,6 @@ def test_connection():
     except OperationalError:
         return "Connection failed."
 
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(200), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<Task %r>' % self.id
-    
 class Serve(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=datetime.utcnow)
@@ -753,45 +749,6 @@ def tennis_update(id):
 
 # The TODO App entries =====================================================================
 
-@app.route('/todo', methods=['POST', 'GET'])
-def todo_index():
-    if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = Todo(content=task_content)
-
-        db.session.add(new_task)
-        db.session.commit()
-        return redirect('/todo')
-
-    else:
-        tasks = Todo.query.order_by(Todo.date_created).all()
-        return render_template('todo.html', tasks=tasks)
-
-
-@app.route('/todo/delete/<int:id>')
-def todo_delete(id):
-    task_to_delete = Todo.query.get_or_404(id)
-
-    try:
-        db.session.delete(task_to_delete)
-        db.session.commit()
-        return redirect('/todo')
-    except:
-        return 'There was a problem deleting that task'
-
-@app.route('/todo/update/<int:id>', methods=['GET', 'POST'])
-def todo_update(id):
-    task = Todo.query.get_or_404(id)
-
-    if request.method == 'POST':
-        task.content = request.form['content']
-
-        db.session.commit()
-        return redirect('/todo')
-
-    else:
-        return render_template('todo_update.html', task=task)
-    
 @app.route('/serve/db')
 def serve_db():
     try:
