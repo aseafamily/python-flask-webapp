@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
 from utils import test_connection, user_dict
+from flask_login import login_required
 
 tennis_bp = Blueprint('tennis', __name__)
 
@@ -17,6 +18,7 @@ def get_categories():
     return jsonify(categories_list)
 
 @tennis_bp.route('/tennis', methods=['POST', 'GET'])
+@login_required
 def tennis_index():
     player_id = request.args.get('u')
 
@@ -136,6 +138,7 @@ def tennis_index():
         return redirect('/tennis?u=' + player_id)
     
 @tennis_bp.route('/tennis/delete/<int:id>')
+@login_required
 def tennis_delete(id):
     tennis_to_delete = Tennis.query.get_or_404(id)
     uid = request.args.get('u')
@@ -148,6 +151,7 @@ def tennis_delete(id):
         return 'There was a problem deleting that task'
     
 @tennis_bp.route('/tennis/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def tennis_update(id):
     tennis = Tennis.query.get_or_404(id)
     uid = request.args.get('u')

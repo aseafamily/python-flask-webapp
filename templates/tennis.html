@@ -40,6 +40,7 @@
             <p>Weekly Fitness Duration (hours): {{ "{:.0f}".format(tennis_analysis.average_fitness_duration_per_week / 60) }}</p>
             <p>Started: {{ tennis_analysis.time_since_first_entry.days }} days ago</p>
         </div>
+        <h3 style="text-align: center"><a href="/">Home</a></h3>
         <script>
             function confirmDelete(entryId, u) {
                 var result = confirm("Are you sure you want to delete this entry?");

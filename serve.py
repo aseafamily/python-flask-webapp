@@ -7,10 +7,12 @@ from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
 from utils import test_connection, user_dict
+from flask_login import login_required
 
 serve_bp = Blueprint('serve', __name__)
 
 @serve_bp.route('/serve', methods=['POST', 'GET'])
+@login_required
 def serve_index():
     player_id = request.args.get('u')
 
@@ -126,6 +128,7 @@ def serve_index():
         return redirect('/serve?u=' + player_id)
     
 @serve_bp.route('/serve/delete/<int:id>')
+@login_required
 def serve_delete(id):
     serve_to_delete = Serve.query.get_or_404(id)
     uid = request.args.get('u')
@@ -138,6 +141,7 @@ def serve_delete(id):
         return 'There was a problem deleting that task'
 
 @serve_bp.route('/serve/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def serve_update(id):
     serve = Serve.query.get_or_404(id)
     uid = request.args.get('u')

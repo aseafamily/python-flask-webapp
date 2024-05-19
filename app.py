@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, send_file, jsonify, abort
+from flask import Flask, render_template, url_for, request, redirect, send_file, jsonify, abort, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
@@ -8,6 +8,10 @@ from todo import todo_bp
 from serve import serve_bp
 from tennis import tennis_bp
 from utils import user_dict
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from forms import LoginForm
+from user import User, users
+
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -27,6 +31,39 @@ app.register_blueprint(tennis_bp)
 app.register_blueprint(serve_bp)
 app.register_blueprint(todo_bp)
 
+# for login
+app.config['SECRET_KEY'] = '48e7a59dca9d6c13b0e7e51b7ee6e2a5759c8e1dbb3a0f83'
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    for user in users.values():
+        if user.id == int(user_id):
+            return user
+    return None
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = users.get(form.username.data)
+        if user and user.password == form.password.data:
+            login_user(user)
+            next_page = request.args.get('next')  # Get the 'next' query parameter
+            if not next_page:
+                next_page = url_for('index')
+            return redirect(next_page)
+        else:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+    return render_template('login.html', form=form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
 # Define a context processor to include the "u" query string parameter and the corresponding user name
 @app.context_processor
 def inject_user():
@@ -36,7 +73,7 @@ def inject_user():
 
 @app.route('/')
 def index():
-   return render_template('index.html')
+   return render_template('index.html', current_user=current_user)
 
 # Route to handle requests for favicon.ico
 @app.route('/favicon.ico')

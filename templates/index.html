@@ -16,6 +16,21 @@
         .alex {
             background-color: lightblue !important;
         }
+        .container {
+            display: flex; /* Use flexbox layout */
+        }
+        .box {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .box-1 {
+            flex: 0 0 70%; /* Set flex-grow to 0, flex-shrink to 0, and flex-basis to 80% */
+        }
+
+        .box-2 {
+            flex: 1; /* Allow the second box to occupy the remaining space */
+        }
     </style>
 </head>
 <body>
@@ -25,17 +40,29 @@
                 <div>
                     <h1 class="title">Welcome to the Blue House Mall Web Site</h1>
                     <img class="houseimg" src="{{ url_for('static', filename='images/bhm.png') }}" alt="BHM Logo">
-                    <div class="centered-div">
-                        <ul class="links nav-links">
-                            <li><a class="emily" href="/tennis?u=2">Emily's Tennis Log</a></li>
-                            <li><a class="emily" href="/serve?u=2">Emily's Serve Practice</a></li>
-                            <li><a class="andrew" href="/tennis?u=1">Andrew's Tennis Log</a></li>
-                            <li><a class="andrew" href="/serve?u=1">Andrew's Serve Practice</a></li>
-                            <li><a class= "alex" href="/tennis?u=0">Alex's Tennis Log</a></li>
-                            <li><a class= "alex" href="/serve?u=0">Alex's Serve Practice</a></li>
-                            <li><a href="/serve/status">Tennis Status</a></li>
-                            <li><a href="/todo">To-Do List</a></li>
-                        </ul>
+                    <div class="container">
+                        <div class="box box-1">
+                            <div class="centered-div">
+                                <ul class="links nav-links">
+                                    <li><a class="emily" href="/tennis?u=2">Emily's Tennis Log</a></li>
+                                    <li><a class="emily" href="/serve?u=2">Emily's Serve Practice</a></li>
+                                    <li><a class="andrew" href="/tennis?u=1">Andrew's Tennis Log</a></li>
+                                    <li><a class="andrew" href="/serve?u=1">Andrew's Serve Practice</a></li>
+                                    <li><a class= "alex" href="/tennis?u=0">Alex's Tennis Log</a></li>
+                                    <li><a class= "alex" href="/serve?u=0">Alex's Serve Practice</a></li>
+                                    <li><a href="/serve/status">Tennis Status</a></li>
+                                    <li><a href="/todo">To-Do List</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="box box-2">
+                            {% if current_user.is_authenticated %}
+                                <p>{{ current_user.username }}</p>
+                                <a href="{{ url_for('logout') }}">Logout</a>
+                            {% else %}
+                                <a href="{{ url_for('login') }}">Login</a></p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
