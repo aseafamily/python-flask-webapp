@@ -127,6 +127,34 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var locations = [
+            "CP",
+            "RHS",
+            "RMS",
+            "WSC"
+        ];
+
+        $('#location').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+
+        $('#location').autocomplete({
+            source: locations, // Use the hardcoded array
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#location').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
+</script>
+
 <script>
     // Get today's date
     var today = new Date();
