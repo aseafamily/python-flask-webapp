@@ -46,7 +46,7 @@ def serve_index():
 
         # Calculate the time since the first entry
         first_entry_date = db.session.query(func.min(Serve.date)).scalar()
-        time_since_first_entry = get_client_time(datetime.utcnow()) - first_entry_date
+        time_since_first_entry = datetime.utcnow() - first_entry_date
 
 
         # Create an instance of ServeAnalysis class
