@@ -45,10 +45,10 @@ var options2 = {
     data: [{% for serve in serves %}{{ serve.total_serve_percent|default(0) }}{% if not loop.last %}, {% endif %}{% endfor %}]
   },{
     name: 'First',
-    data: [{% for serve in serves %}{{ serve.first_serve_in_percent|default(0) }}{% if not loop.last %}, {% endif %}{% endfor %}]
+    data: [{% for serve in serves %}{{ serve.first_serve_in_percent if serve.first_serve_in_percent is not none else 'null' }}{% if not loop.last %}, {% endif %}{% endfor %}]
   },{
     name: 'Second',
-    data: [{% for serve in serves %}{{ serve.second_serve_in_percent|default(0) }}{% if not loop.last %}, {% endif %}{% endfor %}]
+    data: [{% for serve in serves %}{{ serve.second_serve_in_percent if serve.second_serve_in_percent is not none else 'null' }}{% if not loop.last %}, {% endif %}{% endfor %}]
   }],
   xaxis: {
     categories: [{% for serve in serves %}"{{ serve.date.strftime('%Y-%m-%d') }}"{% if not loop.last %}, {% endif %}{% endfor %}]

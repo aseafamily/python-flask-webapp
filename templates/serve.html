@@ -58,11 +58,10 @@
         <p>Duration per week (minutes): {{ "{:.0f}".format(serve_analysis.average_duration_per_week) }}</p>
         <p>Started: {{ serve_analysis.time_since_first_entry.days }} days ago</p>
 
-        <div style="margin-left: 10px; margin-top: 20px; margin-bottom: 20px;">
+        <h3 style="margin-left: 10px; margin-top: 20px; margin-bottom: 20px;text-align: center">
             <a href="/serve/diagram?u={{ u }}">Diagram</a>
-            <a href="/serve/analysis?u={{ u }}">Analysis</a>
-            <h3 style="text-align: center"><a href="/">Home</a></h3>
-        </div>
+            <a href="/">Home</a>
+        </h3>
 
         <script>
             function confirmDelete(serveId, u) {

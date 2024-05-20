@@ -34,9 +34,9 @@ def serve_index():
             func.count(Serve.id).label('total_records_week')
         ).filter(Serve.player == player_id).group_by(func.extract('year', Serve.date), func.extract('week', Serve.date)).all()
 
-        total_serves_per_week = sum(result.total_serves_week for result in weekly_results)
+        total_serves_per_week = sum(result.total_serves_week for result in weekly_results if result.total_serves_week is not None)
         total_duration_per_week = sum(result.total_duration_week for result in weekly_results if result.total_duration_week is not None)
-        total_records_per_week = sum(result.total_records_week for result in weekly_results)
+        total_records_per_week = sum(result.total_records_week for result in weekly_results if result.total_records_week is not None)
         total_weeks = len(weekly_results)
 
         average_serves_per_week = total_serves_per_week / total_weeks if total_weeks > 0 else 0
@@ -121,6 +121,31 @@ def serve_index():
             first_serve_in_percent_ad=first_serve_in_percent_ad,
             second_serve_in_percent_ad=second_serve_in_percent_ad
         )
+
+        serve_instance.first_serve_in = None if serve_instance.first_serve_in == '' else int(serve_instance.first_serve_in)
+        serve_instance.first_serve_out = None if serve_instance.first_serve_out == '' else int(serve_instance.first_serve_out)
+        serve_instance.first_serve_in_percent = None if serve_instance.first_serve_in_percent == '' else int(serve_instance.first_serve_in_percent)
+        serve_instance.second_serve_in = None if serve_instance.second_serve_in == '' else int(serve_instance.second_serve_in)
+        serve_instance.second_serve_out = None if serve_instance.second_serve_out == '' else int(serve_instance.second_serve_out)
+        serve_instance.second_serve_in_percent = None if serve_instance.second_serve_in_percent == '' else int(serve_instance.second_serve_in_percent)
+        serve_instance.total_serve_in = None if serve_instance.total_serve_in == '' else int(serve_instance.total_serve_in)
+        serve_instance.total_serve_out = None if serve_instance.total_serve_out == '' else int(serve_instance.total_serve_out)
+        serve_instance.total_serve_percent = None if serve_instance.total_serve_percent == '' else int(serve_instance.total_serve_percent)
+        serve_instance.total_serve = None if serve_instance.total_serve == '' else int(serve_instance.total_serve)
+        serve_instance.first_serve_in_deuce = None if serve_instance.first_serve_in_deuce == '' else int(serve_instance.first_serve_in_deuce)
+        serve_instance.first_serve_out_deuce = None if serve_instance.first_serve_out_deuce == '' else int(serve_instance.first_serve_out_deuce)
+        serve_instance.first_serve_in_percent_deuce = None if serve_instance.first_serve_in_percent_deuce == '' else int(serve_instance.first_serve_in_percent_deuce)
+        serve_instance.second_serve_in_deuce = None if serve_instance.second_serve_in_deuce == '' else int(serve_instance.second_serve_in_deuce)
+        serve_instance.second_serve_out_deuce = None if serve_instance.second_serve_out_deuce == '' else int(serve_instance.second_serve_out_deuce)
+        serve_instance.second_serve_in_percent_deuce = None if serve_instance.second_serve_in_percent_deuce == '' else int(serve_instance.second_serve_in_percent_deuce)
+        serve_instance.first_serve_in_ad = None if serve_instance.first_serve_in_ad == '' else int(serve_instance.first_serve_in_ad)
+        serve_instance.first_serve_out_ad = None if serve_instance.first_serve_out_ad == '' else int(serve_instance.first_serve_out_ad)
+        serve_instance.first_serve_in_percent_ad = None if serve_instance.first_serve_in_percent_ad == '' else int(serve_instance.first_serve_in_percent_ad)
+        serve_instance.second_serve_in_ad = None if serve_instance.second_serve_in_ad == '' else int(serve_instance.second_serve_in_ad)
+        serve_instance.second_serve_out_ad = None if serve_instance.second_serve_out_ad == '' else int(serve_instance.second_serve_out_ad)
+        serve_instance.second_serve_in_percent_ad = None if serve_instance.second_serve_in_percent_ad == '' else int(serve_instance.second_serve_in_percent_ad)
+        serve_instance.total_first_serve =  None if serve_instance.total_first_serve == '' else int(serve_instance.total_first_serve)
+        serve_instance.total_second_serve =  None if serve_instance.total_second_serve == '' else int(serve_instance.total_second_serve)
 
         # Add the instance to the database
         db.session.add(serve_instance)
@@ -455,7 +480,7 @@ def serve_diagram():
         # Update statistics if the serve falls into the current week
         total_serves_per_week += total_server
         total_records_per_week += 1
-        total_duration_per_week += serve_duration
+        total_duration_per_week += serve_duration if serve_duration is not None else 0
 
     # Append statistics for the last week
     if current_week_start is not None:
