@@ -2,6 +2,7 @@ from tenacity import retry, stop_after_attempt, wait_fixed
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 from db import db_uri
+from datetime import datetime, timedelta
 
 # Hardcoded dictionary mapping user IDs to names
 user_dict = {
@@ -30,3 +31,8 @@ def test_connection():
             return "Connection successful!"
     except OperationalError:
         return "Connection failed."
+    
+def get_week_range(date):
+    start_of_week = date - timedelta(days=date.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+    return start_of_week, end_of_week

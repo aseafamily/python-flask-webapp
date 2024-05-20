@@ -6,7 +6,7 @@ from db_tennis import Tennis, TennisAnalysis, TennisStatus
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
-from utils import test_connection, user_dict
+from utils import test_connection, user_dict, get_week_range
 from flask_login import login_required
 
 serve_bp = Blueprint('serve', __name__)
@@ -255,12 +255,6 @@ def serve_analysis():
 
     # Pass the instance to the template
     return render_template('serve_analysis.html', serve_analysis=serve_analysis)
-
-# Function to calculate the start and end of the week given a date
-def get_week_range(date):
-    start_of_week = date - timedelta(days=date.weekday())
-    end_of_week = start_of_week + timedelta(days=6)
-    return start_of_week, end_of_week
 
 #@app.route('/all_status')
 @serve_bp.route('/serve/status')

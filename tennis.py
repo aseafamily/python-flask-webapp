@@ -6,8 +6,9 @@ from db_tennis import Tennis, TennisAnalysis, TennisStatus
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
-from utils import test_connection, user_dict
+from utils import test_connection, user_dict, get_week_range
 from flask_login import login_required
+import math
 
 tennis_bp = Blueprint('tennis', __name__)
 
@@ -171,3 +172,90 @@ def tennis_update(id):
 
     else:
         return render_template('tennis_update.html', tennis=tennis)
+    
+@tennis_bp.route('/tennis/diagram')
+def tennis_diagram():
+    player_id = request.args.get('u')
+    tennis_all = Tennis.query.filter_by(player=player_id).order_by(Tennis.date.asc()).all()
+
+    weekly_stats = []
+    
+    # Initialize statistics variables
+    total_records_per_week = 0
+    total_duration_per_week = 0
+
+    current_week_start, current_week_end = None, None
+
+    # Iterate through serves and calculate statistics
+    for tennis in tennis_all:
+        tennis_date = tennis.date
+        tennis_duration = tennis.duration
+        tennis_duration = math.ceil((tennis_duration if tennis_duration is not None else 0) / 60)
+        tennis_category = tennis.category
+
+        # current_week_start, current_week_end = get_week_range(serve_date)
+
+        # If the serve date is within the current week, update statistics
+        if current_week_start is None or tennis_date < current_week_start or tennis_date > current_week_end:
+            if current_week_start is not None:
+                # Append statistics for the current week
+                weekly_stats.append({
+                    'start_date': current_week_start,
+                    'end_date': current_week_end,
+                    'total_records': total_records_per_week,
+                    'total_duration': total_duration_per_week,
+                    'total_coach': total_coach_duration_per_week,
+                    'total_fitness': total_fitness_duration_per_week,
+                    'total_class': total_class_duration_per_week,
+                    'total_practice': total_practice_duration_per_week,
+                    'total_match': total_match_duration_per_week,
+                    'total_play': total_play_duration_per_week
+                })
+
+            # Set the new week range
+            current_week_start, current_week_end = get_week_range(tennis_date)
+
+            # Reset statistics for the new week
+            total_records_per_week = 0
+            total_duration_per_week = 0
+            total_coach_duration_per_week = 0
+            total_fitness_duration_per_week = 0
+            total_class_duration_per_week = 0
+            total_practice_duration_per_week = 0
+            total_match_duration_per_week = 0
+            total_play_duration_per_week = 0
+
+
+        # Update statistics if the serve falls into the current week
+        total_records_per_week += 1
+        total_duration_per_week += tennis_duration
+
+        if tennis_category == 'Coach':
+            total_coach_duration_per_week += tennis_duration
+        elif tennis_category == 'Fitness':
+            total_fitness_duration_per_week += tennis_duration
+        elif tennis_category == 'Group' or tennis_category == 'Private' or tennis_category == 'Semi':
+            total_class_duration_per_week += tennis_duration
+        elif tennis_category == 'Practice':
+            total_practice_duration_per_week += tennis_duration
+        elif tennis_category == 'Match':
+            total_match_duration_per_week += tennis_duration
+        elif tennis_category == 'Play':
+            total_play_duration_per_week += tennis_duration
+
+    # Append statistics for the last week
+    if current_week_start is not None:
+        weekly_stats.append({
+            'start_date': current_week_start,
+            'end_date': current_week_end,
+            'total_records': total_records_per_week,
+            'total_duration': total_duration_per_week,
+            'total_coach': total_coach_duration_per_week,
+            'total_fitness': total_fitness_duration_per_week,
+            'total_class': total_class_duration_per_week,
+            'total_practice': total_practice_duration_per_week,
+            'total_match': total_match_duration_per_week,
+            'total_play': total_play_duration_per_week
+        })
+
+    return render_template('tennis_diagram.html', tennis_all=tennis_all, weekly_stats=weekly_stats)

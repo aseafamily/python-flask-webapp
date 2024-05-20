@@ -1,0 +1,81 @@
+{% extends 'tennis_base.html' %}
+
+{% block head %}
+<title>{{ user_name }}'s Tennis Practice Diagram</title>
+{% endblock %}
+
+{% block body %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<div class="content">
+    <h4 style="text-align: center;">Weekly Category</h4>
+    <div id="chart2"></div>
+    <h4 style="text-align: center;">Weekly Duration (Hours)</h4>
+    <div id="chart5"></div>
+    <h4 style="text-align: center;">Weekly Practice</h4>
+    <div id="chart4"></div>
+</div>
+
+<script>
+var options2 = {
+  chart: {
+    type: 'line'
+  },
+  series: [{
+    name: 'Coach',
+    data: [{% for item in weekly_stats %}{{ item.total_coach }}{% if not loop.last %}, {% endif %}{% endfor %}]
+  },{
+    name: 'Class',
+    data: [{% for item in weekly_stats %}{{ item.total_class }}{% if not loop.last %}, {% endif %}{% endfor %}]
+  },{
+    name: 'Practice',
+    data: [{% for item in weekly_stats %}{{ item.total_practice }}{% if not loop.last %}, {% endif %}{% endfor %}]
+  },{
+    name: 'Match',
+    data: [{% for item in weekly_stats %}{{ item.total_match }}{% if not loop.last %}, {% endif %}{% endfor %}]
+  },{
+    name: 'Play',
+    data: [{% for item in weekly_stats %}{{ item.total_play }}{% if not loop.last %}, {% endif %}{% endfor %}]
+  },{
+    name: 'Fitness',
+    data: [{% for item in weekly_stats %}{{ item.total_fitness }}{% if not loop.last %}, {% endif %}{% endfor %}]
+  }],
+  xaxis: {
+    categories: [{% for item in weekly_stats %}"{{ item.start_date.strftime('%Y-%m-%d') }}"{% if not loop.last %}, {% endif %}{% endfor %}]
+  }
+}
+var chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
+chart2.render();
+
+var options4 = {
+  chart: {
+    type: 'bar'
+  },
+  series: [{
+    name: 'Weekly practice',
+    data: [{% for item in weekly_stats %}{{ item.total_records }}{% if not loop.last %}, {% endif %}{% endfor %}]
+  }],
+  xaxis: {
+    categories: [{% for item in weekly_stats %}"{{ item.start_date.strftime('%Y-%m-%d') }}"{% if not loop.last %}, {% endif %}{% endfor %}]
+  }
+}
+var chart4 = new ApexCharts(document.querySelector("#chart4"), options4);
+chart4.render();
+
+var options5 = {
+  chart: {
+    type: 'bar'
+  },
+  series: [{
+    name: 'Weekly duration',
+    data: [{% for item in weekly_stats %}{{ item.total_duration }}{% if not loop.last %}, {% endif %}{% endfor %}]
+  }],
+  xaxis: {
+    categories: [{% for item in weekly_stats %}"{{ item.start_date.strftime('%Y-%m-%d') }}"{% if not loop.last %}, {% endif %}{% endfor %}]
+  }
+}
+var chart5 = new ApexCharts(document.querySelector("#chart5"), options5);
+chart5.render();
+
+</script>
+{% endblock %}
