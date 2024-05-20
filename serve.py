@@ -6,8 +6,9 @@ from db_tennis import Tennis, TennisAnalysis, TennisStatus
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
-from utils import test_connection, user_dict, get_week_range
+from utils import test_connection, user_dict, get_week_range, get_client_time
 from flask_login import login_required
+import math
 
 serve_bp = Blueprint('serve', __name__)
 
@@ -45,7 +46,7 @@ def serve_index():
 
         # Calculate the time since the first entry
         first_entry_date = db.session.query(func.min(Serve.date)).scalar()
-        time_since_first_entry = datetime.utcnow() - first_entry_date
+        time_since_first_entry = get_client_time(datetime.utcnow()) - first_entry_date
 
 
         # Create an instance of ServeAnalysis class
@@ -289,12 +290,12 @@ def get_serve_status(player_id):
 def get_tennis_status(player_id):
     status = TennisStatus()
     status.player_name = user_dict.get(str(player_id), '')
-    status.total_duration = round(calculate_total_tennis_duration(player_id)/60)
-    status.weekly_duration = round(calculate_weekly_tennis_duration(player_id)/60)
+    status.total_duration = math.ceil(calculate_total_tennis_duration(player_id)/60)
+    status.weekly_duration = math.ceil(calculate_weekly_tennis_duration(player_id)/60)
     status.days_since_last_entry = calculate_days_since_last_entry(player_id)
     status.records_this_week = calculate_tennis_records_this_week(player_id)
-    status.duration_this_week = round(calculate_tennis_this_week(player_id)/60)
-    status.fitness_this_week = round(calculate_fitness_this_week(player_id)/60)
+    status.duration_this_week = math.ceil(calculate_tennis_this_week(player_id)/60)
+    status.fitness_this_week = math.ceil(calculate_fitness_this_week(player_id)/60)
     return status
 
 def calculate_total_serves(player_id):
@@ -353,7 +354,7 @@ def calculate_days_since_last_entry(player_id):
     return days_since_last_serve
 
 def calculate_records_this_week(player_id):
-    today = datetime.utcnow()
+    today = get_client_time(datetime.utcnow())
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=7)
     start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -361,7 +362,7 @@ def calculate_records_this_week(player_id):
     return records_this_week
 
 def calculate_tennis_records_this_week(player_id):
-    today = datetime.utcnow()
+    today = get_client_time(datetime.utcnow())
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=7)
     start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -369,7 +370,7 @@ def calculate_tennis_records_this_week(player_id):
     return records_this_week
 
 def calculate_serve_this_week(player_id):
-    today = datetime.utcnow()
+    today = get_client_time(datetime.utcnow())
     start_of_week = today - timedelta(days=today.weekday())
     start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
     end_of_week = start_of_week + timedelta(days=7)
@@ -383,7 +384,7 @@ def calculate_serve_this_week(player_id):
     return total_serves_this_week
 
 def calculate_tennis_this_week(player_id):
-    today = datetime.utcnow()
+    today = get_client_time(datetime.utcnow())
     start_of_week = today - timedelta(days=today.weekday())
     start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
     end_of_week = start_of_week + timedelta(days=7)
@@ -397,7 +398,7 @@ def calculate_tennis_this_week(player_id):
     return total_serves_this_week
 
 def calculate_fitness_this_week(player_id):
-    today = datetime.utcnow()
+    today = get_client_time(datetime.utcnow())
     start_of_week = today - timedelta(days=today.weekday())
     start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
     end_of_week = start_of_week + timedelta(days=7)
@@ -411,7 +412,7 @@ def calculate_fitness_this_week(player_id):
     return total_serves_this_week
 
 def calculate_serve_percentage_this_week(player_id):
-    today = datetime.utcnow()
+    today = get_client_time(datetime.utcnow())
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=6)
     
