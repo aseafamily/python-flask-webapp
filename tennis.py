@@ -6,7 +6,7 @@ from db_tennis import Tennis, TennisAnalysis, TennisStatus
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
-from utils import test_connection, user_dict, get_week_range
+from utils import test_connection, user_dict, get_week_range, get_client_time
 from flask_login import login_required
 import math
 
@@ -25,7 +25,7 @@ def tennis_index():
 
     if request.method == 'GET':
         tennis_all = Tennis.query.filter_by(player=player_id ).order_by(Tennis.date.desc(), Tennis.id.desc()).all()
-        current_date = datetime.now() - timedelta(hours=8)
+        current_date = get_client_time(datetime.utcnow())
 
         weekly_results = db.session.query(func.extract('year', Tennis.date).label('year'),
                                                 func.extract('week', Tennis.date).label('week'),
