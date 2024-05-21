@@ -343,14 +343,14 @@ def calculate_total_serve_percentage(player_id):
 def calculate_days_since_last_serve(player_id):
     last_serve_date_query = Serve.query.filter_by(player=player_id).order_by(Serve.date.desc()).first().date
     if last_serve_date_query:
-        days_since_last_serve = (get_client_time(datetime.now()) - get_client_time(last_serve_date_query)).days
+        days_since_last_serve = (datetime.utcnow() - timedelta(hours=8) - last_serve_date_query).days
         return days_since_last_serve
     else:
         return None
 
 def calculate_days_since_last_entry(player_id):
     last_serve_date = Tennis.query.filter_by(player=player_id).order_by(Tennis.date.desc()).first().date
-    days_since_last_serve = (get_client_time(datetime.now()) - get_client_time(last_serve_date)).days
+    days_since_last_serve = (datetime.utcnow() - timedelta(hours=8) - last_serve_date).days
     return days_since_last_serve
 
 def calculate_records_this_week(player_id):
