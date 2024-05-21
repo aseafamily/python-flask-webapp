@@ -35,7 +35,7 @@ def test_connection():
     
 def get_week_range(date):
     start_of_week = date - timedelta(days=date.weekday())
-    start_of_week = get_client_time(start_of_week)
+    # start_of_week = get_client_time(start_of_week)
     end_of_week = start_of_week + timedelta(days=6)
     return start_of_week, end_of_week
 
