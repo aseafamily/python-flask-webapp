@@ -6,7 +6,7 @@ from db_tennis import Tennis, TennisAnalysis, TennisStatus
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
-from utils import test_connection, user_dict, get_week_range, get_client_time
+from utils import test_connection, user_dict, get_week_range, get_client_time, convert_none_string_to_none
 from flask_login import login_required
 import math
 
@@ -174,37 +174,37 @@ def serve_update(id):
 
     if request.method == 'POST':
         serve.date = datetime.strptime(request.form['date'], '%Y-%m-%d')
-        serve.first_serve_in = request.form['first_serve_in']
-        serve.first_serve_out = request.form['first_serve_out']
-        serve.first_serve_in_percent = request.form['first_serve_in_percent']
-        serve.second_serve_in = request.form['second_serve_in']
-        serve.second_serve_out = request.form['second_serve_out']
-        serve.second_serve_in_percent = request.form['second_serve_in_percent']
-        serve.total_serve_in = request.form['total_serve_in']
-        serve.total_serve_out = request.form['total_serve_out']
-        serve.total_serve_percent = request.form['total_serve_percent']
-        serve.total_serve = request.form['total_serve']
-        serve.duration = request.form['duration']
-        serve.location = request.form['location']
-        serve.comment = request.form['comment']
-        serve.first_serve_in_deuce = request.form['first_serve_in_deuce']
-        serve.first_serve_out_deuce = request.form['first_serve_out_deuce']
-        serve.first_serve_in_percent_deuce = request.form['first_serve_in_percent_deuce']
-        serve.second_serve_in_deuce = request.form['second_serve_in_deuce']
-        serve.second_serve_out_deuce = request.form['second_serve_out_deuce']
-        serve.second_serve_in_percent_deuce = request.form['second_serve_in_percent_deuce']
-        serve.first_serve_in_ad = request.form['first_serve_in_ad']
-        serve.first_serve_out_ad = request.form['first_serve_out_ad']
-        serve.first_serve_in_percent_ad = request.form['first_serve_in_percent_ad']
-        serve.second_serve_in_ad = request.form['second_serve_in_ad']
-        serve.second_serve_out_ad = request.form['second_serve_out_ad']
-        serve.second_serve_in_percent_ad = request.form['second_serve_in_percent_ad']
+        serve.first_serve_in = convert_none_string_to_none(request.form['first_serve_in'])
+        serve.first_serve_out = convert_none_string_to_none(request.form['first_serve_out'])
+        serve.first_serve_in_percent = convert_none_string_to_none(request.form['first_serve_in_percent'])
+        serve.second_serve_in = convert_none_string_to_none(request.form['second_serve_in'])
+        serve.second_serve_out = convert_none_string_to_none(request.form['second_serve_out'])
+        serve.second_serve_in_percent = convert_none_string_to_none(request.form['second_serve_in_percent'])
+        serve.total_serve_in = convert_none_string_to_none(request.form['total_serve_in'])
+        serve.total_serve_out = convert_none_string_to_none(request.form['total_serve_out'])
+        serve.total_serve_percent = convert_none_string_to_none(request.form['total_serve_percent'])
+        serve.total_serve = convert_none_string_to_none(request.form['total_serve'])
+        serve.duration = convert_none_string_to_none(request.form['duration'])
+        serve.location = convert_none_string_to_none(request.form['location'])
+        serve.comment = convert_none_string_to_none(request.form['comment'])
+        serve.first_serve_in_deuce = convert_none_string_to_none(request.form['first_serve_in_deuce'])
+        serve.first_serve_out_deuce = convert_none_string_to_none(request.form['first_serve_out_deuce'])
+        serve.first_serve_in_percent_deuce = convert_none_string_to_none(request.form['first_serve_in_percent_deuce'])
+        serve.second_serve_in_deuce = convert_none_string_to_none(request.form['second_serve_in_deuce'])
+        serve.second_serve_out_deuce = convert_none_string_to_none(request.form['second_serve_out_deuce'])
+        serve.second_serve_in_percent_deuce = convert_none_string_to_none(request.form['second_serve_in_percent_deuce'])
+        serve.first_serve_in_ad = convert_none_string_to_none(request.form['first_serve_in_ad'])
+        serve.first_serve_out_ad = convert_none_string_to_none(request.form['first_serve_out_ad'])
+        serve.first_serve_in_percent_ad = convert_none_string_to_none(request.form['first_serve_in_percent_ad'])
+        serve.second_serve_in_ad = convert_none_string_to_none(request.form['second_serve_in_ad'])
+        serve.second_serve_out_ad = convert_none_string_to_none(request.form['second_serve_out_ad'])
+        serve.second_serve_in_percent_ad = convert_none_string_to_none(request.form['second_serve_in_percent_ad'])
 
         try:
             db.session.commit()
             return redirect('/serve?u=' + uid)
-        except:
-            return 'There was an issue updating your task'
+        except Exception as e:
+            return f"An error occurred: {e}"
 
     else:
         return render_template('serve_update.html', serve=serve)

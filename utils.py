@@ -50,3 +50,9 @@ def get_client_time(date):
     seattle_time = date.astimezone(seattle_timezone)
     return seattle_time
 
+# Function to convert 'None' string to Python None
+def convert_none_string_to_none(value):
+    if value == 'None':
+        return None
+    return value
+
