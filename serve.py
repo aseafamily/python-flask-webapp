@@ -414,7 +414,8 @@ def calculate_fitness_this_week(player_id):
 def calculate_serve_percentage_this_week(player_id):
     today = get_client_time(datetime.utcnow())
     start_of_week = today - timedelta(days=today.weekday())
-    end_of_week = start_of_week + timedelta(days=6)
+    start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_of_week = start_of_week + timedelta(days=7)
     
     serves_this_week = Serve.query.filter_by(player=player_id).filter(Serve.date.between(start_of_week, end_of_week)).all()
     
