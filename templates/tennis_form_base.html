@@ -9,6 +9,11 @@
     {% block first_part %}
     {% endblock %}
 
+    <style>
+        .set_score {
+            width:50px;
+        }
+    </style>
 
     <div class="form">
         <form action="{% block form_action %}{% endblock %}?u={{ u }}" method="POST">
@@ -34,6 +39,49 @@
                 <tr>
                     <td class="user_input">Details:</td>
                     <td><input type="text" name="details" id="details" value="{% block form_details %}{% endblock %}"></td>
+                </tr>
+                <tr id="match-details-row" style="display: none;">
+                    <td colspan="2">
+                        <div>
+                            <label><input type="radio" name="match_type" value="singles" checked> Singles</label>
+                            <label><input type="radio" name="match_type" value="doubles"> Doubles</label>
+                        </div>
+                        <div class="match-details">
+                            <div>Team 1: </div>
+                            <div><input type="text" name="player1" id="player1"></div>
+                            <div id="team1_doubles" style="display: none;"><input type="text" name="player3" id="player3"></div>
+                            <div>Team 2: </div>
+                            <div><input type="text" name="player2" id="player2"></div>
+                            <div id="team2_doubles" style="display: none;"><input type="text" name="player4" id="player4"></div>
+                        </div>
+                        <div class="set-scores">
+                            <table>
+                                <tr>
+                                    <td>Team 1</td>
+                                    <td><input type="text" name="team1_set1" placeholder="Set 1" class="set_score"></td>
+                                    <td><input type="text" name="team1_set2" placeholder="Set 2" class="set_score"></td>
+                                    <td><input type="text" name="team1_set3" placeholder="Set 3" class="set_score"></td>
+                                </tr>
+                                <tr>
+                                    <td>Team 2</td>
+                                    <td><input type="text" name="team2_set1" placeholder="Set 1" class="set_score"></td>
+                                    <td><input type="text" name="team2_set2" placeholder="Set 2" class="set_score"></td>
+                                    <td><input type="text" name="team2_set3" placeholder="Set 3" class="set_score"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="match-outcome">
+                            <label>Match Outcome: 
+                                <select name="match_outcome" id="match_outcome">
+                                    <option value="team1">Team 1 Won</option>
+                                    <option value="team2">Team 2 Won</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="match-description">
+                            <label>Match Description: <textarea name="match_description" id="match_description"></textarea></label>
+                        </div>
+                    </td>
                 </tr>
             </table>
             <br>
@@ -61,6 +109,16 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script>
+    function toggleMatchDetails(selectedValue) {
+        var matchDetailsRow = document.getElementById('match-details-row');
+
+        if (selectedValue?.toLowerCase() === 'match') {
+            matchDetailsRow.style.display = 'table-row';
+        } else {
+            matchDetailsRow.style.display = 'none';
+        }
+    }
+
     $(document).ready(function() {
         $('#category').on('focus', function() {
             $(this).autocomplete('search', '');
@@ -81,6 +139,7 @@
             minLength: 0, // Minimum characters before triggering autocomplete
             select: function(event, ui) {
                 $('#category').val(ui.item.value); // Update input value when an option is selected
+                toggleMatchDetails(ui.item.value);
                 return false; // Prevent default behavior of input field
             }
         });
@@ -106,6 +165,30 @@
                 $('#location').val(ui.item.value); // Update input value when an option is selected
                 return false; // Prevent default behavior of input field
             }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var team1_doubles= document.getElementById('team1_doubles');
+        var team2_doubles = document.getElementById('team2_doubles');
+        var matchTypeRadios = document.getElementsByName('match_type');
+
+        function toggleMatchType() {
+            if (document.querySelector('input[name="match_type"]:checked').value === 'singles') {
+                team1_doubles.style.display = 'none';
+                team2_doubles.style.display = 'none';
+            } else {
+                team1_doubles.style.display = 'block';
+                team2_doubles.style.display = 'block';
+            }
+        }
+
+        // Initialize the visibility on page load
+        toggleMatchType();
+
+        // Add event listeners for match type radios
+        matchTypeRadios.forEach(function(radio) {
+            radio.addEventListener('change', toggleMatchType);
         });
     });
 </script>

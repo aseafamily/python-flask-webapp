@@ -496,3 +496,8 @@ def serve_db():
         return send_file('test.db', as_attachment=True)
     except Exception as e:
         return str(e)
+    
+@serve_bp.route('/serve/test')
+def serve_test():
+    token = request.args['token']
+    return token
