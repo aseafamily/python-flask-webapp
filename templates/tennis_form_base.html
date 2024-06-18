@@ -56,27 +56,43 @@
                         </div>
                         <div class="set-scores">
                             <table>
-                                <tr>
+                                <tr id="team1_score">
                                     <td>Team 1</td>
-                                    <td><input type="text" name="team1_set1" placeholder="Set 1" class="set_score"></td>
-                                    <td><input type="text" name="team1_set2" placeholder="Set 2" class="set_score"></td>
-                                    <td><input type="text" name="team1_set3" placeholder="Set 3" class="set_score"></td>
+                                    <td>
+                                        <input type="text" name="team1_set1" placeholder="Set 1" class="set_score" tabindex="1" size="1" maxlength="1">
+                                        <input type="text" name="tiebreak_team1_set1" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="team1_set2" placeholder="Set 2" class="set_score" tabindex="3"size="1" maxlength="1">
+                                        <input type="text" name="tiebreak_team1_set2" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="team1_set3" placeholder="Set 3" class="set_score" tabindex="5"size="1" maxlength="1">
+                                        <input type="text" name="tiebreak_team1_set3" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                    </td>
                                 </tr>
-                                <tr>
+                                <tr id="team2_score">
                                     <td>Team 2</td>
-                                    <td><input type="text" name="team2_set1" placeholder="Set 1" class="set_score"></td>
-                                    <td><input type="text" name="team2_set2" placeholder="Set 2" class="set_score"></td>
-                                    <td><input type="text" name="team2_set3" placeholder="Set 3" class="set_score"></td>
+                                    <td>
+                                        <input type="text" name="team2_set1" placeholder="Set 1" class="set_score" tabindex="2"size="1" maxlength="1">
+                                        <input type="text" name="tiebreak_team2_set1" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="team2_set2" placeholder="Set 2" class="set_score" tabindex="4"size="1" maxlength="1">
+                                        <input type="text" name="tiebreak_team2_set2" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="team2_set3" placeholder="Set 3" class="set_score" tabindex="6"size="1" maxlength="1">
+                                        <input type="text" name="tiebreak_team2_set3" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                    </td>
                                 </tr>
                             </table>
                         </div>
                         <div class="match-outcome">
-                            <label>Match Outcome: 
-                                <select name="match_outcome" id="match_outcome">
-                                    <option value="team1">Team 1 Won</option>
-                                    <option value="team2">Team 2 Won</option>
-                                </select>
-                            </label>
+                            Match Won: 
+                                <label><input type="radio" name="match_outcome" value="team1_won" checked> Team 1</label>
+                                <label><input type="radio" name="match_outcome" value="team2_won"> Team 2</label>
+                            
                         </div>
                         <div class="match-description">
                             <label>Match Description: <textarea name="match_description" id="match_description"></textarea></label>
@@ -143,6 +159,52 @@
                 return false; // Prevent default behavior of input field
             }
         });
+
+        function checkScores() {
+            for (let i = 1; i <= 3; i++) {
+                let team1_set = parseInt($(`input[name="team1_set${i}"]`).val()) || 0;
+                let team2_set = parseInt($(`input[name="team2_set${i}"]`).val()) || 0;
+                let scoreDifference = Math.abs(team1_set - team2_set);
+                
+                if (scoreDifference === 1) {
+                    $(`input[name="tiebreak_team1_set${i}"]`).show();
+                    $(`input[name="tiebreak_team2_set${i}"]`).show();
+                } else {
+                    $(`input[name="tiebreak_team1_set${i}"]`).hide().val('');
+                    $(`input[name="tiebreak_team2_set${i}"]`).hide().val('');
+                }
+            }
+        }
+
+        $('.set_score').on('input', checkScores);
+
+        function calculateMatchOutcome() {
+            let team1_sets_won = 0;
+            let team2_sets_won = 0;
+
+            for (let i = 1; i <= 3; i++) {
+                let team1_set_score = parseInt($(`input[name="team1_set${i}"]`).val()) || 0;
+                let team2_set_score = parseInt($(`input[name="team2_set${i}"]`).val()) || 0;
+
+                if (team1_set_score > team2_set_score) {
+                    team1_sets_won++;
+                } else if (team2_set_score > team1_set_score) {
+                    team2_sets_won++;
+                }
+            }
+
+            if (team1_sets_won > team2_sets_won || (team1_sets_won === 2 && team2_sets_won < 2)) {
+                $('input[name="match_outcome"][value="team1_won"]').prop('checked', true);
+                $('#team1_score').css('background-color', 'lightgreen');
+                $('#team2_score').css('background-color', ''); // Reset Team 2's background color
+            } else {
+                $('input[name="match_outcome"][value="team2_won"]').prop('checked', true);
+                $('#team2_score').css('background-color', 'lightgreen');
+                $('#team1_score').css('background-color', ''); // Reset Team 1's background color
+            }
+        }
+
+        $('.set_score').on('input', calculateMatchOutcome);
     });
 
     $(document).ready(function() {
