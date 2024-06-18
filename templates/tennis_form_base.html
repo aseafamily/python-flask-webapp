@@ -11,7 +11,54 @@
 
     <style>
         .set_score {
-            width:50px;
+            width:20px;
+            font-family: Gotham SSm A,Gotham SSm B,Helvetica,Arial,sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.71;
+            color: #2b3339;
+            padding: .375rem .75rem;
+            text-align: center;
+        }
+        .tiebreak_score {
+            width:20px;
+            font-family: Gotham SSm A,Gotham SSm B,Helvetica,Arial,sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.71;
+            color: #2b3339;
+            padding: .375rem .75rem;
+            text-align: center;
+            margin-left: -10px;
+        }
+        .match-type {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .pos-table {
+            border: 0;
+            border-collapse: collapse;
+        }
+        .pos-table td {
+            border: 0;
+        }
+        .match-details {
+            margin-top: 10px;
+        }
+        .set-scores {
+            margin-top: 10px;
+        }
+        .match-row {
+            margin-top: 10px;
+        }
+        .match-input, .match-textarea {
+            width: 250px;
+        }
+        .match-textarea {
+            height: 180px;
+        }
+        .match-notable {
+            margin-left: 6px;
         }
     </style>
 
@@ -42,60 +89,121 @@
                 </tr>
                 <tr id="match-details-row" style="display: none;">
                     <td colspan="2">
-                        <div>
+                        <div class="match-type">
                             <label><input type="radio" name="match_type" value="singles" checked> Singles</label>
                             <label><input type="radio" name="match_type" value="doubles"> Doubles</label>
                         </div>
-                        <div class="match-details">
-                            <div>Team 1: </div>
-                            <div><input type="text" name="player1" id="player1"></div>
-                            <div id="team1_doubles" style="display: none;"><input type="text" name="player3" id="player3"></div>
-                            <div>Team 2: </div>
-                            <div><input type="text" name="player2" id="player2"></div>
-                            <div id="team2_doubles" style="display: none;"><input type="text" name="player4" id="player4"></div>
+                        <div class="match-details match-row">
+                            <table class="pos-table">
+                                <tr>
+                                    <td>Team 1: </td>
+                                    <td>
+                                        <input type="text" name="player1" id="player1">
+                                    </td>
+                                </tr>
+                                <tr id="team1_doubles" style="display: none;">
+                                    <td></td>
+                                    <td><input type="text" name="player3" id="player3"></td>
+                                </tr>
+                                <tr>
+                                    <td>Team 2: </td>
+                                    <td>
+                                        <input type="text" name="player2" id="player2">
+                                    </td>
+                                </tr>
+                                <tr id="team2_doubles" style="display: none;">
+                                    <td></td>
+                                    <td><input type="text" name="player4" id="player4"></td>
+                                </tr>
+                            </table>
                         </div>
-                        <div class="set-scores">
-                            <table>
+                        <div class="set-scores match-row">
+                            <table class="pos-table">
                                 <tr id="team1_score">
                                     <td>Team 1</td>
                                     <td>
-                                        <input type="text" name="team1_set1" placeholder="Set 1" class="set_score" tabindex="1" size="1" maxlength="1">
-                                        <input type="text" name="tiebreak_team1_set1" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                        <input type="text" name="team1_set1" placeholder="S1" class="set_score" tabindex="1" size="1" maxlength="1"  inputmode="numeric">
+                                        <input type="text" name="tiebreak_team1_set1" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                     <td>
-                                        <input type="text" name="team1_set2" placeholder="Set 2" class="set_score" tabindex="3"size="1" maxlength="1">
-                                        <input type="text" name="tiebreak_team1_set2" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                        <input type="text" name="team1_set2" placeholder="S2" class="set_score" tabindex="3"size="1" maxlength="1" inputmode="numeric">
+                                        <input type="text" name="tiebreak_team1_set2" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                     <td>
-                                        <input type="text" name="team1_set3" placeholder="Set 3" class="set_score" tabindex="5"size="1" maxlength="1">
-                                        <input type="text" name="tiebreak_team1_set3" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                        <input type="text" name="team1_set3" placeholder="S3" class="set_score" tabindex="5"size="1" maxlength="1" inputmode="numeric">
+                                        <input type="text" name="tiebreak_team1_set3" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                 </tr>
                                 <tr id="team2_score">
                                     <td>Team 2</td>
                                     <td>
-                                        <input type="text" name="team2_set1" placeholder="Set 1" class="set_score" tabindex="2"size="1" maxlength="1">
-                                        <input type="text" name="tiebreak_team2_set1" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                        <input type="text" name="team2_set1" placeholder="S1" class="set_score" tabindex="2"size="1" maxlength="1" inputmode="numeric">
+                                        <input type="text" name="tiebreak_team2_set1" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                     <td>
-                                        <input type="text" name="team2_set2" placeholder="Set 2" class="set_score" tabindex="4"size="1" maxlength="1">
-                                        <input type="text" name="tiebreak_team2_set2" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                        <input type="text" name="team2_set2" placeholder="S2" class="set_score" tabindex="4"size="1" maxlength="1" inputmode="numeric">
+                                        <input type="text" name="tiebreak_team2_set2" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                     <td>
-                                        <input type="text" name="team2_set3" placeholder="Set 3" class="set_score" tabindex="6"size="1" maxlength="1">
-                                        <input type="text" name="tiebreak_team2_set3" class="tiebreak_score" style="display: none;" size="2" maxlength="2">
+                                        <input type="text" name="team2_set3" placeholder="S3" class="set_score" tabindex="6"size="1" maxlength="1" inputmode="numeric">
+                                        <input type="text" name="tiebreak_team2_set3" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="match-outcome">
-                            Match Won: 
-                                <label><input type="radio" name="match_outcome" value="team1_won" checked> Team 1</label>
-                                <label><input type="radio" name="match_outcome" value="team2_won"> Team 2</label>
-                            
-                        </div>
-                        <div class="match-description">
-                            <label>Match Description: <textarea name="match_description" id="match_description"></textarea></label>
+                        <div class="match-row">
+                            <table class="pos-table">
+                                <tr>
+                                    <td>Match won:</td>
+                                    <td>
+                                        <label><input type="radio" name="match_outcome" value="team1_won" checked> Team 1</label>
+                                        <label><input type="radio" name="match_outcome" value="team2_won"> Team 2</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Match name:</td>
+                                    <td><input type="text" name="match_name" id="match_name" class="match-input"></td>
+                                </tr>
+                                <tr>
+                                    <td>Match level:</td>
+                                    <td><input type="text" name="match_level" id="match_level" class="match-input"></td>
+                                </tr>
+                                <tr>
+                                    <td>Match link:</td>
+                                    <td><input type="text" name="match_link" id="match_link" class="match-input"></td>
+                                </tr>
+                                <tr>
+                                    <td>Match event:</td>
+                                    <td><input type="text" name="match_event" id="match_event" class="match-input"></td>
+                                </tr>
+                                <tr>
+                                    <td>Match draw:</td>
+                                    <td><input type="text" name="match_draw" id="match_draw" class="match-input"></td>
+                                </tr>
+                                <tr>
+                                    <td>Match round:</td>
+                                    <td><input type="text" name="match_round" id="match_round" class="match-input"></td>
+                                </tr>
+                                <tr>
+                                    <td>Match city:</td>
+                                    <td><input type="text" name="match_city" id="match_city" class="match-input"></td>
+                                </tr>
+                                <tr>
+                                    <td>Match state:</td>
+                                    <td><input type="text" name="match_state" id="match_state" class="match-input"></td>
+                                </tr>
+                                <tr>
+                                    <td>Court Type:</td>
+                                    <td>
+                                        <label><input type="radio" name="court_type" value="outdoor">Outdoor</label>
+                                        <label><input type="radio" name="court_type" value="indoor" checked>Indoor</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Comments:</td>
+                                    <td><textarea name="match_comments" id="match_comments" class="match-textarea"></textarea></td>
+                                </tr>
+                            </table>
                         </div>
                     </td>
                 </tr>
@@ -230,6 +338,119 @@
         });
     });
 
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var rounds = [
+            "R128",
+            "R64",
+            "R32",
+            "R16",
+            "Quarterfinals",
+            "Semifinals",
+            "Finals"
+        ];
+
+        $('#match_round').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+
+        $('#match_round').autocomplete({
+            source: rounds, // Use the hardcoded array
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#match_round').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var items = [
+            "Boys'12 & under",
+            "Boys'14 & under",
+            "Boys'16 & under",
+            "Boys'18 & under",
+            "Girls'12 & under",
+            "Girls'14 & under",
+            "Girls'16 & under",
+            "Girls'18 & under",
+            "Adults 18+",
+            "Adults 40+",
+            "Adults 55+"
+        ];
+
+        $('#match_event').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+
+        $('#match_event').autocomplete({
+            source: items, // Use the hardcoded array
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#match_event').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var items = [
+            "Main",
+            "Playoff 3-4",
+            "Consolation",
+            "Singles 1",
+            "Singles 2",
+            "Doubles 1",
+            "Doubles 2",
+            "Doubles 3"
+        ];
+
+        $('#match_draw').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+
+        $('#match_draw').autocomplete({
+            source: items, // Use the hardcoded array
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#match_draw').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var items = [
+            "Level 1",
+            "Level 2",
+            "Level 3",
+            "Level 4",
+            "Level 5",
+            "Level 6",
+            "Level 7",
+            "USTA League",
+            "USTA Junior Team",
+            "Green ball",
+            "Red ball"
+        ];
+
+        $('#match_level').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+
+        $('#match_level').autocomplete({
+            source: items, // Use the hardcoded array
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#match_level').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         var team1_doubles= document.getElementById('team1_doubles');
         var team2_doubles = document.getElementById('team2_doubles');
@@ -240,8 +461,8 @@
                 team1_doubles.style.display = 'none';
                 team2_doubles.style.display = 'none';
             } else {
-                team1_doubles.style.display = 'block';
-                team2_doubles.style.display = 'block';
+                team1_doubles.style.display = 'table-row';
+                team2_doubles.style.display = 'table-row';
             }
         }
 
