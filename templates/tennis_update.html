@@ -3,6 +3,10 @@
 {% block first_part %}
 
 <p>ID: {{ tennis.id }}</p>
+
+{% if match %}
+    <p>Match ID: {{ match.id }}</p>
+{% endif %}
     
 {% endblock %}
 
@@ -12,3 +16,4 @@
 {% block form_location %}{{tennis.location}}{% endblock %}
 {% block form_category %}{{tennis.category}}{% endblock %}
 {% block form_details %}{{tennis.details}}{% endblock %}
+{% block form_loaded %}toggleMatchDetails('{{tennis.category}}');{% endblock %}

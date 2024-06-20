@@ -3,12 +3,15 @@ from flask import Flask, render_template, url_for, request, redirect, send_file,
 from db import db
 from db_serve import Serve, ServeAnalysis, ServeStatus
 from db_tennis import Tennis, TennisAnalysis, TennisStatus
+from db_match import Match
+from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
 from utils import test_connection, user_dict, get_week_range, get_client_time
 from flask_login import login_required
 import math
+from sqlalchemy.orm import aliased
 
 tennis_bp = Blueprint('tennis', __name__)
 
@@ -123,20 +126,148 @@ def tennis_index():
         details = request.form['details']
         player = player_id
 
-        # Create an instance of Tennis class
-        tennis_instance = Tennis(
-            date=date,
-            duration=duration,
-            location=location,
-            category=category,
-            details=details,
-            player = player
-        )
+        if category == 'Match':
+            try:
+                match_type = request.form['match_type']
+                is_singles = match_type == 'singles'
+                player1_id = get_or_create_player(request.form['player1'], db.session, request.form['player1_id'])
+                player2_id = get_or_create_player(request.form['player2'], db.session, request.form['player2_id'])
+                player3_id = -1
+                player4_id = -1
 
-        # Add the instance to the database
-        db.session.add(tennis_instance)
-        db.session.commit()
+                if not is_singles:
+                    player3_id = get_or_create_player(request.form['player3'], db.session, request.form['player3_id'])
+                    player4_id = get_or_create_player(request.form['player4'], db.session, request.form['player4_id'])
+
+                tennis_instance = Tennis(
+                    date=date,
+                    duration=duration,
+                    location=location,
+                    category=category,
+                    details=details,
+                    player = player
+                )
+
+                # Add the instance to the database
+                db.session.add(tennis_instance)
+                db.session.flush()
+
+                # Add a new match using the player1_id
+                new_match = Match(
+                    duration=duration,
+                    location=location,
+                    date=date,
+                    type='S' if is_singles else 'D',
+                    player1=player1_id,
+                    player2=player2_id,
+                    player3=None if is_singles else player3_id,
+                    player4=None if is_singles else player4_id,
+                    team1_set1=get_integer_from_form('team1_set1'),
+                    team1_set1_tb=get_integer_from_form('team1_set1_tb'),
+                    team2_set1=get_integer_from_form('team2_set1'),
+                    team2_set1_tb=get_integer_from_form('team2_set1_tb'),
+                    team1_set2=get_integer_from_form('team1_set2'),
+                    team1_set2_tb=get_integer_from_form('team1_set2_tb'),
+                    team2_set2=get_integer_from_form('team2_set2'),
+                    team2_set2_tb=get_integer_from_form('team2_set2_tb'),
+                    team1_set3=get_integer_from_form('team1_set3'),
+                    team1_set3_tb=get_integer_from_form('team1_set3_tb'),
+                    team2_set3=get_integer_from_form('team2_set3'),
+                    team2_set3_tb=get_integer_from_form('team2_set3_tb'),
+                    team1_won=True if request.form['match_outcome'] == 'team1_won' else False,
+                    match_name=request.form['match_name'],
+                    match_level=request.form['match_level'],
+                    match_link=request.form['match_link'],
+                    match_event=request.form['match_event'],
+                    match_draw=request.form['match_draw'],
+                    match_round=request.form['match_round'],
+                    match_city=request.form['match_city'],
+                    match_state=request.form['match_state'],
+                    is_indoor=True if request.form['court_type'] == 'indoor' else False,
+                    comments=request.form['match_comments'],
+                    tennis_id=tennis_instance.id
+                )
+                db.session.add(new_match)
+                db.session.commit()
+            except:
+                db.session.rollback()
+                raise
+            finally:
+                # No need to close the session manually; Flask-SQLAlchemy handles this
+                pass
+        else:
+            # Create an instance of Tennis class
+            tennis_instance = Tennis(
+                date=date,
+                duration=duration,
+                location=location,
+                category=category,
+                details=details,
+                player = player
+            )
+
+            # Add the instance to the database
+            db.session.add(tennis_instance)
+            db.session.commit()
+
         return redirect('/tennis?u=' + player_id)
+    
+def get_or_create_player(full_name: str, session, player_id: str = '') -> int:
+    if player_id:
+        try:
+            return int(player_id)
+        except ValueError:
+            raise ValueError("Invalid player_id provided. It must be a valid integer.")
+
+    # Split the full name into first and last name
+    name_parts = full_name.strip().split()
+    if len(name_parts) == 1:
+        first_name = name_parts[0]
+        last_name = ''
+    else:
+        first_name = name_parts[0]
+        last_name = ' '.join(name_parts[1:])  # Support for middle names and compound last names
+
+    # Try to find the player in the database
+    query = session.query(Player.id, Player.first_name, Player.last_name).filter(
+        func.lower(Player.first_name) == func.lower(first_name),
+        func.lower(Player.last_name) == func.lower(last_name)
+    )
+    existing_player = query.first()
+    
+    if existing_player:
+        # Player found, return the player ID
+        return existing_player.id
+    else:
+        # Player not found, create a new player
+        new_player = Player(
+            first_name=first_name,
+            last_name=last_name,
+            gender=None,           # Set default values for other fields if necessary
+            birthday=None,
+            year_graduation=None,
+            utr_profile=None,
+            usta_profile=None,
+            usta_id=None,
+            utr=None,
+            wtn=None,
+            usta=None,
+            utr_date=None,
+            wtn_date=None,
+            usta_date=None
+        )
+        session.add(new_player)
+        session.commit()  # Commit to get the new player ID
+        
+        return new_player.id
+    
+def get_integer_from_form(form_key: str) -> int:
+    if form_key in request.form and request.form[form_key]:
+        try:
+            return int(request.form[form_key])
+        except ValueError:
+            pass
+    return None
     
 @tennis_bp.route('/tennis/delete/<int:id>')
 @login_required
@@ -150,11 +281,49 @@ def tennis_delete(id):
         return redirect('/tennis?u=' + uid)
     except:
         return 'There was a problem deleting that task'
-    
+
+# Define a helper function to handle generating names
+def generate_name(first_name, last_name):
+    if first_name and not last_name:
+        return first_name.strip()  # Return first_name if last_name is empty
+    elif first_name and last_name:
+        return (first_name + ' ' + last_name).strip()  # Concatenate both names
+    else:
+        return None  # Return None if both names are empty or None
+        
 @tennis_bp.route('/tennis/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def tennis_update(id):
     tennis = Tennis.query.get_or_404(id)
+    match = None
+    player1_name = None
+    player2_name = None
+    player3_name = None
+    player4_name = None
+    player1 = aliased(Player)
+    player2 = aliased(Player)
+    player3 = aliased(Player)
+    player4 = aliased(Player)
+
+    if tennis.category == 'Match':
+        match_query = db.session.query(
+            Match,
+            player1.first_name.label('player1_first_name'), player1.last_name.label('player1_last_name'),
+            player2.first_name.label('player2_first_name'), player2.last_name.label('player2_last_name'),
+            player3.first_name.label('player3_first_name'), player3.last_name.label('player3_last_name'),
+            player4.first_name.label('player4_first_name'), player4.last_name.label('player4_last_name')
+        ).join(player1, Match.player1 == player1.id, isouter=True) \
+        .join(player2, Match.player2 == player2.id, isouter=True) \
+        .join(player3, Match.player3 == player3.id, isouter=True) \
+        .join(player4, Match.player4 == player4.id, isouter=True) \
+        .filter(Match.tennis_id == tennis.id).first()
+        if match_query:
+            match, player1_first_name, player1_last_name, player2_first_name, player2_last_name, \
+            player3_first_name, player3_last_name, player4_first_name, player4_last_name = match_query
+            player1_name = generate_name(player1_first_name, player1_last_name)
+            player2_name = generate_name(player2_first_name, player2_last_name)
+            player3_name = generate_name(player3_first_name, player3_last_name)
+            player4_name = generate_name(player4_first_name, player4_last_name)
     uid = request.args.get('u')
 
     if request.method == 'POST':
@@ -171,7 +340,7 @@ def tennis_update(id):
             return 'There was an issue updating your task'
 
     else:
-        return render_template('tennis_update.html', tennis=tennis)
+        return render_template('tennis_update.html', tennis=tennis, match=match, player1_name=player1_name, player2_name=player2_name, player3_name=player3_name, player4_name=player4_name)
     
 @tennis_bp.route('/tennis/diagram')
 def tennis_diagram():

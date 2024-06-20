@@ -131,30 +131,30 @@
                                     <td>Team 1</td>
                                     <td>
                                         <input type="text" name="team1_set1" placeholder="S1" class="set_score" tabindex="1" size="1" maxlength="1"  inputmode="numeric">
-                                        <input type="text" name="tiebreak_team1_set1" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team1_set1_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                     <td>
                                         <input type="text" name="team1_set2" placeholder="S2" class="set_score" tabindex="3"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="tiebreak_team1_set2" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team1_set2_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                     <td>
                                         <input type="text" name="team1_set3" placeholder="S3" class="set_score" tabindex="5"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="tiebreak_team1_set3" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team1_set3_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                 </tr>
                                 <tr id="team2_score">
                                     <td>Team 2</td>
                                     <td>
                                         <input type="text" name="team2_set1" placeholder="S1" class="set_score" tabindex="2"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="tiebreak_team2_set1" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team2_set1_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                     <td>
                                         <input type="text" name="team2_set2" placeholder="S2" class="set_score" tabindex="4"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="tiebreak_team2_set2" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team2_set2_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                     <td>
                                         <input type="text" name="team2_set3" placeholder="S3" class="set_score" tabindex="6"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="tiebreak_team2_set3" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team2_set3_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
                                     </td>
                                 </tr>
                             </table>
@@ -283,11 +283,11 @@
                 let scoreDifference = Math.abs(team1_set - team2_set);
                 
                 if (scoreDifference === 1) {
-                    $(`input[name="tiebreak_team1_set${i}"]`).show();
-                    $(`input[name="tiebreak_team2_set${i}"]`).show();
+                    $(`input[name="team1_set${i}_tb"]`).show();
+                    $(`input[name="team2_set${i}_tb"]`).show();
                 } else {
-                    $(`input[name="tiebreak_team1_set${i}"]`).hide().val('');
-                    $(`input[name="tiebreak_team2_set${i}"]`).hide().val('');
+                    $(`input[name="team1_set${i}_tb"]`).hide().val('');
+                    $(`input[name="team2_set${i}_tb"]`).hide().val('');
                 }
             }
         }
@@ -457,6 +457,8 @@
                 return false; // Prevent default behavior of input field
             }
         });
+
+        {% block form_loaded %}{% endblock %}
     });
 
     document.addEventListener('DOMContentLoaded', function() {
