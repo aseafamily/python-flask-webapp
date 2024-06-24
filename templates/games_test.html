@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iOS Device Orientation</title>
+    <style>
+        body {
+            background-color: lightblue; /* Initial background color */
+            transition: background-color 0.5s; /* Smooth transition for background color */
+        }
+    </style>
     <script>
         function isIOS() {
             return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -12,6 +18,15 @@
         function handleDeviceOrientation(event) {
             const beta = event.beta; // The rotation around the X axis (in degrees).
             document.getElementById('beta-value').textContent = `Beta: ${beta.toFixed(2)}°`;
+
+            // Determine background color based on beta value
+            if (beta > 80 && beta < 100) {
+                document.body.style.backgroundColor = 'lightgreen'; // Face-up
+            } else if (beta < -80 && beta > -100) {
+                document.body.style.backgroundColor = 'lightred'; // Face-down
+            } else {
+                document.body.style.backgroundColor = 'lightblue'; // Default (on long edge)
+            }
         }
 
         function requestDeviceOrientationPermission() {
