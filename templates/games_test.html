@@ -19,11 +19,12 @@
             const beta = event.beta; // The rotation around the X axis (in degrees).
             document.getElementById('beta-value').textContent = `Beta: ${beta.toFixed(2)}°`;
 
-            // Determine background color based on beta value
-            if (beta > 80 && beta < 100) {
-                document.body.style.backgroundColor = 'lightgreen'; // Face-up
-            } else if (beta < -80 && beta > -100) {
+            // Determine background color based on absolute beta value
+            const absBeta = Math.abs(beta);
+            if (absBeta > 0.1 && absBeta <= 10) {
                 document.body.style.backgroundColor = 'lightred'; // Face-down
+            } else if (absBeta >= 170 && absBeta <= 180) {
+                document.body.style.backgroundColor = 'lightgreen'; // Face-up
             } else {
                 document.body.style.backgroundColor = 'lightblue'; // Default (on long edge)
             }
