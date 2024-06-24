@@ -16,15 +16,14 @@
         }
 
         function handleDeviceOrientation(event) {
-            const beta = event.beta; // The rotation around the X axis (in degrees).
-            document.getElementById('beta-value').textContent = `Beta: ${beta.toFixed(2)}°`;
+            const gamma = event.gamma; // The rotation around the Y axis (in degrees).
+            document.getElementById('gamma-value').textContent = `Gamma: ${gamma.toFixed(2)}°`;
 
-            // Determine background color based on absolute beta value
-            const absBeta = Math.abs(beta);
-            if (absBeta > 0.1 && absBeta <= 10) {
-                document.body.style.backgroundColor = 'lightred'; // Face-down
-            } else if (absBeta >= 170 && absBeta <= 180) {
-                document.body.style.backgroundColor = 'lightgreen'; // Face-up
+            // Determine background color based on gamma value
+            if (gamma > 80 && gamma <= 100) {
+                document.body.style.backgroundColor = 'lightgreen'; // Face-up along the long edge
+            } else if (gamma < -80 && gamma >= -100) {
+                document.body.style.backgroundColor = 'lightred'; // Face-down along the long edge
             } else {
                 document.body.style.backgroundColor = 'lightblue'; // Default (on long edge)
             }
@@ -37,7 +36,7 @@
                         if (permissionState === 'granted') {
                             window.addEventListener('deviceorientation', handleDeviceOrientation);
                         } else {
-                            document.getElementById('beta-value').textContent = 'Permission denied';
+                            document.getElementById('gamma-value').textContent = 'Permission denied';
                         }
                     })
                     .catch(console.error);
@@ -59,7 +58,7 @@
 <body>
     <h1>Device Orientation</h1>
     <p id="device-info">Detecting device...</p>
-    <p id="beta-value">Beta: N/A</p>
+    <p id="gamma-value">Gamma: N/A</p>
     <button id="request-permission" style="display:none;" onclick="requestDeviceOrientationPermission()">Request Orientation Permission</button>
 </body>
 </html>
