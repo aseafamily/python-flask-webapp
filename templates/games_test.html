@@ -14,10 +14,26 @@
             document.getElementById('beta-value').textContent = `Beta: ${beta.toFixed(2)}°`;
         }
 
+        function requestDeviceOrientationPermission() {
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                            window.addEventListener('deviceorientation', handleDeviceOrientation);
+                        } else {
+                            document.getElementById('beta-value').textContent = 'Permission denied';
+                        }
+                    })
+                    .catch(console.error);
+            } else {
+                window.addEventListener('deviceorientation', handleDeviceOrientation);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             if (isIOS()) {
                 document.getElementById('device-info').textContent = 'This is an iOS device';
-                window.addEventListener('deviceorientation', handleDeviceOrientation);
+                document.getElementById('request-permission').style.display = 'block';
             } else {
                 document.getElementById('device-info').textContent = 'This is not an iOS device';
             }
@@ -28,5 +44,6 @@
     <h1>Device Orientation</h1>
     <p id="device-info">Detecting device...</p>
     <p id="beta-value">Beta: N/A</p>
+    <button id="request-permission" style="display:none;" onclick="requestDeviceOrientationPermission()">Request Orientation Permission</button>
 </body>
 </html>
