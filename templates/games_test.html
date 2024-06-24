@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Device Orientation</title>
+    <script>
+        function isIOS() {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        }
+
+        function handleDeviceOrientation(event) {
+            const beta = event.beta; // The rotation around the X axis (in degrees).
+            document.getElementById('beta-value').textContent = `Beta: ${beta.toFixed(2)}°`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (isIOS()) {
+                document.getElementById('device-info').textContent = 'This is an iOS device';
+                window.addEventListener('deviceorientation', handleDeviceOrientation);
+            } else {
+                document.getElementById('device-info').textContent = 'This is not an iOS device';
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>Device Orientation</h1>
+    <p id="device-info">Detecting device...</p>
+    <p id="beta-value">Beta: N/A</p>
+</body>
+</html>
