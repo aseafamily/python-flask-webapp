@@ -442,7 +442,7 @@ def generate_match_summary(match):
     if match.type == 'D':
         player3_name = get_brief_player_name(request.form['player3'])
         player4_name = get_brief_player_name(request.form['player4'])
-        player1_name = f"{player1_name}/{player3_name}"
+        player1_name = f"/{player3_name} "
         player2_name = f"{player2_name}/{player4_name}"
 
     # Extract scores
@@ -463,7 +463,7 @@ def generate_match_summary(match):
             sets_summary.append(set_summary)
 
     # Combine all details
-    match_summary = f"{player1_name} "
+    match_summary = f"{player1_name}"
     match_summary += ";".join(sets_summary)
     match_summary += f" {player2_name}"
 
