@@ -68,7 +68,8 @@
                 <th>Act</th>
             </tr>
             {% for tennis in tennis_all %}
-                <tr>
+                {% set is_match = tennis.category == 'Match' %}
+                <tr style="background-color: {% if is_match %}#ffffe0{% endif %};">
                     {% set weekday_abbr = tennis.date.strftime('%a') %}
                     {% if weekday_abbr in ['Mon', 'Wed', 'Fri'] %}
                         {% set weekday_abbr = weekday_abbr[:1] %}
@@ -86,7 +87,7 @@
                         <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')">D</a>
                     </td>
                 </tr>
-                <tr>
+                <tr style="background-color: {% if is_match %}#ffffe0{% endif %};">
                     <td></td>
                     <td colspan="4">{{ tennis.details }}</td>
                 </tr>
