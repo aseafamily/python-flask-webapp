@@ -27,6 +27,12 @@
 {% block form_details %}{% endblock %}
 {% block form_loaded %}{% endblock %}
 
+{% block match_player1 %}{{ user_name }}{% endblock %}
+{% block match_player1_id %}{{ u }}{% endblock %}
+
+{% block team1_won %}checked{% endblock %}
+{% block court_type_indoor %}checked{% endblock %}
+
 {% block bottom_part %}
     <div class="content" style="margin-top: 30px;">
         <div>
@@ -74,7 +80,7 @@
                     <td style="white-space: nowrap;">{{ formatted_date }} {{ weekday_abbr }}</td>
                     <td>{{ "{:.1f}".format(tennis.duration / 60) }}</td>
                     <td>{{ tennis.category }}</td>
-                    <td>{{ tennis.location }}</td>
+                    <td>{{ tennis.location | generate_acronym }}</td>
                     <td style="white-space: nowrap;">
                         <a href="/tennis/update/{{tennis.id}}?u={{ u }}" style="margin-left: 10px; margin-right: 20px;">U</a>
                         <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')">D</a>

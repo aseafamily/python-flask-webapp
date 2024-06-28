@@ -46,6 +46,29 @@ def load_user(user_id):
             return user
     return None
 
+@app.template_filter('generate_acronym')
+def generate_acronym(location_name):
+    # Check if location_name is already an acronym (less than four uppercase characters)
+    if len(location_name) <= 4 and location_name.isupper():
+        return location_name
+    
+    # Split the location name into words
+    words = location_name.split()
+
+    # Initialize acronym
+    acronym = ""
+
+    # Build acronym from first letters of each word (up to 4 characters)
+    for word in words:
+        acronym += word[0].upper()
+
+        # Break loop if acronym length reaches 4 characters
+        if len(acronym) >= 4:
+            break
+
+    return acronym
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()

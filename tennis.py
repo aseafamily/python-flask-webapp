@@ -12,6 +12,7 @@ from utils import test_connection, user_dict, get_week_range, get_client_time
 from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
+import re
 
 tennis_bp = Blueprint('tennis', __name__)
 
@@ -188,6 +189,7 @@ def tennis_index():
                     tennis_id=tennis_instance.id
                 )
                 db.session.add(new_match)
+                tennis_instance.details = generate_match_summary(new_match)
                 db.session.commit()
             except:
                 db.session.rollback()
@@ -273,10 +275,13 @@ def get_integer_from_form(form_key: str) -> int:
 @login_required
 def tennis_delete(id):
     tennis_to_delete = Tennis.query.get_or_404(id)
+    match_to_delete = Match.query.filter_by(tennis_id=tennis_to_delete.id).first()
     uid = request.args.get('u')
 
     try:
         db.session.delete(tennis_to_delete)
+        if match_to_delete is not None:
+            db.session.delete(match_to_delete)
         db.session.commit()
         return redirect('/tennis?u=' + uid)
     except:
@@ -296,51 +301,234 @@ def generate_name(first_name, last_name):
 def tennis_update(id):
     tennis = Tennis.query.get_or_404(id)
     match = None
-    player1_name = None
-    player2_name = None
-    player3_name = None
-    player4_name = None
-    player1 = aliased(Player)
-    player2 = aliased(Player)
-    player3 = aliased(Player)
-    player4 = aliased(Player)
-
-    if tennis.category == 'Match':
-        match_query = db.session.query(
-            Match,
-            player1.first_name.label('player1_first_name'), player1.last_name.label('player1_last_name'),
-            player2.first_name.label('player2_first_name'), player2.last_name.label('player2_last_name'),
-            player3.first_name.label('player3_first_name'), player3.last_name.label('player3_last_name'),
-            player4.first_name.label('player4_first_name'), player4.last_name.label('player4_last_name')
-        ).join(player1, Match.player1 == player1.id, isouter=True) \
-        .join(player2, Match.player2 == player2.id, isouter=True) \
-        .join(player3, Match.player3 == player3.id, isouter=True) \
-        .join(player4, Match.player4 == player4.id, isouter=True) \
-        .filter(Match.tennis_id == tennis.id).first()
-        if match_query:
-            match, player1_first_name, player1_last_name, player2_first_name, player2_last_name, \
-            player3_first_name, player3_last_name, player4_first_name, player4_last_name = match_query
-            player1_name = generate_name(player1_first_name, player1_last_name)
-            player2_name = generate_name(player2_first_name, player2_last_name)
-            player3_name = generate_name(player3_first_name, player3_last_name)
-            player4_name = generate_name(player4_first_name, player4_last_name)
     uid = request.args.get('u')
 
     if request.method == 'POST':
-        tennis.date = datetime.strptime(request.form['date'], '%Y-%m-%d')
-        tennis.duration = request.form['duration']
-        tennis.location = request.form['location']
-        tennis.category = request.form['category']
-        tennis.details = request.form['details']        
+        date = datetime.strptime(request.form['date'], '%Y-%m-%d')
+        duration = request.form['duration']
+        location = request.form['location']
 
-        try:
-            db.session.commit()
-            return redirect('/tennis?u=' + uid)
-        except:
-            return 'There was an issue updating your task'
+        tennis.date = date
+        tennis.duration = duration
+        tennis.location = location
+        tennis.category = request.form['category']
+        tennis.details = request.form['details']
+
+        if tennis.category == 'Match':
+            match_type = request.form['match_type']
+            is_singles = match_type == 'singles'
+            player1_id = get_or_create_player(request.form['player1'], db.session, request.form['player1_id'])
+            player2_id = get_or_create_player(request.form['player2'], db.session, request.form['player2_id'])
+            player3_id = -1
+            player4_id = -1
+
+            if not is_singles:
+                player3_id = get_or_create_player(request.form['player3'], db.session, request.form['player3_id'])
+                player4_id = get_or_create_player(request.form['player4'], db.session, request.form['player4_id'])
+
+            match = Match.query.filter_by(tennis_id=tennis.id).first()
+            if not match:
+                # Create a new match
+                match = Match(
+                    duration=duration,
+                    location=location,
+                    date=date,
+                    type='S' if is_singles else 'D',
+                    player1=player1_id,
+                    player2=player2_id,
+                    player3=None if is_singles else player3_id,
+                    player4=None if is_singles else player4_id,
+                    team1_set1=get_integer_from_form('team1_set1'),
+                    team1_set1_tb=get_integer_from_form('team1_set1_tb'),
+                    team2_set1=get_integer_from_form('team2_set1'),
+                    team2_set1_tb=get_integer_from_form('team2_set1_tb'),
+                    team1_set2=get_integer_from_form('team1_set2'),
+                    team1_set2_tb=get_integer_from_form('team1_set2_tb'),
+                    team2_set2=get_integer_from_form('team2_set2'),
+                    team2_set2_tb=get_integer_from_form('team2_set2_tb'),
+                    team1_set3=get_integer_from_form('team1_set3'),
+                    team1_set3_tb=get_integer_from_form('team1_set3_tb'),
+                    team2_set3=get_integer_from_form('team2_set3'),
+                    team2_set3_tb=get_integer_from_form('team2_set3_tb'),
+                    team1_won=True if request.form['match_outcome'] == 'team1_won' else False,
+                    match_name=request.form['match_name'],
+                    match_level=request.form['match_level'],
+                    match_link=request.form['match_link'],
+                    match_event=request.form['match_event'],
+                    match_draw=request.form['match_draw'],
+                    match_round=request.form['match_round'],
+                    match_city=request.form['match_city'],
+                    match_state=request.form['match_state'],
+                    is_indoor=True if request.form['court_type'] == 'indoor' else False,
+                    comments=request.form['match_comments'],
+                    tennis_id=tennis.id
+                )
+                db.session.add(match)
+            else:
+                # Update the match
+                match.duration=duration
+                match.date=date
+                match.type='S' if is_singles else 'D'
+                match.player1=player1_id
+                match.player2=player2_id
+                match.player3=None if is_singles else player3_id
+                match.player4=None if is_singles else player4_id
+                match.team1_set1=get_integer_from_form('team1_set1')
+                match.team1_set1_tb=get_integer_from_form('team1_set1_tb')
+                match.team2_set1=get_integer_from_form('team2_set1')
+                match.team2_set1_tb=get_integer_from_form('team2_set1_tb')
+                match.team1_set2=get_integer_from_form('team1_set2')
+                match.team1_set2_tb=get_integer_from_form('team1_set2_tb')
+                match.team2_set2=get_integer_from_form('team2_set2')
+                match.team2_set2_tb=get_integer_from_form('team2_set2_tb')
+                match.team1_set3=get_integer_from_form('team1_set3')
+                match.team1_set3_tb=get_integer_from_form('team1_set3_tb')
+                match.team2_set3=get_integer_from_form('team2_set3')
+                match.team2_set3_tb=get_integer_from_form('team2_set3_tb')
+                match.team1_won=True if request.form['match_outcome'] == 'team1_won' else False
+                match.match_name=request.form['match_name']
+                match.match_level=request.form['match_level']
+                match.match_link=request.form['match_link']
+                match.match_event=request.form['match_event']
+                match.match_draw=request.form['match_draw']
+                match.match_round=request.form['match_round']
+                match.match_city=request.form['match_city']
+                match.match_state=request.form['match_state']
+                match.is_indoor=True if request.form['court_type'] == 'indoor' else False
+                match.comments=request.form['match_comments']
+
+            tennis.details = generate_match_summary(match)
+
+    
+        db.session.commit()
+        return redirect('/tennis?u=' + uid)
 
     else:
+        player1_name = None
+        player2_name = None
+        player3_name = None
+        player4_name = None
+        player1 = aliased(Player)
+        player2 = aliased(Player)
+        player3 = aliased(Player)
+        player4 = aliased(Player)
+
+        if tennis.category == 'Match':
+            match_query = db.session.query(
+                Match,
+                player1.first_name.label('player1_first_name'), player1.last_name.label('player1_last_name'),
+                player2.first_name.label('player2_first_name'), player2.last_name.label('player2_last_name'),
+                player3.first_name.label('player3_first_name'), player3.last_name.label('player3_last_name'),
+                player4.first_name.label('player4_first_name'), player4.last_name.label('player4_last_name')
+            ).join(player1, Match.player1 == player1.id, isouter=True) \
+            .join(player2, Match.player2 == player2.id, isouter=True) \
+            .join(player3, Match.player3 == player3.id, isouter=True) \
+            .join(player4, Match.player4 == player4.id, isouter=True) \
+            .filter(Match.tennis_id == tennis.id).first()
+            if match_query:
+                match, player1_first_name, player1_last_name, player2_first_name, player2_last_name, \
+                player3_first_name, player3_last_name, player4_first_name, player4_last_name = match_query
+                player1_name = generate_name(player1_first_name, player1_last_name)
+                player2_name = generate_name(player2_first_name, player2_last_name)
+                player3_name = generate_name(player3_first_name, player3_last_name)
+                player4_name = generate_name(player4_first_name, player4_last_name)
+        
         return render_template('tennis_update.html', tennis=tennis, match=match, player1_name=player1_name, player2_name=player2_name, player3_name=player3_name, player4_name=player4_name)
+
+def generate_match_summary(match):
+    # Extract player names
+    player1_name = '' # get_brief_player_name(request.form['player1'])
+    player2_name = get_brief_player_name(request.form['player2'])
+    if match.type == 'D':
+        player3_name = get_brief_player_name(request.form['player3'])
+        player4_name = get_brief_player_name(request.form['player4'])
+        player1_name = f"{player1_name}/{player3_name}"
+        player2_name = f"{player2_name}/{player4_name}"
+
+    # Extract scores
+    sets_summary = []
+    for i in range(1, 4):  # Assuming matches have up to 3 sets
+        team1_score = getattr(match, f"team1_set{i}")
+        team2_score = getattr(match, f"team2_set{i}")
+        team1_tb = getattr(match, f"team1_set{i}_tb", None)
+        team2_tb = getattr(match, f"team2_set{i}_tb", None)
+
+        if team1_score is not None and team2_score is not None:
+            set_summary = f"{team1_score}"
+            if team1_tb is not None:
+                set_summary += f"({team1_tb})"
+            set_summary += f"-{team2_score}"
+            if team2_tb is not None:
+                set_summary += f"({team2_tb})"
+            sets_summary.append(set_summary)
+
+    # Combine all details
+    match_summary = f"{player1_name} "
+    match_summary += ";".join(sets_summary)
+    match_summary += f" {player2_name}"
+
+    level = generate_title(match.match_level, False)
+    title = generate_title(match.match_name, True)
+    round = get_match_round_abbreviation(match.match_round)
+    event = extract_number_from_string(match.match_event)
+    if match.match_draw == 'Consolation':
+        round = f"C-{round}"
+
+    match_summary += f" {title} {level} {event} {round}"
+
+    return match_summary
+
+def extract_number_from_string(input_string):
+    match = re.search(r'\d+', input_string)
+    if match:
+        return f"U{match.group()}"
+    return None
+
+def get_brief_player_name(player):
+    # Split the full name into parts
+    parts = player.split()
+
+    # Construct the formatted name
+    if len(parts) >= 2:
+        formatted_name = f"{parts[0]}{parts[1][0].upper()}"
+    else:
+        formatted_name = player.full_name  # In case only one part (unlikely for full name)
+
+    return formatted_name
+
+def generate_title(location_name, ignore_digits=True):
+    # Check if location_name is already an acronym (less than four uppercase characters)
+    if len(location_name) <= 4 and location_name.isupper():
+        return location_name
+    
+    # Split the location name into words
+    words = location_name.split()
+
+    # Initialize acronym
+    acronym = ""
+
+    # Build acronym from first letters of each word (up to 4 characters)
+    for word in words:
+        if not (ignore_digits and word.isdigit()):  # Skip words that are numbers if ignore_digits is True
+            acronym += word[0].upper()
+
+            # Break loop if acronym length reaches 4 characters
+            if len(acronym) >= 4:
+                break
+
+    return acronym
+
+def get_match_round_abbreviation(round_name):
+    special_rounds = {
+        "Quarterfinals": "QF",
+        "Semifinals": "SF",
+        "Finals": "F"
+    }
+    
+    if round_name in special_rounds:
+        return special_rounds[round_name]
+    else:
+        return round_name[:4].upper()
     
 @tennis_bp.route('/tennis/diagram')
 def tennis_diagram():

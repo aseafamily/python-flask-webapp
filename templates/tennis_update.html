@@ -12,8 +12,74 @@
 
 {% block form_action %}/tennis/update/{{tennis.id}}{% endblock %}
 {% block form_date %}{{tennis.date.date()}}{% endblock %}
-{% block form_duration %}{{tennis.duration}}{% endblock %}
+{% block form_duration %}{{tennis.duration | int}}{% endblock %}
 {% block form_location %}{{tennis.location}}{% endblock %}
 {% block form_category %}{{tennis.category}}{% endblock %}
 {% block form_details %}{{tennis.details}}{% endblock %}
-{% block form_loaded %}toggleMatchDetails('{{tennis.category}}');{% endblock %}
+
+{% block form_loaded %}
+    toggleMatchDetails('{{tennis.category}}');
+    var matchType = "{{ match.type if match else '' }}";
+    if (matchType === "D") {
+        document.querySelector('input[name="match_type"][value="doubles"]').checked = true;
+    }
+{% endblock %}
+
+{% if match %}
+    {% block match_player1 %}{{player1_name if player1_name is not none else ''}}{% endblock %}
+    {% block match_player2 %}{{player2_name if player2_name is not none else ''}}{% endblock %}
+    {% block match_player3 %}{{player3_name if player3_name is not none else ''}}{% endblock %}
+    {% block match_player4 %}{{player4_name if player4_name is not none else ''}}{% endblock %}
+    {% block match_player1_id %}{{match.player1 if match.player1 is not none else ''}}{% endblock %}
+    {% block match_player2_id %}{{match.player2 if match.player2 is not none else ''}}{% endblock %}
+    {% block match_player3_id %}{{match.player3 if match.player3 is not none else ''}}{% endblock %}
+    {% block match_player4_id %}{{match.player4 if match.player4 is not none else ''}}{% endblock %}
+    
+    {% block team1_set1 %}{{match.team1_set1 if match.team1_set1 is not none else ''}}{% endblock %}
+    {% block team1_set1_tb %}{{match.team1_set1_tb if match.team1_set1_tb is not none else ''}}{% endblock %}
+    {% block team2_set1 %}{{match.team2_set1 if match.team2_set1 is not none else ''}}{% endblock %}
+    {% block team2_set1_tb %}{{match.team2_set1_tb if match.team2_set1_tb is not none else ''}}{% endblock %}
+    {% block team1_set2 %}{{match.team1_set2 if match.team1_set2 is not none else ''}}{% endblock %}
+    {% block team1_set2_tb %}{{match.team1_set2_tb if match.team1_set2_tb is not none else ''}}{% endblock %}
+    {% block team2_set2 %}{{match.team2_set2 if match.team2_set2 is not none else ''}}{% endblock %}
+    {% block team2_set2_tb %}{{match.team2_set2_tb if match.team2_set2_tb is not none else ''}}{% endblock %}
+    {% block team1_set3 %}{{match.team1_set3 if match.team1_set3 is not none else ''}}{% endblock %}
+    {% block team1_set3_tb %}{{match.team1_set3_tb if match.team1_set3_tb is not none else ''}}{% endblock %}
+    {% block team2_set3 %}{{match.team2_set3 if match.team2_set3 is not none else ''}}{% endblock %}
+    {% block team2_set3_tb %}{{match.team2_set3_tb if match.team2_set3_tb is not none else ''}}{% endblock %}
+
+    {% block team1_won %}
+        {% if match.team1_won %}
+            checked
+        {% endif %}
+    {% endblock %}
+
+    {% block team2_won %}
+        {% if not match.team1_won %}
+            checked
+        {% endif %}
+    {% endblock %}
+
+    {% block match_name %}{{match.match_name if match.match_name is not none else ''}}{% endblock %}
+    {% block match_level %}{{match.match_level if match.match_level is not none else ''}}{% endblock %}
+    {% block match_link %}{{match.match_link if match.match_link is not none else ''}}{% endblock %}
+    {% block match_event %}{{match.match_event if match.match_event is not none else ''}}{% endblock %}
+    {% block match_draw %}{{match.match_draw if match.match_draw is not none else ''}}{% endblock %}
+    {% block match_round %}{{match.match_round if match.match_round is not none else ''}}{% endblock %}
+    {% block match_city %}{{match.match_city if match.match_city is not none else ''}}{% endblock %}
+    {% block match_state %}{{match.match_state if match.match_state is not none else ''}}{% endblock %}
+    {% block match_comments %}{{match.comments if match.match_comments is not none else ''}}{% endblock %}
+
+    {% block court_type_outdoor %}
+        {% if not match.is_indoor %}
+            checked
+        {% endif %}
+    {% endblock %}
+
+    {% block court_type_indoor %}
+        {% if match.is_indoor %}
+            checked
+        {% endif %}
+    {% endblock %}
+    
+{% endif %}

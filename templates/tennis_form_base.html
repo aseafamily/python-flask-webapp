@@ -98,29 +98,29 @@
                                 <tr>
                                     <td>Team 1: </td>
                                     <td>
-                                        <input type="text" name="player1" id="player1">
-                                        <input type="hidden" id="player1_id" name="player1_id" value="">
+                                        <input type="text" name="player1" id="player1" value="{% block match_player1 %}{% endblock %}">
+                                        <input type="hidden" id="player1_id" name="player1_id" value="{% block match_player1_id %}{% endblock %}">
                                     </td>
                                 </tr>
                                 <tr id="team1_doubles" style="display: none;">
                                     <td></td>
                                     <td>
-                                        <input type="text" name="player3" id="player3">
-                                        <input type="hidden" id="player3_id" name="player3_id">
+                                        <input type="text" name="player3" id="player3" value="{% block match_player3 %}{% endblock %}">
+                                        <input type="hidden" id="player3_id" name="player3_id" value="{% block match_player3_id %}{% endblock %}">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Team 2: </td>
                                     <td>
-                                        <input type="text" name="player2" id="player2">
-                                        <input type="hidden" id="player2_id" name="player2_id">
+                                        <input type="text" name="player2" id="player2" value="{% block match_player2 %}{% endblock %}">
+                                        <input type="hidden" id="player2_id" name="player2_id" value="{% block match_player2_id %}{% endblock %}">
                                     </td>
                                 </tr>
                                 <tr id="team2_doubles" style="display: none;">
                                     <td></td>
                                     <td>
-                                        <input type="text" name="player4" id="player4">
-                                        <input type="hidden" id="player4_id" name="player4_id">
+                                        <input type="text" name="player4" id="player4" value="{% block match_player4 %}{% endblock %}">
+                                        <input type="hidden" id="player4_id" name="player4_id" value="{% block match_player4_id %}{% endblock %}">
                                     </td>
                                 </tr>
                             </table>
@@ -130,31 +130,31 @@
                                 <tr id="team1_score">
                                     <td>Team 1</td>
                                     <td>
-                                        <input type="text" name="team1_set1" placeholder="S1" class="set_score" tabindex="1" size="1" maxlength="1"  inputmode="numeric">
-                                        <input type="text" name="team1_set1_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team1_set1" placeholder="S1" class="set_score" tabindex="1" size="1" maxlength="1"  inputmode="numeric" value="{% block team1_set1 %}{% endblock %}">
+                                        <input type="text" name="team1_set1_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric" value="{% block team1_set1_tb %}{% endblock %}">
                                     </td>
                                     <td>
-                                        <input type="text" name="team1_set2" placeholder="S2" class="set_score" tabindex="3"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="team1_set2_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team1_set2" placeholder="S2" class="set_score" tabindex="3"size="1" maxlength="1" inputmode="numeric" value="{% block team1_set2 %}{% endblock %}">
+                                        <input type="text" name="team1_set2_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric" value="{% block team1_set2_tb %}{% endblock %}">
                                     </td>
                                     <td>
-                                        <input type="text" name="team1_set3" placeholder="S3" class="set_score" tabindex="5"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="team1_set3_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team1_set3" placeholder="S3" class="set_score" tabindex="5"size="1" maxlength="1" inputmode="numeric" value="{% block team1_set3 %}{% endblock %}">
+                                        <input type="text" name="team1_set3_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric" value="{% block team1_set3_tb %}{% endblock %}">
                                     </td>
                                 </tr>
                                 <tr id="team2_score">
                                     <td>Team 2</td>
                                     <td>
-                                        <input type="text" name="team2_set1" placeholder="S1" class="set_score" tabindex="2"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="team2_set1_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team2_set1" placeholder="S1" class="set_score" tabindex="2"size="1" maxlength="1" inputmode="numeric" value="{% block team2_set1 %}{% endblock %}">
+                                        <input type="text" name="team2_set1_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric" value="{% block team2_set1_tb %}{% endblock %}">
                                     </td>
                                     <td>
-                                        <input type="text" name="team2_set2" placeholder="S2" class="set_score" tabindex="4"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="team2_set2_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team2_set2" placeholder="S2" class="set_score" tabindex="4"size="1" maxlength="1" inputmode="numeric" value="{% block team2_set2 %}{% endblock %}">
+                                        <input type="text" name="team2_set2_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric" value="{% block team2_set2_tb %}{% endblock %}">
                                     </td>
                                     <td>
-                                        <input type="text" name="team2_set3" placeholder="S3" class="set_score" tabindex="6"size="1" maxlength="1" inputmode="numeric">
-                                        <input type="text" name="team2_set3_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric">
+                                        <input type="text" name="team2_set3" placeholder="S3" class="set_score" tabindex="6"size="1" maxlength="1" inputmode="numeric" value="{% block team2_set3 %}{% endblock %}">
+                                        <input type="text" name="team2_set3_tb" class="tiebreak_score" style="display: none;" size="2" maxlength="2" inputmode="numeric" value="{% block team2_set3_tb %}{% endblock %}">
                                     </td>
                                 </tr>
                             </table>
@@ -164,52 +164,52 @@
                                 <tr>
                                     <td>Match won:</td>
                                     <td>
-                                        <label><input type="radio" name="match_outcome" value="team1_won" checked> Team 1</label>
-                                        <label><input type="radio" name="match_outcome" value="team2_won"> Team 2</label>
+                                        <label><input type="radio" name="match_outcome" value="team1_won" {% block team1_won %}{% endblock %}> Team 1</label>
+                                        <label><input type="radio" name="match_outcome" value="team2_won" {% block team2_won %}{% endblock %}> Team 2</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Match name:</td>
-                                    <td><input type="text" name="match_name" id="match_name" class="match-input"></td>
+                                    <td><input type="text" name="match_name" id="match_name" class="match-input" value="{% block match_name %}{% endblock %}"></td>
                                 </tr>
                                 <tr>
                                     <td>Match level:</td>
-                                    <td><input type="text" name="match_level" id="match_level" class="match-input"></td>
+                                    <td><input type="text" name="match_level" id="match_level" class="match-input" value="{% block match_level %}{% endblock %}"></td>
                                 </tr>
                                 <tr>
                                     <td>Match link:</td>
-                                    <td><input type="text" name="match_link" id="match_link" class="match-input"></td>
+                                    <td><input type="text" name="match_link" id="match_link" class="match-input" value="{% block match_link %}{% endblock %}"></td>
                                 </tr>
                                 <tr>
                                     <td>Match event:</td>
-                                    <td><input type="text" name="match_event" id="match_event" class="match-input"></td>
+                                    <td><input type="text" name="match_event" id="match_event" class="match-input" value="{% block match_event %}{% endblock %}"></td>
                                 </tr>
                                 <tr>
                                     <td>Match draw:</td>
-                                    <td><input type="text" name="match_draw" id="match_draw" class="match-input"></td>
+                                    <td><input type="text" name="match_draw" id="match_draw" class="match-input" value="{% block match_draw %}{% endblock %}"></td>
                                 </tr>
                                 <tr>
                                     <td>Match round:</td>
-                                    <td><input type="text" name="match_round" id="match_round" class="match-input"></td>
+                                    <td><input type="text" name="match_round" id="match_round" class="match-input" value="{% block match_round %}{% endblock %}"></td>
                                 </tr>
                                 <tr>
                                     <td>Match city:</td>
-                                    <td><input type="text" name="match_city" id="match_city" class="match-input"></td>
+                                    <td><input type="text" name="match_city" id="match_city" class="match-input" value="{% block match_city %}{% endblock %}"></td>
                                 </tr>
                                 <tr>
                                     <td>Match state:</td>
-                                    <td><input type="text" name="match_state" id="match_state" class="match-input"></td>
+                                    <td><input type="text" name="match_state" id="match_state" class="match-input" value="{% block match_state %}{% endblock %}"></td>
                                 </tr>
                                 <tr>
                                     <td>Court Type:</td>
                                     <td>
-                                        <label><input type="radio" name="court_type" value="outdoor">Outdoor</label>
-                                        <label><input type="radio" name="court_type" value="indoor" checked>Indoor</label>
+                                        <label><input type="radio" name="court_type" value="outdoor" {% block court_type_outdoor %}{% endblock %}>Outdoor</label>
+                                        <label><input type="radio" name="court_type" value="indoor" {% block court_type_indoor %}{% endblock %}>Indoor</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Comments:</td>
-                                    <td><textarea name="match_comments" id="match_comments" class="match-textarea"></textarea></td>
+                                    <td><textarea name="match_comments" id="match_comments" class="match-textarea">{% block match_comments %}{% endblock %}</textarea></td>
                                 </tr>
                             </table>
                         </div>
@@ -250,6 +250,8 @@
             matchDetailsRow.style.display = 'none';
         }
     }
+
+    {% block form_loaded %}{% endblock %}
 
     $(document).ready(function() {
         $('#category').on('focus', function() {
@@ -293,6 +295,7 @@
         }
 
         $('.set_score').on('input', checkScores);
+        checkScores();
 
         function calculateMatchOutcome() {
             let team1_sets_won = 0;
@@ -309,7 +312,7 @@
                 }
             }
 
-            if (team1_sets_won > team2_sets_won || (team1_sets_won === 2 && team2_sets_won < 2)) {
+            if (team1_sets_won > team2_sets_won || (team1_sets_won === 2 && team2_sets_won < 2) || (team1_sets_won === 0 && team2_sets_won === 0)) {
                 $('input[name="match_outcome"][value="team1_won"]').prop('checked', true);
                 $('#team1_score').css('background-color', 'lightgreen');
                 $('#team2_score').css('background-color', ''); // Reset Team 2's background color
@@ -321,6 +324,7 @@
         }
 
         $('.set_score').on('input', calculateMatchOutcome);
+        calculateMatchOutcome();
     });
 
     $(document).ready(function() {
@@ -457,8 +461,6 @@
                 return false; // Prevent default behavior of input field
             }
         });
-
-        {% block form_loaded %}{% endblock %}
     });
 
     document.addEventListener('DOMContentLoaded', function() {
