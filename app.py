@@ -35,6 +35,7 @@ app.register_blueprint(games_bp)
 
 # for login
 app.config['SECRET_KEY'] = '48e7a59dca9d6c13b0e7e51b7ee6e2a5759c8e1dbb3a0f83'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -51,7 +52,7 @@ def login():
     if form.validate_on_submit():
         user = users.get(form.username.data)
         if user and user.password == form.password.data:
-            login_user(user)
+            login_user(user, remember=True)
             next_page = request.args.get('next')  # Get the 'next' query parameter
             if not next_page:
                 next_page = url_for('index')
