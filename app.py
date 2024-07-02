@@ -51,7 +51,10 @@ def generate_acronym(location_name):
     # Check if location_name is already an acronym (less than four uppercase characters)
     if len(location_name) <= 4 and location_name.isupper():
         return location_name
-    
+
+    # Words to skip
+    skip_words = {'a', 'an', 'the', 'and'}
+
     # Split the location name into words
     words = location_name.split()
 
@@ -60,14 +63,14 @@ def generate_acronym(location_name):
 
     # Build acronym from first letters of each word (up to 4 characters)
     for word in words:
-        acronym += word[0].upper()
+        if word.lower() not in skip_words:
+            acronym += word[0].upper()
 
-        # Break loop if acronym length reaches 4 characters
-        if len(acronym) >= 4:
-            break
+            # Break loop if acronym length reaches 4 characters
+            if len(acronym) >= 4:
+                break
 
     return acronym
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

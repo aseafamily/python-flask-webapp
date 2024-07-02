@@ -282,6 +282,27 @@
             for (let i = 1; i <= 3; i++) {
                 let team1_set = parseInt($(`input[name="team1_set${i}"]`).val()) || 0;
                 let team2_set = parseInt($(`input[name="team2_set${i}"]`).val()) || 0;
+                let team1_empty = $(`input[name="team1_set${i}"]`).val() === '';
+                let team2_empty = $(`input[name="team2_set${i}"]`).val() === '';
+
+                if (team1_empty && !team2_empty && team2_set < 6) {
+                    let value = team2_set == 5 ? 7 : 6;
+                    if (i == 3 && team2_set == 1) {
+                        value = 0;
+                    }
+                    $(`input[name="team1_set${i}"]`).val(value);
+                    team1_set = value;
+                }
+
+                if (team2_empty && !team1_empty && team1_set < 6) {
+                    let value = team1_set == 5 ? 7 : 6;
+                    if (i == 3 && team1_set == 1) {
+                        value = 0;
+                    }
+                    $(`input[name="team2_set${i}"]`).val(value);
+                    team2_set = value;
+                }
+
                 let scoreDifference = Math.abs(team1_set - team2_set);
                 
                 if (scoreDifference === 1) {
