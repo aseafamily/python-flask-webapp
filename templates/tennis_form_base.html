@@ -63,7 +63,7 @@
     </style>
 
     <div class="form">
-        <form action="{% block form_action %}{% endblock %}?u={{ u }}" method="POST">
+        <form action="{% block form_action %}{% endblock %}?u={{ u }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}" method="POST">
             <table>
                 <tr style="background-color: lightgrey;">
                     <td>Date:</td>

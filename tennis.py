@@ -7,7 +7,7 @@ from db_match import Match
 from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
-from sqlalchemy import cast, String
+from sqlalchemy import cast, String, desc
 from utils import test_connection, user_dict, get_week_range, get_client_time
 from flask_login import login_required
 import math
@@ -26,9 +26,22 @@ def get_categories():
 @login_required
 def tennis_index():
     player_id = request.args.get('u')
+    category_filter = request.args.get('category', '')
 
     if request.method == 'GET':
-        tennis_all = Tennis.query.filter_by(player=player_id ).order_by(Tennis.date.desc(), Tennis.id.desc()).all()
+        # Initial query
+        tennis_all_query = Tennis.query.filter_by(player=player_id)
+
+        # Add category filter if it exists and is not empty
+        if category_filter:
+            tennis_all_query = tennis_all_query.filter_by(category=category_filter)
+
+        # Order the results by date and id in descending order
+        tennis_all_query = tennis_all_query.order_by(desc(Tennis.date), desc(Tennis.id))
+
+        # Execute the query
+        tennis_all = tennis_all_query.all()
+
         current_date = get_client_time(datetime.utcnow())
 
         weekly_results = db.session.query(func.extract('year', Tennis.date).label('year'),
@@ -212,7 +225,11 @@ def tennis_index():
             db.session.add(tennis_instance)
             db.session.commit()
 
-        return redirect('/tennis?u=' + player_id)
+        redirect_url = f'/tennis?u={player_id}'
+        if category_filter:
+            redirect_url += f'&category={category_filter}'
+
+        return redirect(redirect_url)
     
 def get_or_create_player(full_name: str, session, player_id: str = '') -> int:
     if player_id:
@@ -283,7 +300,12 @@ def tennis_delete(id):
         if match_to_delete is not None:
             db.session.delete(match_to_delete)
         db.session.commit()
-        return redirect('/tennis?u=' + uid)
+
+        redirect_url = f'/tennis?u={uid}'
+        category_filter = request.args.get('category', '')
+        if category_filter:
+            redirect_url += f'&category={category_filter}'
+        return redirect(redirect_url)
     except:
         return 'There was a problem deleting that task'
 
@@ -401,8 +423,13 @@ def tennis_update(id):
 
     
         db.session.commit()
-        return redirect('/tennis?u=' + uid)
 
+        redirect_url = f'/tennis?u={uid}'
+        category_filter = request.args.get('category', '')
+        if category_filter:
+            redirect_url += f'&category={category_filter}'
+
+        return redirect(redirect_url)
     else:
         player1_name = None
         player2_name = None

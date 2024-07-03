@@ -55,10 +55,67 @@
             function confirmDelete(entryId, u) {
                 var result = confirm("Are you sure you want to delete this entry?");
                 if (result) {
-                    window.location.href = "/tennis/delete/" + entryId + "?u=" + u;
+                    let url = `/tennis/delete/${entryId}?u=${u}`;
+
+                    // Check if category is in the query string
+                    const params = new URLSearchParams(window.location.search);
+                    const category = params.get('category');
+                    if (category) {
+                        url += `&category=${category}`;
+                    }
+
+                    window.location.href = url;
                 }
             }
+
+            function setFilter() {
+                const category = document.getElementById('filter-input').value;
+                const url = new URL(window.location.href);
+                url.searchParams.set('category', category);
+
+                fetch(url.toString())
+                    .then(response => {
+                        if (response.ok) {
+                            window.location = url.toString();
+                        }
+                    });
+            }
+
+            $(document).ready(function() {
+                $('#filter-input').on('focus', function() {
+                    $(this).autocomplete('search', '');
+                });
+                $('#filter-input').autocomplete({
+                    source: function(request, response) {
+                        $.ajax({
+                            url: '/categories',
+                            dataType: 'json',
+                            data: {
+                                term: request.term
+                            },
+                            success: function(data) {
+                                response(data);
+                            }
+                        });
+                    },
+                    minLength: 0, // Minimum characters before triggering autocomplete
+                    select: function(event, ui) {
+                        $('#filter-input').val(ui.item.value); // Update input value when an option is selected
+                        return false; // Prevent default behavior of input field
+                    }
+                });
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const category = urlParams.get('category');
+                if (category) {
+                    $('#filter-input').val(category);
+                }
+            })
         </script>
+        <div id="filter-section" style="margin-bottom: 20px;">
+            <input type="text" id="filter-input" placeholder="Enter category">
+            <button onclick="setFilter()">Filter</button>
+        </div>
         <table>
             <tr>
                 <th>Date</th>
@@ -83,7 +140,7 @@
                     <td>{{ tennis.category }}</td>
                     <td>{{ tennis.location | generate_acronym }}</td>
                     <td style="white-space: nowrap;">
-                        <a href="/tennis/update/{{tennis.id}}?u={{ u }}" style="margin-left: 10px; margin-right: 20px;">U</a>
+                        <a href="/tennis/update/{{tennis.id}}?u={{ u }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}" style="margin-left: 10px; margin-right: 20px;">U</a>
                         <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')">D</a>
                     </td>
                 </tr>
