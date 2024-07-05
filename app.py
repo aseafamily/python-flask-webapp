@@ -72,6 +72,22 @@ def generate_acronym(location_name):
 
     return acronym
 
+@app.template_filter('divide_and_format')
+def divide_and_format(value):
+    try:
+        # Divide the value by 100
+        result = value / 100
+        
+        # Format the result to two decimal places
+        formatted_result = f"{result:.2f}"
+        
+        return formatted_result
+    
+    except TypeError:
+        # Handle the case where the input is not an integer
+        return None
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()

@@ -34,6 +34,22 @@
     {% block match_player2_id %}{{match.player2 if match.player2 is not none else ''}}{% endblock %}
     {% block match_player3_id %}{{match.player3 if match.player3 is not none else ''}}{% endblock %}
     {% block match_player4_id %}{{match.player4 if match.player4 is not none else ''}}{% endblock %}
+    {% block match_player1_seed %}{{match.player1_seed if match.player1_seed is not none else ''}}{% endblock %}
+    {% block match_player2_seed %}{{match.player2_seed if match.player2_seed is not none else ''}}{% endblock %}
+    {% block match_player3_seed %}{{match.player3_seed if match.player3_seed is not none else ''}}{% endblock %}
+    {% block match_player4_seed %}{{match.player4_seed if match.player4_seed is not none else ''}}{% endblock %}
+    {% block match_player1_wtn %}{{match.player1_wtn | divide_and_format if match.player1_wtn is not none else ''}}{% endblock %}
+    {% block match_player2_wtn %}{{match.player2_wtn | divide_and_format if match.player2_wtn is not none else ''}}{% endblock %}
+    {% block match_player3_wtn %}{{match.player3_wtn | divide_and_format if match.player3_wtn is not none else ''}}{% endblock %}
+    {% block match_player4_wtn %}{{match.player4_wtn | divide_and_format if match.player4_wtn is not none else ''}}{% endblock %}
+    {% block match_player1_utr %}{{match.player1_utr | divide_and_format if match.player1_utr is not none else ''}}{% endblock %}
+    {% block match_player2_utr %}{{match.player2_utr | divide_and_format if match.player2_utr is not none else ''}}{% endblock %}
+    {% block match_player3_utr %}{{match.player3_utr | divide_and_format if match.player3_utr is not none else ''}}{% endblock %}
+    {% block match_player4_utr %}{{match.player4_utr | divide_and_format if match.player4_utr is not none else ''}}{% endblock %}
+    {% block match_player1_usta %}{{match.player1_usta | divide_and_format if match.player1_usta is not none else ''}}{% endblock %}
+    {% block match_player2_usta %}{{match.player2_usta | divide_and_format if match.player2_usta is not none else ''}}{% endblock %}
+    {% block match_player3_usta %}{{match.player3_usta | divide_and_format if match.player3_usta is not none else ''}}{% endblock %}
+    {% block match_player4_usta %}{{match.player4_usta | divide_and_format if match.player4_usta is not none else ''}}{% endblock %}
     
     {% block team1_set1 %}{{match.team1_set1 if match.team1_set1 is not none else ''}}{% endblock %}
     {% block team1_set1_tb %}{{match.team1_set1_tb if match.team1_set1_tb is not none else ''}}{% endblock %}

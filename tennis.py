@@ -199,7 +199,23 @@ def tennis_index():
                     match_state=request.form['match_state'],
                     is_indoor=True if request.form['court_type'] == 'indoor' else False,
                     comments=request.form['match_comments'],
-                    tennis_id=tennis_instance.id
+                    tennis_id=tennis_instance.id,
+                    player1_wtn = get_integer_from_form100('player1_wtn'),
+                    player1_utr = get_integer_from_form100('player1_utr'),
+                    player1_usta = get_integer_from_form100('player1_usta'),
+                    player1_seed = get_integer_from_form('player1_seed'),
+                    player2_wtn = get_integer_from_form100('player2_wtn'),
+                    player2_utr = get_integer_from_form100('player2_utr'),
+                    player2_usta = get_integer_from_form100('player2_usta'),
+                    player2_seed = get_integer_from_form('player2_seed'),
+                    player3_wtn = get_integer_from_form100('player3_wtn'),
+                    player3_utr = get_integer_from_form100('player3_utr'),
+                    player3_usta = get_integer_from_form100('player3_usta'),
+                    player3_seed = get_integer_from_form('player3_seed'),
+                    player4_wtn = get_integer_from_form100('player4_wtn'),
+                    player4_utr = get_integer_from_form100('player4_utr'),
+                    player4_usta = get_integer_from_form100('player4_usta'),
+                    player4_seed = get_integer_from_form('player4_seed')
                 )
                 db.session.add(new_match)
                 tennis_instance.details = generate_match_summary(new_match)
@@ -287,6 +303,25 @@ def get_integer_from_form(form_key: str) -> int:
         except ValueError:
             pass
     return None
+
+def get_integer_from_form100(form_key):
+    try:
+        # Get the value from request.form
+        value = request.form.get(form_key)
+        
+        # Check if value is available
+        if value is not None:
+            # Cast value to float and multiply by 100
+            value_as_float = float(value)
+            result = int(value_as_float * 100)
+            return result
+        
+        # If the value is not found, return None or handle accordingly
+        return None
+
+    except (ValueError, TypeError):
+        # Handle the case where the value cannot be converted to float
+        return None
     
 @tennis_bp.route('/tennis/delete/<int:id>')
 @login_required
@@ -383,7 +418,23 @@ def tennis_update(id):
                     match_state=request.form['match_state'],
                     is_indoor=True if request.form['court_type'] == 'indoor' else False,
                     comments=request.form['match_comments'],
-                    tennis_id=tennis.id
+                    tennis_id=tennis.id,
+                    player1_wtn = get_integer_from_form100('player1_wtn'),
+                    player1_utr = get_integer_from_form100('player1_utr'),
+                    player1_usta = get_integer_from_form100('player1_usta'),
+                    player1_seed = get_integer_from_form('player1_seed'),
+                    player2_wtn = get_integer_from_form100('player2_wtn'),
+                    player2_utr = get_integer_from_form100('player2_utr'),
+                    player2_usta = get_integer_from_form100('player2_usta'),
+                    player2_seed = get_integer_from_form('player2_seed'),
+                    player3_wtn = get_integer_from_form100('player3_wtn'),
+                    player3_utr = get_integer_from_form100('player3_utr'),
+                    player3_usta = get_integer_from_form100('player3_usta'),
+                    player3_seed = get_integer_from_form('player3_seed'),
+                    player4_wtn = get_integer_from_form100('player4_wtn'),
+                    player4_utr = get_integer_from_form100('player4_utr'),
+                    player4_usta = get_integer_from_form100('player4_usta'),
+                    player4_seed = get_integer_from_form('player4_seed')
                 )
                 db.session.add(match)
             else:
@@ -418,6 +469,22 @@ def tennis_update(id):
                 match.match_state=request.form['match_state']
                 match.is_indoor=True if request.form['court_type'] == 'indoor' else False
                 match.comments=request.form['match_comments']
+                match.player1_wtn = get_integer_from_form100('player1_wtn')
+                match.player1_utr = get_integer_from_form100('player1_utr')
+                match.player1_usta = get_integer_from_form100('player1_usta')
+                match.player1_seed = get_integer_from_form('player1_seed')
+                match.player2_wtn = get_integer_from_form100('player2_wtn')
+                match.player2_utr = get_integer_from_form100('player2_utr')
+                match.player2_usta = get_integer_from_form100('player2_usta')
+                match.player2_seed = get_integer_from_form('player2_seed')
+                match.player3_wtn = get_integer_from_form100('player3_wtn')
+                match.player3_utr = get_integer_from_form100('player3_utr')
+                match.player3_usta = get_integer_from_form100('player3_usta')
+                match.player3_seed = get_integer_from_form('player3_seed')
+                match.player4_wtn = get_integer_from_form100('player4_wtn')
+                match.player4_utr = get_integer_from_form100('player4_utr')
+                match.player4_usta = get_integer_from_form100('player4_usta')
+                match.player4_seed = get_integer_from_form('player4_seed')
 
             tennis.details = generate_match_summary(match)
 
