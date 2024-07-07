@@ -90,6 +90,8 @@
         <div id="file-container"></div>
 
         <button id="upload-button" class="upload-button">Upload Images and files</button>
+
+        <div id="upload_status" style="margin-top: 20px;"></div>
     </div>
 
     <script>
@@ -100,6 +102,7 @@
             const fileInput = document.getElementById('file-input');
             const csvInput = document.getElementById('csv-input');
             const uploadButton = document.getElementById('upload-button');
+            const uploadStatus = document.getElementById('upload_status');
 
             // Listen for paste events on the textarea
             pasteTextarea.addEventListener('paste', handlePaste);
@@ -180,8 +183,10 @@
                     console.log('Upload successful:', data);
                     // Optionally, clear the image container after successful upload
                     imageContainer.innerHTML = '';
+                    fileContainer.innerHTML = '';
+                    uploadStatus.innerHTML = JSON.stringify(data);
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => uploadStatus.innerHTML = JSON.stringify(error));
             }
 
             function addImageToContainer(src) {
