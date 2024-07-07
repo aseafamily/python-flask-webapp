@@ -253,10 +253,6 @@
                 <input class="iphone-button" type="submit" value="Submit">
             </div>
         </form>
-    </div>    
-    <h1>Paste Images</h1>
-    <button id="paste-button" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer;">Paste Images</button>
-    <div id="image-container" style="margin-top: 20px; border: 2px dashed #ccc; width: 600px; height: 400px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; overflow: auto;">
     </div>
 </div>
 
@@ -271,36 +267,6 @@
     if (!document.getElementById('date').value) {
         document.getElementById('date').value = formattedDate;
     }
-
-    const pasteButton = document.getElementById('paste-button');
-    const imageContainer = document.getElementById('image-container');
-
-    // Handle paste event
-    pasteButton.addEventListener('click', function() {
-        navigator.clipboard.read().then(items => {
-            items.forEach(item => {
-                if (item.types.includes('image/png') || item.types.includes('image/jpeg')) {
-                    item.getType(item.types[0]).then(blob => {
-                        const reader = new FileReader();
-                        reader.onload = function(event) {
-                            const img = document.createElement('img');
-                            img.src = event.target.result;
-                            img.style.maxWidth = '150px'; // Adjust size as needed
-                            img.style.maxHeight = '150px'; // Adjust size as needed
-                            img.style.margin = '5px'; // Adjust margin as needed
-                            imageContainer.appendChild(img);
-                        };
-                        reader.readAsDataURL(blob);
-                        console.log(blob);
-                    });
-                } else {
-                    console.warn('Clipboard item is not an image (type: ' + item.types[0] + ').');
-                }
-            });
-        }).catch(err => {
-            console.error('Failed to read clipboard contents: ', err);
-        });
-    });
 </script>
 
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">

@@ -710,3 +710,7 @@ def tennis_diagram():
         })
 
     return render_template('tennis_diagram.html', tennis_all=tennis_all, weekly_stats=weekly_stats)
+
+@tennis_bp.route('/tennis/upload')
+def tennis_upload():
+    return render_template('tennis_upload.html')

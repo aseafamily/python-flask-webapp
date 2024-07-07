@@ -87,27 +87,28 @@
                     <div class="container">
                         <div class="entry">
                             <h2 class="emily">Emily</h2>
-                            <a href="/tennis?u=2">Tennis</a>
                             <a href="/serve?u=2">Serve</a>
+                            <a href="/serve/diagram?u=2" class="small">Diagrams</a>
+                            <a href="/tennis?u=2">Tennis</a>
+                            <a href="/tennis/diagram?u=2" class="small">Diagrams</a>
                             <a href="/match?u=2">Match</a>
-                            <a href="/tennis/diagram?u=2" class="small">Tennis Diagrams</a>
-                            <a href="/serve/diagram?u=2" class="small">Serve Diagrams</a>
+                            
                         </div>
                         <div class="entry">
                             <h2 class="andrew">Andrew</h2>
-                            <a href="/tennis?u=1">Tennis</a>
                             <a href="/serve?u=1">Serve</a>
+                            <a href="/serve/diagram?u=1" class="small">Diagrams</a>
+                            <a href="/tennis?u=1">Tennis</a>
+                            <a href="/tennis/diagram?u=1" class="small">Diagrams</a>
                             <a href="/match?u=1">Match</a>
-                            <a href="/tennis/diagram?u=1" class="small">Tennis Diagrams</a>
-                            <a href="/serve/diagram?u=1" class="small">Serve Diagrams</a>
                         </div>
                         <div class="entry">
                             <h2 class="alex">Alex</h2>
-                            <a href="/tennis?u=0">Tennis</a>
                             <a href="/serve?u=0">Serve</a>
+                            <a href="/serve/diagram?u=0" class="small">Diagrams</a>
+                            <a href="/tennis?u=0">Tennis</a>
+                            <a href="/tennis/diagram?u=0" class="small">Diagrams</a>
                             <a href="/match?u=0">Match</a>
-                            <a href="/tennis/diagram?u=0" class="small">Tennis Diagrams</a>
-                            <a href="/serve/diagram?u=0" class="small">Serve Diagrams</a>
                         </div>
                         <div class="entry">
                             <a href="/serve/status">Tennis Status</a>
@@ -116,7 +117,7 @@
                         </div>
                         <div class="user-section">
                             {% if current_user.is_authenticated %}
-                                <p>Welcom, {{ current_user.username }}</p>
+                                <p>Welcome, {{ current_user.username }}</p>
                                 <a href="{{ url_for('logout') }}">Logout</a>
                             {% else %}
                                 <a href="{{ url_for('login') }}">Login</a></p>
