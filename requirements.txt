@@ -15,3 +15,4 @@ flask-wtf
 wtforms
 flask-bcrypt
 pytz
+azure-storage-file-share
