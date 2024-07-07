@@ -12,9 +12,6 @@ from utils import user_dict
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms import LoginForm
 from user import User, users
-import os
-from azure.storage.fileshare import ShareFileClient, ShareServiceClient
-
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -126,52 +123,6 @@ def index():
 @app.route('/favicon.ico')
 def favicon():
     abort(404)
-
-connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
-file_share_name = "bhmfiles"  # Replace with your actual file share name
-
-@app.route('/tennisupload', methods=['POST'])
-def tennis_upload():
-    directory_name = 'tennis/1'
-    try:
-        uploaded_files = []
-        index = 1
-        for key in request.files:
-            files = request.files.getlist(key)
-            for file in files:
-                if file:
-                    # Generate new filename with format image01.png, image02.jpg, etc.
-                    filename = file.filename
-                    file_ext = os.path.splitext(filename)[1]  # Get file extension
-                    new_filename = f"image{index:02}{file_ext}"
-                    if file_ext == '.csv':
-                        new_filename = 'data.csv'
-                    else:
-                        index += 1
-                    #file_path = os.path.join(app.instance_path, 'uploads', new_filename)
-                    #file.save(file_path)
-
-                    # Create the ShareServiceClient object which will be used to create a file client
-                    service_client = ShareServiceClient.from_connection_string(connection_string)
-                    
-                    # Get or create the directory client
-                    directory_client = service_client.get_share_client(file_share_name).get_directory_client(directory_name)
-                    
-                    # Create a file client within the specified directory
-                    file_client = directory_client.get_file_client(file.filename)
-
-                    # Upload the file
-                    file_client.upload_file(file)
-
-                    uploaded_files.append(f"{directory_name}/{new_filename}")
-                else:
-                    return jsonify({'error': 'File type not allowed'}), 400
-            
-        return jsonify({'message': 'Files uploaded successfully', 'files': uploaded_files}), 200
-    
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
 
 if __name__ == "__main__":
     app.debug = True

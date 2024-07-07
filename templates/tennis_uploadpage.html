@@ -38,7 +38,7 @@
         }
         #paste-textarea {
             width: 100%;
-            height: 150px;
+            height: 50px;
             margin-top: 20px;
             padding: 10px;
             border: 2px dashed #ccc;
@@ -73,7 +73,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Paste and Upload Images Example</h1>
+        <h1>Paste and Upload files to tennis entry ID: {{ id }}</h1>
         <p>Right-click to paste images, or choose from file.</p>
         
         <!-- File input and label -->
@@ -174,7 +174,7 @@
                     formData.append('csv', csvFile, csvFile.name);
                 }
 
-                fetch('/tennisupload', {
+                fetch('/tennis/upload/{{ id }}', {
                     method: 'POST',
                     body: formData
                 })

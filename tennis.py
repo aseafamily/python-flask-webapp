@@ -14,6 +14,7 @@ import math
 from sqlalchemy.orm import aliased
 import re
 import os
+from azure.storage.fileshare import ShareFileClient, ShareServiceClient
 
 tennis_bp = Blueprint('tennis', __name__)
 
@@ -712,6 +713,55 @@ def tennis_diagram():
 
     return render_template('tennis_diagram.html', tennis_all=tennis_all, weekly_stats=weekly_stats)
 
-@tennis_bp.route('/tennis/uploadpage')
-def tennis_uploadpage():
-    return render_template('tennis_uploadpage.html')
+@tennis_bp.route('/tennis/uploadpage/<int:id>')
+def tennis_uploadpage(id):
+    return render_template('tennis_uploadpage.html', id=id)
+
+@tennis_bp.route('/tennis/upload/<int:id>', methods=['POST'])
+def tennis_upload(id):
+    connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    file_share_name = "bhmfiles"  # Replace with your actual file share name
+    try:
+        uploaded_files = []
+        index = 1
+        for key in request.files:
+            files = request.files.getlist(key)
+            for file in files:
+                if file:
+                    # Generate new filename with format image01.png, image02.jpg, etc.
+                    filename = file.filename
+                    file_ext = os.path.splitext(filename)[1]  # Get file extension
+                    new_filename = f"image{index:02}{file_ext}"
+                    if file_ext == '.csv':
+                        new_filename = 'data.csv'
+                    else:
+                        index += 1
+                    #file_path = os.path.join(app.instance_path, 'uploads', new_filename)
+                    #file.save(file_path)
+
+                    # Create the ShareServiceClient object which will be used to create a file client
+                    service_client = ShareServiceClient.from_connection_string(connection_string)
+
+                    parent_directory_name = "tennis"
+                    parent_directory_client = service_client.get_share_client(file_share_name).get_directory_client(parent_directory_name)
+                    if not parent_directory_client.exists():
+                        parent_directory_client.create_directory()
+
+                    nested_directory_client = parent_directory_client.get_subdirectory_client(str(id))
+                    if not nested_directory_client.exists():
+                        nested_directory_client.create_directory()
+                   
+                    # Create a file client within the specified directory
+                    file_client = nested_directory_client.get_file_client(file.filename)
+
+                    # Upload the file
+                    file_client.upload_file(file)
+
+                    uploaded_files.append(f"{parent_directory_name}/{id}/{new_filename}")
+                else:
+                    return jsonify({'error': 'File type not allowed'}), 400
+            
+        return jsonify({'message': 'Files uploaded successfully', 'files': uploaded_files}), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
