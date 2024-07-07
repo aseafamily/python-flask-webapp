@@ -82,14 +82,23 @@
         
         <div class="image-container" id="image-container"></div>
         <textarea id="paste-textarea" placeholder="Paste images here"></textarea>
-        <button id="upload-button" class="upload-button">Upload Images</button>
+
+        <!-- CSV file input and label -->
+        <input type="file" id="csv-input" accept=".csv">
+        <label for="csv-input" class="file-input-label">Choose CSV File</label>
+
+        <div id="file-container"></div>
+
+        <button id="upload-button" class="upload-button">Upload Images and files</button>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const imageContainer = document.getElementById('image-container');
+            const fileContainer = document.getElementById('file-container');
             const pasteTextarea = document.getElementById('paste-textarea');
             const fileInput = document.getElementById('file-input');
+            const csvInput = document.getElementById('csv-input');
             const uploadButton = document.getElementById('upload-button');
 
             // Listen for paste events on the textarea
@@ -97,6 +106,8 @@
 
             // Listen for change event on file input
             fileInput.addEventListener('change', handleFileSelect);
+
+            csvInput.addEventListener('change', handleCsvFileSelect);
 
             // Listen for click event on upload button
             uploadButton.addEventListener('click', handleUpload);
@@ -130,6 +141,21 @@
                 fileInput.value = '';
             }
 
+            function handleCsvFileSelect(event) {
+                const files = event.target.files;
+                displayFiles(files);
+            }
+
+            function displayFiles(files) {
+                fileContainer.innerHTML = ''; // Clear previous file display
+
+                for (const file of files) {
+                    const fileItem = document.createElement('div');
+                    fileItem.textContent = `${file.name} (${formatBytes(file.size)})`;
+                    fileContainer.appendChild(fileItem);
+                }
+            }
+
             function handleUpload() {
                 const images = document.querySelectorAll('.image-container img');
                 const formData = new FormData();
@@ -138,6 +164,12 @@
                     const blob = dataURItoBlob(image.src);
                     formData.append(`file${index + 1}`, blob, `image${index + 1}.png`);
                 });
+
+                // Append CSV file if selected
+                const csvFile = csvInput.files[0];
+                if (csvFile && csvFile.type === 'text/csv') {
+                    formData.append('csv', csvFile, csvFile.name);
+                }
 
                 fetch('/tennisupload', {
                     method: 'POST',

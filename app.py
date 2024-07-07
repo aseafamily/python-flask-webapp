@@ -139,7 +139,10 @@ def tennis_upload():
                     filename = file.filename
                     file_ext = os.path.splitext(filename)[1]  # Get file extension
                     new_filename = f"image{index:02}{file_ext}"
-                    index += 1
+                    if file_ext == '.csv':
+                        new_filename = 'data.csv'
+                    else:
+                        index += 1
                     file_path = os.path.join(app.instance_path, 'uploads', new_filename)
                     file.save(file_path)
                     uploaded_files.append(file_path)
