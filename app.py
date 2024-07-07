@@ -12,6 +12,7 @@ from utils import user_dict
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms import LoginForm
 from user import User, users
+import os
 
 
 app = Flask(__name__)
@@ -124,6 +125,32 @@ def index():
 @app.route('/favicon.ico')
 def favicon():
     abort(404)
+
+@app.route('/tennisupload', methods=['POST'])
+def tennis_upload():
+    try:
+        uploaded_files = []
+        index = 1
+        for key in request.files:
+            files = request.files.getlist(key)
+            for file in files:
+                if file:
+                    # Generate new filename with format image01.png, image02.jpg, etc.
+                    filename = file.filename
+                    file_ext = os.path.splitext(filename)[1]  # Get file extension
+                    new_filename = f"image{index:02}{file_ext}"
+                    index += 1
+                    file_path = os.path.join(app.instance_path, 'uploads', new_filename)
+                    file.save(file_path)
+                    uploaded_files.append(file_path)
+                else:
+                    return jsonify({'error': 'File type not allowed'}), 400
+            
+        return jsonify({'message': 'Files uploaded successfully', 'files': uploaded_files}), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 if __name__ == "__main__":
     app.debug = True

@@ -13,6 +13,7 @@ from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
 import re
+import os
 
 tennis_bp = Blueprint('tennis', __name__)
 
@@ -711,6 +712,6 @@ def tennis_diagram():
 
     return render_template('tennis_diagram.html', tennis_all=tennis_all, weekly_stats=weekly_stats)
 
-@tennis_bp.route('/tennis/upload')
-def tennis_upload():
-    return render_template('tennis_upload.html')
+@tennis_bp.route('/tennis/uploadpage')
+def tennis_uploadpage():
+    return render_template('tennis_uploadpage.html')

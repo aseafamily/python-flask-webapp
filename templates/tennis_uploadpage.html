@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paste and Upload Multiple Images Example</title>
+    <title>Paste and Upload Images Example</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,11 +60,20 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .upload-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Paste and Upload Multiple Images Example</h1>
+        <h1>Paste and Upload Images Example</h1>
         <p>Right-click to paste images, or choose from file.</p>
         
         <!-- File input and label -->
@@ -73,6 +82,7 @@
         
         <div class="image-container" id="image-container"></div>
         <textarea id="paste-textarea" placeholder="Paste images here"></textarea>
+        <button id="upload-button" class="upload-button">Upload Images</button>
     </div>
 
     <script>
@@ -80,12 +90,16 @@
             const imageContainer = document.getElementById('image-container');
             const pasteTextarea = document.getElementById('paste-textarea');
             const fileInput = document.getElementById('file-input');
+            const uploadButton = document.getElementById('upload-button');
 
             // Listen for paste events on the textarea
             pasteTextarea.addEventListener('paste', handlePaste);
 
             // Listen for change event on file input
             fileInput.addEventListener('change', handleFileSelect);
+
+            // Listen for click event on upload button
+            uploadButton.addEventListener('click', handleUpload);
 
             function handlePaste(event) {
                 const items = (event.clipboardData || event.originalEvent.clipboardData).items;
@@ -94,7 +108,7 @@
                         const file = item.getAsFile();
                         const reader = new FileReader();
                         reader.onload = function(e) {
-                            resizeImage(e.target.result, addImageToContainer);
+                            addImageToContainer(e.target.result);
                         };
                         reader.readAsDataURL(file);
                     }
@@ -107,7 +121,7 @@
                     if (file.type.startsWith('image/')) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
-                            resizeImage(e.target.result, addImageToContainer);
+                            addImageToContainer(e.target.result);
                         };
                         reader.readAsDataURL(file);
                     }
@@ -116,34 +130,26 @@
                 fileInput.value = '';
             }
 
-            function resizeImage(src, callback) {
-                const img = document.createElement('img');
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const maxSize = 150; // Resize to a max width/height of 150px
-                    let width = img.width;
-                    let height = img.height;
+            function handleUpload() {
+                const images = document.querySelectorAll('.image-container img');
+                const formData = new FormData();
 
-                    if (width > height) {
-                        if (width > maxSize) {
-                            height *= maxSize / width;
-                            width = maxSize;
-                        }
-                    } else {
-                        if (height > maxSize) {
-                            width *= maxSize / height;
-                            height = maxSize;
-                        }
-                    }
+                images.forEach((image, index) => {
+                    const blob = dataURItoBlob(image.src);
+                    formData.append(`file${index + 1}`, blob, `image${index + 1}.png`);
+                });
 
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    const resizedSrc = canvas.toDataURL('image/png');
-                    callback(resizedSrc);
-                };
-                img.src = src;
+                fetch('/tennisupload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Upload successful:', data);
+                    // Optionally, clear the image container after successful upload
+                    imageContainer.innerHTML = '';
+                })
+                .catch(error => console.error('Error:', error));
             }
 
             function addImageToContainer(src) {
@@ -151,6 +157,20 @@
                 img.src = src;
                 img.classList.add('resized-image'); // Optional: Apply styling to resized images
                 imageContainer.appendChild(img);
+            }
+
+            // Function to convert data URI to Blob
+            function dataURItoBlob(dataURI) {
+                const byteString = atob(dataURI.split(',')[1]);
+                const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+                const arrayBuffer = new ArrayBuffer(byteString.length);
+                const int8Array = new Uint8Array(arrayBuffer);
+
+                for (let i = 0; i < byteString.length; i++) {
+                    int8Array[i] = byteString.charCodeAt(i);
+                }
+
+                return new Blob([int8Array], { type: mimeString });
             }
         });
     </script>
