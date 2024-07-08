@@ -8,6 +8,7 @@ from todo import todo_bp
 from serve import serve_bp
 from tennis import tennis_bp
 from games import games_bp
+from match import match_bp
 from utils import user_dict
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms import LoginForm
@@ -31,6 +32,7 @@ app.register_blueprint(tennis_bp)
 app.register_blueprint(serve_bp)
 app.register_blueprint(todo_bp)
 app.register_blueprint(games_bp)
+app.register_blueprint(match_bp)
 
 # for login
 app.config['SECRET_KEY'] = '48e7a59dca9d6c13b0e7e51b7ee6e2a5759c8e1dbb3a0f83'

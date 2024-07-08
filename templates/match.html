@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Match Results</title>
+    <style>
+        html {
+            font-size: 14px;
+            line-height: 1.15;
+            text-size-adjust: 100%;
+        }
+        body {
+            width: 100%;
+            font-family: "Sofascore Sans", "Arial Unicode MS", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-weight: 400;
+            color: #222226;
+            background-color: #edf1f6;
+            font-feature-settings: "kern";
+            font-kerning: normal;
+            margin: 0px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .jLRkRA {
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+        }
+        .cMLRbb {
+            display: flex;
+            min-height: 48px;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+        .bIarbf {
+            object-fit: contain;
+        }
+        .iWGVcA {
+            display: flex;
+            flex-direction: column;
+        }
+        .gFVOUS {
+            display: flex;
+            margin-left: 24px;
+        }
+        .dDpJHe {
+            margin-top: 2px;
+            color: rgba(34, 34, 38, 0.45);
+            text-align: left;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+        .kTgHLG {
+            margin-right: 12px;
+            color: rgba(34, 34, 38, 0.45);
+            text-align: left;
+            font: 500 12px / 1.33 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+        a {
+            text-decoration: none;
+            background-color: transparent;
+        }
+        .hwhDQm {
+            display: block;
+            border-radius: 2px;
+        }
+        .hshtw {
+            -webkit-box-align: center;
+            align-items: center;
+            position: relative;
+            color: #222226;
+        }
+        .cQgcrM {
+            display: flex;
+        }
+        .cBIkhT {
+            display: flex;
+            height: 48px;
+        }
+        .bVjijM {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            width: calc(100% - 8px);
+            height: 44px;
+            overflow: hidden;
+        }
+        .dUEAfq {
+            position: relative;
+            width: 100%;
+            height: 44px;
+            transform: translate(-100%);
+            background-color: rgba(203, 24, 24, 0.1);
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+            opacity: 0;
+            transition: opacity 300ms ease-out 0s;
+        }
+        .jKVshf {
+            margin-left: 8px;
+            margin-right: 8px;
+            text-align: center;
+            flex: 0 0 56px;
+            -webkit-box-flex: 0;
+        }
+        .kcRyBI {
+            color: rgba(34, 34, 38, 0.45);
+            text-align: left;
+            font: 400 12px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+        bdi {
+            unicode-bidi: isolate;
+        }
+        .fFdGkQ {
+            position: relative;
+            border: 1px solid transparent;
+            overflow: hidden;
+        }
+        .cRYpNI {
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .jTiCHC {
+            display: flex;
+            position: relative;
+            height: 17px;
+            min-width: 16px;
+        }
+        .fFdGkQ .previousScore, .fFdGkQ .currentScore {
+            min-width: 16px;
+            position: relative;
+        }
+        .fjeMtb {
+            color: #222226;
+            text-align: center;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+        .eFoirc {
+            width: 56px;
+            color: rgba(34, 34, 38, 0.45);
+            text-align: center;
+            display: block;
+            font: 400 12px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            text-overflow: ellipsis;
+            overflow-x: clip;
+            white-space: nowrap;
+            min-width: 0px;
+        }
+        .ljKzEw {
+            background-color: rgba(34, 34, 38, 0.15);
+            height: 36px;
+            margin-right: 8px;
+            flex: 0 0 1px;
+        }
+        .dtLxRI {
+            overflow-x: clip;
+            min-width: 0px;
+            -webkit-box-flex: 1;
+            flex-grow: 1;
+        }
+        .lkDlwE {
+            overflow-x: clip;
+            min-width: 0px;
+            flex: 1 1 100px;
+        }
+        .khxXvq {
+            display: flex;
+            margin-bottom: 2px;
+        }
+        .hYFYfq {
+            height: 16px;
+            width: 16px;
+            margin-right: 8px;
+        }
+        .hpocRq {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .jaLVYd {
+            color: rgba(34, 34, 38, 0.45);
+            text-align: left;
+            font: 400 14px / 16px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            text-overflow: ellipsis;
+            overflow-x: clip;
+            white-space: nowrap;
+            min-width: 0px;
+        }
+        .ldkigH {
+            color: #222226;
+            text-align: left;
+            font: 400 14px / 16px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            text-overflow: ellipsis;
+            overflow-x: clip;
+            white-space: nowrap;
+            min-width: 0px;
+        }
+        .hdXfIu {
+            display: flex;
+            align-self: center;
+        }
+       .eqGkKN {
+            display: flex;
+            margin-right: 8px;
+            align-self: center;
+        }
+        .hxgrMp {
+            flex: 0 1 auto;
+        }
+        .bPbaIT {
+            display: flex;
+            height: 16px;
+            margin-bottom: 2px;
+        }
+        .iNZtrx {
+            display: inline-block;
+            position: relative;
+            width: 24px;
+            text-align: left;
+        }
+        .fFdGkQ {
+            position: relative;
+            border: 1px solid transparent;
+            overflow: hidden;
+        }
+        .Nhgnl {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+        .gpiIdD {
+            display: flex;
+            position: relative;
+            height: 17px;
+            width: 24px;
+            min-width: 16px;
+        }
+        .fFdGkQ .previousScore, .fFdGkQ .currentScore {
+            min-width: 16px;
+            position: relative;
+        }
+        .fIcwJd {
+            color: rgba(34, 34, 38, 0.45);
+            text-align: center;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+        .krLQbw {
+            position: absolute;
+            top: 0px;
+            left: 14px;
+            color: #222226;
+            text-align: left;
+            font: 400 10px / 1 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            vertical-align: super;
+        }
+        .fYUXNw {
+            display: flex;
+            height: 16px;
+        }
+        .fFdGkQ .previousScore, .fFdGkQ .currentScore {
+            min-width: 16px;
+            position: relative;
+        }
+        .yaNbA {
+            display: flex;
+            align-items: flex-end;
+            -webkit-box-pack: end;
+            justify-content: flex-end;
+            flex-direction: column;
+        }
+        .btcITE {
+            display: flex;
+            color: rgba(34, 34, 38, 0.45);
+            position: relative;
+            width: 38px;
+            margin-right: 8px;
+        }
+        .MkeW {
+            display: flex;
+            align-items: flex-end;
+            flex-direction: column;
+        }
+        .bOoisU {
+            color: #222226;
+            text-align: right;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+        .fxWZuu {
+            color: rgba(34, 34, 38, 0.45);
+            text-align: right;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+        .gQLOTH {
+            background-color: rgba(34, 34, 38, 0.15);
+            height: 36px;
+            margin-right: 12px;
+            flex: 0 0 1px;
+        }
+        .jJDgZs {
+            margin-right: 12px;
+            flex: 0 1 auto;
+        }
+        .ibdrtp {
+            color: #222226;
+            text-align: center;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            text-overflow: ellipsis;
+            overflow-x: clip;
+            white-space: nowrap;
+            min-width: 0px;
+        }
+        .cPhZia {
+            background-color: #c7361f;
+            height: 24px;
+            width: 24px;
+            margin-left: 1px;
+            margin-right: 1px;
+            border-radius: 50%;
+        }
+        .ihwaOf {
+            width: 24px;
+            color: #c7361f;
+            text-align: center;
+            font: 700 14px / 24px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="Box">
+            <div class="Box">
+                <div class="Box klGMtt"><div display="flex" class="Box Flex cMLRbb jLRkRA">
+                    <img src="https://api.sofascore.app/api/v1/unique-tournament/2494/image" alt="London" width="24" height="24" class="Img bIarbf">
+                    <div display="flex" direction="column" class="Box Flex gFVOUS iWGVcA">
+                        <a href="/tournament/tennis/atp/london/2494">
+                            <bdi color="rgba(34, 34, 38, 0.45)" class="Text dDpJHe">London</bdi>
+                        </a>
+                        <span color="rgba(34, 34, 38, 0.45)" class="Text kTgHLG">Grass</span>
+                    </div>
+                </div>
+                <a data-id="12418613" class="sc-jxOSlx hwhDQm event-hl-12418613" href="/tennis/match/alcaraz-draper/Zzdcsytkc#id:12418613">
+                    <div>
+                        <div display="flex" class="Box Flex cBIkhT cQgcrM sc-dCFHLb hshtw js-list-cell-target js-list-cell-target-12418613">
+                            <div class="Box klGMtt sc-bmzYkS bVjijM"><div class="sc-koXPp dUEAfq"></div></div>
+                            <div title="FT" class="Box jKVshf">
+                                <bdi font-size="12" color="rgba(34, 34, 38, 0.45)" class="Text kcRyBI">20/06/24</bdi>
+                                <div display="flex" direction="column" class="Box Flex jTiCHC cRYpNI sc-iHGNWf fFdGkQ score-box">
+                                    <span class="Text fjeMtb currentScore" style="font-weight: normal; font-size: 14px;">
+                                        <bdi font-size="12" color="rgba(34, 34, 38, 0.45)" class="Text eFoirc">FT</bdi>
+                                    </span>
+                                    <span class="Text fjeMtb previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                </div>
+                            </div>
+                            <div class="Box ljKzEw"></div>
+                            <div class="Box dtLxRI">
+                                <div display="flex" class="Box Flex ggRYVx jLRkRA">
+                                    <div title="Alcaraz C. Draper J. live score" class="Box lkDlwE">
+                                        <div display="flex" class="Box Flex khxXvq jLRkRA">
+                                            <div class="Box hYFYfq">
+                                                <img src="https://www.sofascore.com/static/images/flags/es.png" alt="Spain" width="16" height="16" class="Img hpocRq">
+                                            </div>
+                                            <bdi color="rgba(34, 34, 38, 0.45)" class="Text jaLVYd">Alcaraz C.</bdi>
+                                        </div>
+                                        <div display="flex" class="Box Flex ggRYVx jLRkRA">
+                                            <div class="Box hYFYfq">
+                                                <img src="https://www.sofascore.com/static/images/flags/gb.png" alt="United Kingdom" width="16" height="16" class="Img hpocRq">
+                                            </div>
+                                            <bdi color="#222226" class="Text ldkigH">Draper J.</bdi>
+                                        </div>
+                                    </div>
+                                    <div display="flex" class="Box Flex eqGkKN hdXfIu">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="var(--secondary-default)" class="SvgWrapper fyGiev">
+                                            <path fill="var(--secondary-default)" d="M13.09 7.13 4.53 2 3 2.87v10.26l1.53.87 8.56-5.13z" fill-rule="evenodd"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="Box hxgrMp">
+                                        <div display="flex" class="Box Flex bPbaIT cQgcrM">
+                                            <div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 14px;">6</span>
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                                <sup font-size="micro" data-change-key="homeScore.period1TieBreak" class="Text krLQbw">3</sup>
+                                            </div>
+                                            <div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 14px;">3</span>
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                            </div>
+                                            <div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                            </div>
+                                            <!--
+                                            <div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                            </div><div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                            </div>
+                                            -->
+                                        </div>
+                                        <div display="flex" class="Box Flex fYUXNw cQgcrM">
+                                            <div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="#222226" class="Text fjeMtb currentScore" style="font-weight: normal; font-size: 14px;">7</span>
+                                                    <span color="#222226" class="Text fjeMtb previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                                <sup font-size="micro" data-change-key="awayScore.period1TieBreak" class="Text krLQbw">7</sup>
+                                            </div>
+                                            <div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="#222226" class="Text fjeMtb currentScore" style="font-weight: normal; font-size: 14px;">6</span>
+                                                    <span color="#222226" class="Text fjeMtb previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                            </div>
+                                            <div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                            </div>
+                                            <!--
+                                            <div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                            </div>
+                                            <div d="inline-block" class="Box iNZtrx">
+                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                    <span color="rgba(34, 34, 38, 0.45)" class="Text fIcwJd previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                                </div>
+                                            </div>
+                                            -->
+                                        </div>
+                                    </div>
+                                    <!--
+                                    <div display="flex" direction="column" color="rgba(34, 34, 38, 0.45)" class="Box Flex btcITE yaNbA">
+                                        <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-iHGNWf fFdGkQ score-box">
+                                            <span color="rgba(34, 34, 38, 0.45)" class="Text fxWZuu currentScore" style="font-weight: normal; font-size: 14px;">0</span>
+                                            <span color="rgba(34, 34, 38, 0.45)" class="Text fxWZuu previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                        </div>
+                                        <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-iHGNWf fFdGkQ score-box">
+                                            <span color="#222226" class="Text bOoisU currentScore" style="font-weight: normal; font-size: 14px;">2</span>
+                                            <span color="#222226" class="Text bOoisU previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                                        </div>
+                                    </div>
+                                    -->
+                                </div>
+                            </div>
+                            <div class="Box gQLOTH"></div>
+                            <div class="Box jJDgZs">
+                                <div class="Text ibdrtp" style="overflow: visible;">
+                                    <div class="Box cPhZia">
+                                        <div color="#c7361f" class="Text ihwaOf">L</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
