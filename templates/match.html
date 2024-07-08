@@ -72,7 +72,7 @@
             text-decoration: none;
             background-color: transparent;
         }
-        .hwhDQm {
+        .match_item {
             display: block;
             border-radius: 2px;
         }
@@ -144,10 +144,10 @@
             min-width: 16px;
             position: relative;
         }
-        .fjeMtb {
+        .won_score {
             color: var(--on-surface-nLv1);
             text-align: center;
-            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            font: 400 16px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
         }
         .eFoirc {
             width: 56px;
@@ -190,7 +190,7 @@
             border-radius: 50%;
             object-fit: cover;
         }
-        .jaLVYd {
+        .lost_name {
             color: var(--on-surface-nLv3);
             text-align: left;
             font: 400 16px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
@@ -199,7 +199,7 @@
             white-space: nowrap;
             min-width: 0px;
         }
-        .ldkigH {
+        .won_name {
             color: var(--on-surface-nLv1);
             text-align: left;
             font: 400 16px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
@@ -243,12 +243,12 @@
             width: 24px;
             min-width: 16px;
         }
-        .fIcwJd {
+        .lost_score {
             color: var(--on-surface-nLv3);
             text-align: center;
-            font: 400 16px 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            font: 400 16px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
         }
-        .krLQbw {
+        .tb_score {
             position: absolute;
             top: 0px;
             left: 14px;
@@ -280,8 +280,16 @@
             white-space: nowrap;
             min-width: 0px;
         }
-        .cPhZia {
+        .lost_sign {
             background-color: var(--error-default);
+            height: 24px;
+            width: 24px;
+            margin-left: 1px;
+            margin-right: 1px;
+            border-radius: 50%;
+        }
+        .won_sign {
+            background-color: #0bb32a;
             height: 24px;
             width: 24px;
             margin-left: 1px;
@@ -297,106 +305,186 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="Box">
-            <div class="Box">
-                <div class="Box klGMtt"><div display="flex" class="Box Flex cMLRbb jLRkRA">
-                    <img src="https://api.sofascore.app/api/v1/unique-tournament/2494/image" alt="London" width="24" height="24" class="Img bIarbf">
-                    <div display="flex" direction="column" class="Box Flex gFVOUS iWGVcA">
-                        <a href="/tournament/tennis/atp/london/2494">
-                            <bdi class="Text dDpJHe">London</bdi>
-                        </a>
-                        <span class="Text kTgHLG">Grass</span>
+    <div class="container">        
+        <div class="Box klGMtt"><div display="flex" class="Box cMLRbb jLRkRA">
+            <img src="https://api.sofascore.app/api/v1/unique-tournament/2494/image" alt="London" width="24" height="24" class="Img bIarbf">
+            <div display="flex" direction="column" class="Box gFVOUS iWGVcA">
+                <a href="/tournament/tennis/atp/london/2494">
+                    <bdi class="dDpJHe">London</bdi>
+                </a>
+                <span class="kTgHLG">Grass</span>
+            </div>
+        </div>
+        <a class="match_item" href="/tennis/match/alcaraz-draper/Zzdcsytkc#id:12418613">
+            <div>
+                <div display="flex" class="Box cBIkhT cQgcrM hshtw">
+                    <div class="Box klGMtt bVjijM"><div class="dUEAfq"></div></div>
+                    <div title="FT" class="Box jKVshf">
+                        <bdi font-size="12" class="kcRyBI">20/06/24</bdi>
+                        <div display="flex" direction="column" class="Box jTiCHC cRYpNI fFdGkQ">
+                            <span class="currentScore" style="font-weight: normal; font-size: 14px;">
+                                <bdi font-size="12" class="eFoirc">FT</bdi>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <a data-id="12418613" class="sc-jxOSlx hwhDQm event-hl-12418613" href="/tennis/match/alcaraz-draper/Zzdcsytkc#id:12418613">
-                    <div>
-                        <div display="flex" class="Box Flex cBIkhT cQgcrM sc-dCFHLb hshtw js-list-cell-target js-list-cell-target-12418613">
-                            <div class="Box klGMtt sc-bmzYkS bVjijM"><div class="sc-koXPp dUEAfq"></div></div>
-                            <div title="FT" class="Box jKVshf">
-                                <bdi font-size="12" class="Text kcRyBI">20/06/24</bdi>
-                                <div display="flex" direction="column" class="Box Flex jTiCHC cRYpNI sc-iHGNWf fFdGkQ score-box">
-                                    <span class="Text fjeMtb currentScore" style="font-weight: normal; font-size: 14px;">
-                                        <bdi font-size="12" class="Text eFoirc">FT</bdi>
-                                    </span>
-                                    <span class="Text fjeMtb previousScore" style="font-weight: normal; font-size: 14px;"></span>
+                    <div class="Box ljKzEw"></div>
+                    <div class="Box dtLxRI">
+                        <div display="flex" class="Box ggRYVx jLRkRA">
+                            <div title="Alcaraz C. Draper J. live score" class="Box lkDlwE">
+                                <div display="flex" class="Box khxXvq jLRkRA">
+                                    <div class="Box hYFYfq">
+                                        <img src="https://www.sofascore.com/static/images/flags/es.png" alt="Spain" width="16" height="16" class="Img hpocRq">
+                                    </div>
+                                    <bdi class="lost_name">Alcaraz C.</bdi>
+                                </div>
+                                <div display="flex" class="Box ggRYVx jLRkRA">
+                                    <div class="Box hYFYfq">
+                                        <img src="https://www.sofascore.com/static/images/flags/gb.png" alt="United Kingdom" width="16" height="16" class="Img hpocRq">
+                                    </div>
+                                    <bdi class="won_name">Draper J.</bdi>
                                 </div>
                             </div>
-                            <div class="Box ljKzEw"></div>
-                            <div class="Box dtLxRI">
-                                <div display="flex" class="Box Flex ggRYVx jLRkRA">
-                                    <div title="Alcaraz C. Draper J. live score" class="Box lkDlwE">
-                                        <div display="flex" class="Box Flex khxXvq jLRkRA">
-                                            <div class="Box hYFYfq">
-                                                <img src="https://www.sofascore.com/static/images/flags/es.png" alt="Spain" width="16" height="16" class="Img hpocRq">
-                                            </div>
-                                            <bdi class="Text jaLVYd">Alcaraz C.</bdi>
+                            <div display="flex" class="Box eqGkKN hdXfIu">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="#0bb32a" class="SvgWrapper fyGiev">
+                                    <path fill="#0bb32a" d="M13.09 7.13 4.53 2 3 2.87v10.26l1.53.87 8.56-5.13z" fill-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="Box hxgrMp">
+                                <div display="flex" class="Box bPbaIT cQgcrM">
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="lost_score currentScore">6</span>
                                         </div>
-                                        <div display="flex" class="Box Flex ggRYVx jLRkRA">
-                                            <div class="Box hYFYfq">
-                                                <img src="https://www.sofascore.com/static/images/flags/gb.png" alt="United Kingdom" width="16" height="16" class="Img hpocRq">
-                                            </div>
-                                            <bdi class="Text ldkigH">Draper J.</bdi>
+                                        <sup font-size="micro" class="tb_score">3</sup>
+                                    </div>
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="lost_score currentScore">3</span>
                                         </div>
                                     </div>
-                                    <div display="flex" class="Box Flex eqGkKN hdXfIu">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="#0bb32a" class="SvgWrapper fyGiev">
-                                            <path fill="#0bb32a" d="M13.09 7.13 4.53 2 3 2.87v10.26l1.53.87 8.56-5.13z" fill-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="Box hxgrMp">
-                                        <div display="flex" class="Box Flex bPbaIT cQgcrM">
-                                            <div d="inline-block" class="Box iNZtrx">
-                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
-                                                    <span class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 16px;">6</span>
-                                                </div>
-                                                <sup font-size="micro" data-change-key="homeScore.period1TieBreak" class="Text krLQbw">3</sup>
-                                            </div>
-                                            <div d="inline-block" class="Box iNZtrx">
-                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
-                                                    <span class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 16px;">3</span>
-                                                </div>
-                                            </div>
-                                            <div d="inline-block" class="Box iNZtrx">
-                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
-                                                    <span class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 14px;"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div display="flex" class="Box Flex fYUXNw cQgcrM">
-                                            <div d="inline-block" class="Box iNZtrx">
-                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
-                                                    <span class="Text fjeMtb currentScore" style="font-weight: normal; font-size: 16px;">7</span>
-                                                </div>
-                                                <sup font-size="micro" data-change-key="awayScore.period1TieBreak" class="Text krLQbw">7</sup>
-                                            </div>
-                                            <div d="inline-block" class="Box iNZtrx">
-                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
-                                                    <span class="Text fjeMtb currentScore" style="font-weight: normal; font-size: 16px;">6</span>
-                                                </div>
-                                            </div>
-                                            <div d="inline-block" class="Box iNZtrx">
-                                                <div display="flex" direction="column" class="Box Flex gpiIdD Nhgnl sc-iHGNWf fFdGkQ score-box">
-                                                    <span class="Text fIcwJd currentScore" style="font-weight: normal; font-size: 16px;"></span>
-                                                </div>
-                                            </div>
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="lost_score currentScore"></span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="Box gQLOTH"></div>
-                            <div class="Box jJDgZs">
-                                <div class="Text ibdrtp" style="overflow: visible;">
-                                    <div class="Box cPhZia">
-                                        <div class="Text ihwaOf">L</div>
+                                <div display="flex" class="Box fYUXNw cQgcrM">
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="won_score currentScore">7</span>
+                                        </div>
+                                        <sup font-size="micro" class="tb_score">7</sup>
+                                    </div>
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="won_score currentScore">6</span>
+                                        </div>
+                                    </div>
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="won_score currentScore"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </a>
+                    <div class="Box gQLOTH"></div>
+                    <div class="Box jJDgZs">
+                        <div class="ibdrtp" style="overflow: visible;">
+                            <div class="Box lost_sign">
+                                <div class="ihwaOf">L</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </a>
+        <a class="match_item" href="/tennis/match/alcaraz-draper/Zzdcsytkc#id:12418613">
+            <div>
+                <div display="flex" class="Box cBIkhT cQgcrM hshtw">
+                    <div class="Box klGMtt bVjijM"><div class="dUEAfq"></div></div>
+                    <div title="FT" class="Box jKVshf">
+                        <bdi font-size="12" class="kcRyBI">20/06/24</bdi>
+                        <div display="flex" direction="column" class="Box jTiCHC cRYpNI fFdGkQ">
+                            <span class="currentScore" style="font-weight: normal; font-size: 14px;">
+                                <bdi font-size="12" class="eFoirc">FT</bdi>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="Box ljKzEw"></div>
+                    <div class="Box dtLxRI">
+                        <div display="flex" class="Box ggRYVx jLRkRA">
+                            <div title="Alcaraz C. Draper J. live score" class="Box lkDlwE">
+                                <div display="flex" class="Box khxXvq jLRkRA">
+                                    <div class="Box hYFYfq">
+                                        <img src="https://www.sofascore.com/static/images/flags/es.png" alt="Spain" width="16" height="16" class="Img hpocRq">
+                                    </div>
+                                    <bdi class="won_name">Alcaraz C.</bdi>
+                                </div>
+                                <div display="flex" class="Box ggRYVx jLRkRA">
+                                    <div class="Box hYFYfq">
+                                        <img src="https://www.sofascore.com/static/images/flags/gb.png" alt="United Kingdom" width="16" height="16" class="Img hpocRq">
+                                    </div>
+                                    <bdi class="lost_name">Dan H.</bdi>
+                                </div>
+                            </div>
+                            <div display="flex" class="Box eqGkKN hdXfIu">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="#0bb32a" class="SvgWrapper fyGiev">
+                                    <path fill="#0bb32a" d="M13.09 7.13 4.53 2 3 2.87v10.26l1.53.87 8.56-5.13z" fill-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="Box hxgrMp">
+                                <div display="flex" class="Box bPbaIT cQgcrM">
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="won_score currentScore">6</span>
+                                        </div>
+                                    </div>
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="won_score currentScore">3</span>
+                                        </div>
+                                    </div>
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="won_score currentScore">7</span>
+                                        </div>
+                                        <sup font-size="micro" class="tb_score">7</sup>
+                                    </div>
+                                </div>
+                                <div display="flex" class="Box fYUXNw cQgcrM">
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="lost_score currentScore">1</span>
+                                        </div>
+                                    </div>
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="lost_score currentScore">6</span>
+                                        </div>
+                                    </div>
+                                    <div d="inline-block" class="Box iNZtrx">
+                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
+                                            <span class="lost_score currentScore">6</span>
+                                        </div>
+                                        <sup font-size="micro" class="tb_score">3</sup>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Box gQLOTH"></div>
+                    <div class="Box jJDgZs">
+                        <div class="ibdrtp" style="overflow: visible;">
+                            <div class="Box won_sign">
+                                <div class="ihwaOf">W</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
     </div>
 </body>
 </html>
