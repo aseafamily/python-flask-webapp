@@ -107,3 +107,9 @@ def generate_title(location_name, ignore_digits=True):
                 break
 
     return acronym
+
+def extract_number_from_string(input_string):
+    match = re.search(r'\d+', input_string)
+    if match:
+        return f"U{match.group()}"
+    return None

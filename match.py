@@ -8,7 +8,7 @@ from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String, desc
-from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title
+from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string
 from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
@@ -62,6 +62,8 @@ def match_index():
 
         tournament_logo = generate_title(match.Match.match_name)
 
+        event_name = extract_number_from_string(match.Match.match_event)
+
         match_data = {
             'match': match.Match,
             'player1_first_name': match.player1_first_name,
@@ -76,6 +78,7 @@ def match_index():
             'team2_name': team2_name,
             'round_name': round_name,
             'tournament_logo': tournament_logo,
+            'event_name': event_name,
             'show_match_name': match.Match.match_name != last_match_name
         }
         results.append(match_data)

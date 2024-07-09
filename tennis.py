@@ -8,7 +8,7 @@ from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String, desc
-from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title
+from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string
 from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
@@ -571,12 +571,6 @@ def generate_match_summary(match):
     match_summary += f" {title} {level} {event} {round}"
 
     return match_summary
-
-def extract_number_from_string(input_string):
-    match = re.search(r'\d+', input_string)
-    if match:
-        return f"U{match.group()}"
-    return None
 
 def get_brief_player_name(player):
     # Split the full name into parts
