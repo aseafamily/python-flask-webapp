@@ -112,20 +112,4 @@ def get_logo(image_id):
         return send_file(content, mimetype='image/png')
 
     except ResourceNotFoundError:
-        # If image_id.png is not found, return usta.png
-        try:
-            directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
-            file_client = directory_client.get_file_client("usta.png")
-            stream = file_client.download_file()
-            # Create a BytesIO object to store the downloaded content
-            content = BytesIO()
-            content.write(stream.readall())
-
-            # Seek back to the beginning of the BytesIO object
-            content.seek(0)
-
-            # Return the image file
-            return send_file(content, mimetype='image/png')
-        except ResourceNotFoundError:
-            # If usta.png is also not found, return a generic 404 image or handle as needed
-            abort(404)
+        abort(404)

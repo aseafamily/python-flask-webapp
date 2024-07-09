@@ -111,5 +111,9 @@ def generate_title(location_name, ignore_digits=True):
 def extract_number_from_string(input_string):
     match = re.search(r'\d+', input_string)
     if match:
-        return f"U{match.group()}"
-    return None
+        number = match.group()
+        if "+" in input_string:
+            return f"{number}+"
+        return f"U{number}"
+    else:
+        return generate_title(input_string, False)

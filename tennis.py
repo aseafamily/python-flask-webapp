@@ -580,7 +580,7 @@ def get_brief_player_name(player):
     if len(parts) >= 2:
         formatted_name = f"{parts[0]}{parts[1][0].upper()}"
     else:
-        formatted_name = player.full_name  # In case only one part (unlikely for full name)
+        formatted_name = player
 
     return formatted_name
 

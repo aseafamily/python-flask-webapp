@@ -311,9 +311,13 @@
         {% for match_data in results %}
             {% if match_data.show_match_name %}
         <div class="Box klGMtt"><div display="flex" class="Box cMLRbb jLRkRA">
-            <img src="/match/logo/{{ match_data.tournament_logo }}" width="auto" height="36" class="Img bIarbf">
+            <img src="/match/logo/{{ match_data.tournament_logo }}" 
+                width="auto" 
+                height="36" 
+                class="Img bIarbf"
+                onerror="this.onerror=null; this.src='/match/logo/USTA';">
             <div display="flex" direction="column" class="Box gFVOUS iWGVcA">
-                <a href="/tournament/tennis/atp/london/2494">
+                <a href="{{ match_data.match.match_link }}" target="_blank">
                     <bdi class="dDpJHe">{{ match_data.match.match_level }}: {{ match_data.match.match_name }}</bdi>
                 </a>
                 <span class="kTgHLG">{{ match_data.match.match_city }}, {{ match_data.match.match_state }} - {{ match_data.event_name }}</span>
