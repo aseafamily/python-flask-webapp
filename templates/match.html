@@ -109,7 +109,7 @@
             transition: opacity 300ms ease-out 0s;
         }
         .jKVshf {
-            margin-left: 8px;
+            margin-left: 2px;
             margin-right: 2px;
             text-align: center;
             flex: 0 0 56px;
@@ -311,7 +311,7 @@
         {% for match_data in results %}
             {% if match_data.show_match_name %}
         <div class="Box klGMtt"><div display="flex" class="Box cMLRbb jLRkRA">
-            <img src="https://api.sofascore.app/api/v1/unique-tournament/2494/image" alt="London" width="24" height="24" class="Img bIarbf">
+            <img src="https://playtennis.usta.com/Content/Public/Clubspark/usta/global/img/usta.png" width="auto" height="36" class="Img bIarbf">
             <div display="flex" direction="column" class="Box gFVOUS iWGVcA">
                 <a href="/tournament/tennis/atp/london/2494">
                     <bdi class="dDpJHe">{{ match_data.match.match_level }}: {{ match_data.match.match_name }}</bdi>
@@ -324,7 +324,7 @@
             <div>
                 <div display="flex" class="Box cBIkhT cQgcrM hshtw">
                     <div class="Box klGMtt bVjijM"><div class="dUEAfq"></div></div>
-                    <div title="FT" class="Box jKVshf">
+                    <div class="Box jKVshf">
                         {% set formatted_date = "%02d/%d/%d"|format(match_data.match.date.year % 100, match_data.match.date.month, match_data.match.date.day) %}
                         <bdi font-size="12" class="kcRyBI">{{ formatted_date }}</bdi>
                         <div display="flex" direction="column" class="Box jTiCHC cRYpNI fFdGkQ">
@@ -336,17 +336,21 @@
                     <div class="Box ljKzEw"></div>
                     <div class="Box dtLxRI">
                         <div display="flex" class="Box ggRYVx jLRkRA">
-                            <div title="Alcaraz C. Draper J. live score" class="Box lkDlwE">
+                            <div class="Box lkDlwE">
                                 <div display="flex" class="Box khxXvq jLRkRA">
+                                    {% if match_data.match.type == 'S' %}
                                     <div class="Box hYFYfq">
                                         <img src="https://www.sofascore.com/static/images/flags/us.png" alt="USA" width="16" height="16" class="Img hpocRq">
                                     </div>
+                                    {% endif %}
                                     <bdi class="{% if match_data.match.team1_won %}won_name{% else %}lost_name{% endif %}">{{ match_data.team1_name }}</bdi>
                                 </div>
                                 <div display="flex" class="Box ggRYVx jLRkRA">
+                                    {% if match_data.match.type == 'S' %}
                                     <div class="Box hYFYfq">
                                         <img src="https://www.sofascore.com/static/images/flags/us.png" alt="USA" width="16" height="16" class="Img hpocRq">
                                     </div>
+                                    {% endif %}
                                     <bdi class="{% if match_data.match.team1_won %}lost_name{% else %}won_name{% endif %}">{{ match_data.team2_name }}</bdi>
                                 </div>
                             </div>

@@ -45,8 +45,8 @@ def match_index():
     last_match_name = None
     for match in match_query:
         if match.Match.type == 'S':
-            team1_name = get_name_short(match.player1_first_name, match.player1_last_name)
-            team2_name = get_name_short(match.player2_first_name, match.player2_last_name)
+            team1_name = f"{match.player1_first_name} {match.player1_last_name}"
+            team2_name = f"{match.player2_first_name} {match.player2_last_name}"
         else:  # Assuming 'Doubles'
             team1_name = get_name_short(match.player1_first_name, match.player1_last_name) + " / " + get_name_short(match.player3_first_name, match.player3_last_name)
             team2_name = get_name_short(match.player2_first_name, match.player2_last_name) + " / " + get_name_short(match.player4_first_name, match.player4_last_name)
@@ -79,5 +79,5 @@ def match_index():
     return render_template('match.html', results=results)
 
 def get_name_short(first_name, last_name):
-    name = f"{first_name} {last_name[0]}." if last_name else first_name
+    name = f"{first_name} {last_name[0]}" if last_name else first_name
     return name if name else ''
