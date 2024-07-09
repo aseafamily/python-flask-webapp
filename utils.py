@@ -56,3 +56,29 @@ def convert_none_string_to_none(value):
         return None
     return value
 
+def get_match_round_abbreviation(match):
+    special_rounds = {
+        "Quarterfinals": "QF",
+        "Semifinals": "SF",
+        "Finals": "F"
+    }
+
+    round_name = match.match_round
+    
+    for key, value in special_rounds.items():
+        if key in round_name:
+            round_name = round_name.replace(key, value)
+
+    if match.match_draw != 'Main':
+        if not round_name:
+            if any(char.isdigit() for char in match.match_draw):
+                digits = ''.join(filter(str.isdigit, match.match_draw))
+                round_name = match.match_draw[0] + digits
+            else:
+                round_name = match.match_draw
+
+        elif not any(char.isdigit() for char in match.match_draw) and '-' not in round_name:
+            round_name = f"{match.match_draw[0]}-{round_name}"
+
+    return round_name.upper()
+

@@ -8,7 +8,7 @@ from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String, desc
-from utils import test_connection, user_dict, get_week_range, get_client_time
+from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation
 from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
@@ -565,10 +565,8 @@ def generate_match_summary(match):
 
     level = generate_title(match.match_level, False)
     title = generate_title(match.match_name, True)
-    round = get_match_round_abbreviation(match.match_round)
+    round = get_match_round_abbreviation(match)
     event = extract_number_from_string(match.match_event)
-    if match.match_draw == 'Consolation':
-        round = f"C-{round}"
 
     match_summary += f" {title} {level} {event} {round}"
 
@@ -614,18 +612,6 @@ def generate_title(location_name, ignore_digits=True):
 
     return acronym
 
-def get_match_round_abbreviation(round_name):
-    special_rounds = {
-        "Quarterfinals": "QF",
-        "Semifinals": "SF",
-        "Finals": "F"
-    }
-    
-    if round_name in special_rounds:
-        return special_rounds[round_name]
-    else:
-        return round_name[:4].upper()
-    
 @tennis_bp.route('/tennis/diagram')
 def tennis_diagram():
     player_id = request.args.get('u')

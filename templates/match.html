@@ -254,7 +254,7 @@
             left: 14px;
             color: var(--on-surface-nLv1);
             text-align: left;
-            font: 400 11px / 1 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            font: 400 10px / 1 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
             vertical-align: super;
         }
         .fYUXNw {
@@ -264,7 +264,7 @@
         .gQLOTH {
             background-color: rgba(34, 34, 38, 0.15);
             height: 36px;
-            margin-right: 12px;
+            margin-right: 10px;
             flex: 0 0 1px;
         }
         .jJDgZs {
@@ -305,25 +305,31 @@
     </style>
 </head>
 <body>
-    <div class="container">        
+    <div class="container">
+        
+        <!-- Start results iteration -->
+        {% for match_data in results %}
+            {% if match_data.show_match_name %}
         <div class="Box klGMtt"><div display="flex" class="Box cMLRbb jLRkRA">
             <img src="https://api.sofascore.app/api/v1/unique-tournament/2494/image" alt="London" width="24" height="24" class="Img bIarbf">
             <div display="flex" direction="column" class="Box gFVOUS iWGVcA">
                 <a href="/tournament/tennis/atp/london/2494">
-                    <bdi class="dDpJHe">London</bdi>
+                    <bdi class="dDpJHe">{{ match_data.match.match_level }}: {{ match_data.match.match_name }}</bdi>
                 </a>
-                <span class="kTgHLG">Grass</span>
+                <span class="kTgHLG">{{ match_data.match.match_city }}, {{ match_data.match.match_state }}</span>
             </div>
         </div>
+            {% endif %}
         <a class="match_item" href="/tennis/match/alcaraz-draper/Zzdcsytkc#id:12418613">
             <div>
                 <div display="flex" class="Box cBIkhT cQgcrM hshtw">
                     <div class="Box klGMtt bVjijM"><div class="dUEAfq"></div></div>
                     <div title="FT" class="Box jKVshf">
-                        <bdi font-size="12" class="kcRyBI">20/06/24</bdi>
+                        {% set formatted_date = "%02d/%d/%d"|format(match_data.match.date.year % 100, match_data.match.date.month, match_data.match.date.day) %}
+                        <bdi font-size="12" class="kcRyBI">{{ formatted_date }}</bdi>
                         <div display="flex" direction="column" class="Box jTiCHC cRYpNI fFdGkQ">
                             <span class="currentScore" style="font-weight: normal; font-size: 14px;">
-                                <bdi font-size="12" class="eFoirc">FT</bdi>
+                                <bdi font-size="12" class="eFoirc">{{ match_data.round_name }}</bdi>
                             </span>
                         </div>
                     </div>
@@ -333,15 +339,15 @@
                             <div title="Alcaraz C. Draper J. live score" class="Box lkDlwE">
                                 <div display="flex" class="Box khxXvq jLRkRA">
                                     <div class="Box hYFYfq">
-                                        <img src="https://www.sofascore.com/static/images/flags/es.png" alt="Spain" width="16" height="16" class="Img hpocRq">
+                                        <img src="https://www.sofascore.com/static/images/flags/us.png" alt="USA" width="16" height="16" class="Img hpocRq">
                                     </div>
-                                    <bdi class="lost_name">Alcaraz C.</bdi>
+                                    <bdi class="{% if match_data.match.team1_won %}won_name{% else %}lost_name{% endif %}">{{ match_data.team1_name }}</bdi>
                                 </div>
                                 <div display="flex" class="Box ggRYVx jLRkRA">
                                     <div class="Box hYFYfq">
-                                        <img src="https://www.sofascore.com/static/images/flags/gb.png" alt="United Kingdom" width="16" height="16" class="Img hpocRq">
+                                        <img src="https://www.sofascore.com/static/images/flags/us.png" alt="USA" width="16" height="16" class="Img hpocRq">
                                     </div>
-                                    <bdi class="won_name">Draper J.</bdi>
+                                    <bdi class="{% if match_data.match.team1_won %}lost_name{% else %}won_name{% endif %}">{{ match_data.team2_name }}</bdi>
                                 </div>
                             </div>
                             <div display="flex" class="Box eqGkKN hdXfIu">
@@ -353,37 +359,41 @@
                                 <div display="flex" class="Box bPbaIT cQgcrM">
                                     <div d="inline-block" class="Box iNZtrx">
                                         <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="lost_score currentScore">6</span>
+                                            <span class="{% if match_data.match.team1_won %}won_score{% else %}lost_score{% endif %} currentScore">{{ match_data.match.team1_set1 if match_data.match.team1_set1 is not none else "" }}</span>
                                         </div>
-                                        <sup font-size="micro" class="tb_score">3</sup>
+                                        <sup font-size="micro" class="tb_score">{{ match_data.match.team1_set1_tb if match_data.match.team1_set1_tb is not none else "" }}</sup>
                                     </div>
                                     <div d="inline-block" class="Box iNZtrx">
                                         <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="lost_score currentScore">3</span>
+                                            <span class="{% if match_data.match.team1_won %}won_score{% else %}lost_score{% endif %} currentScore">{{ match_data.match.team1_set2 if match_data.match.team1_set2 is not none else "" }}</span>
                                         </div>
+                                        <sup font-size="micro" class="tb_score">{{ match_data.match.team1_set2_tb if match_data.match.team1_set2_tb is not none else "" }}</sup>
                                     </div>
                                     <div d="inline-block" class="Box iNZtrx">
                                         <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="lost_score currentScore"></span>
+                                            <span class="{% if match_data.match.team1_won %}won_score{% else %}lost_score{% endif %} currentScore">{{ match_data.match.team1_set3 if match_data.match.team1_set3 is not none else "" }}</span>
                                         </div>
+                                        <sup font-size="micro" class="tb_score">{{ match_data.match.team1_set3_tb if match_data.match.team1_set3_tb is not none else "" }}</sup>
                                     </div>
                                 </div>
                                 <div display="flex" class="Box fYUXNw cQgcrM">
                                     <div d="inline-block" class="Box iNZtrx">
                                         <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="won_score currentScore">7</span>
+                                            <span class="{% if match_data.match.team1_won %}lost_score{% else %}won_score{% endif %} currentScore">{{ match_data.match.team2_set1 if match_data.match.team2_set1 is not none else "" }}</span>
                                         </div>
-                                        <sup font-size="micro" class="tb_score">7</sup>
+                                        <sup font-size="micro" class="tb_score">{{ match_data.match.team2_set1_tb if match_data.match.team2_set1_tb is not none else "" }}</sup>
                                     </div>
                                     <div d="inline-block" class="Box iNZtrx">
                                         <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="won_score currentScore">6</span>
+                                            <span class="{% if match_data.match.team1_won %}lost_score{% else %}won_score{% endif %} currentScore">{{ match_data.match.team2_set2 if match_data.match.team2_set2 is not none else "" }}</span>
                                         </div>
+                                        <sup font-size="micro" class="tb_score">{{ match_data.match.team2_set2_tb if match_data.match.team2_set2_tb is not none else "" }}</sup>
                                     </div>
                                     <div d="inline-block" class="Box iNZtrx">
                                         <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="won_score currentScore"></span>
+                                            <span class="{% if match_data.match.team1_won %}lost_score{% else %}won_score{% endif %} currentScore">{{ match_data.match.team2_set3 if match_data.match.team2_set3 is not none else "" }}</span>
                                         </div>
+                                        <sup font-size="micro" class="tb_score">{{ match_data.match.team2_set3_tb if match_data.match.team2_set3_tb is not none else "" }}</sup>
                                     </div>
                                 </div>
                             </div>
@@ -392,99 +402,17 @@
                     <div class="Box gQLOTH"></div>
                     <div class="Box jJDgZs">
                         <div class="ibdrtp" style="overflow: visible;">
-                            <div class="Box lost_sign">
-                                <div class="ihwaOf">L</div>
+                            <div class="Box {% if match_data.match.team1_won %}won_sign{% else %}lost_sign{% endif %}">
+                                <div class="ihwaOf">{% if match_data.match.team1_won %}W{% else %}L{% endif %}</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </a>
-        <a class="match_item" href="/tennis/match/alcaraz-draper/Zzdcsytkc#id:12418613">
-            <div>
-                <div display="flex" class="Box cBIkhT cQgcrM hshtw">
-                    <div class="Box klGMtt bVjijM"><div class="dUEAfq"></div></div>
-                    <div title="FT" class="Box jKVshf">
-                        <bdi font-size="12" class="kcRyBI">20/06/24</bdi>
-                        <div display="flex" direction="column" class="Box jTiCHC cRYpNI fFdGkQ">
-                            <span class="currentScore" style="font-weight: normal; font-size: 14px;">
-                                <bdi font-size="12" class="eFoirc">FT</bdi>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="Box ljKzEw"></div>
-                    <div class="Box dtLxRI">
-                        <div display="flex" class="Box ggRYVx jLRkRA">
-                            <div title="Alcaraz C. Draper J. live score" class="Box lkDlwE">
-                                <div display="flex" class="Box khxXvq jLRkRA">
-                                    <div class="Box hYFYfq">
-                                        <img src="https://www.sofascore.com/static/images/flags/es.png" alt="Spain" width="16" height="16" class="Img hpocRq">
-                                    </div>
-                                    <bdi class="won_name">Alcaraz C.</bdi>
-                                </div>
-                                <div display="flex" class="Box ggRYVx jLRkRA">
-                                    <div class="Box hYFYfq">
-                                        <img src="https://www.sofascore.com/static/images/flags/gb.png" alt="United Kingdom" width="16" height="16" class="Img hpocRq">
-                                    </div>
-                                    <bdi class="lost_name">Dan H.</bdi>
-                                </div>
-                            </div>
-                            <div display="flex" class="Box eqGkKN hdXfIu">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="#0bb32a" class="SvgWrapper fyGiev">
-                                    <path fill="#0bb32a" d="M13.09 7.13 4.53 2 3 2.87v10.26l1.53.87 8.56-5.13z" fill-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <div class="Box hxgrMp">
-                                <div display="flex" class="Box bPbaIT cQgcrM">
-                                    <div d="inline-block" class="Box iNZtrx">
-                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="won_score currentScore">6</span>
-                                        </div>
-                                    </div>
-                                    <div d="inline-block" class="Box iNZtrx">
-                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="won_score currentScore">3</span>
-                                        </div>
-                                    </div>
-                                    <div d="inline-block" class="Box iNZtrx">
-                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="won_score currentScore">7</span>
-                                        </div>
-                                        <sup font-size="micro" class="tb_score">7</sup>
-                                    </div>
-                                </div>
-                                <div display="flex" class="Box fYUXNw cQgcrM">
-                                    <div d="inline-block" class="Box iNZtrx">
-                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="lost_score currentScore">1</span>
-                                        </div>
-                                    </div>
-                                    <div d="inline-block" class="Box iNZtrx">
-                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="lost_score currentScore">6</span>
-                                        </div>
-                                    </div>
-                                    <div d="inline-block" class="Box iNZtrx">
-                                        <div display="flex" direction="column" class="Box gpiIdD Nhgnl fFdGkQ">
-                                            <span class="lost_score currentScore">6</span>
-                                        </div>
-                                        <sup font-size="micro" class="tb_score">3</sup>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="Box gQLOTH"></div>
-                    <div class="Box jJDgZs">
-                        <div class="ibdrtp" style="overflow: visible;">
-                            <div class="Box won_sign">
-                                <div class="ihwaOf">W</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
+        {% endfor %}
+        <!-- End results iteration -->
+
     </div>
 </body>
 </html>
