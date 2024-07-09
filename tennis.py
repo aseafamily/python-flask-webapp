@@ -8,7 +8,7 @@ from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String, desc
-from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation
+from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title
 from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
@@ -590,28 +590,6 @@ def get_brief_player_name(player):
 
     return formatted_name
 
-def generate_title(location_name, ignore_digits=True):
-    # Check if location_name is already an acronym (less than four uppercase characters)
-    if len(location_name) <= 4 and location_name.isupper():
-        return location_name
-    
-    # Split the location name into words
-    words = location_name.split()
-
-    # Initialize acronym
-    acronym = ""
-
-    # Build acronym from first letters of each word (up to 4 characters)
-    for word in words:
-        if not (ignore_digits and word.isdigit()):  # Skip words that are numbers if ignore_digits is True
-            acronym += word[0].upper()
-
-            # Break loop if acronym length reaches 4 characters
-            if len(acronym) >= 4:
-                break
-
-    return acronym
-
 @tennis_bp.route('/tennis/diagram')
 def tennis_diagram():
     player_id = request.args.get('u')
@@ -706,7 +684,7 @@ def tennis_uploadpage(id):
 @tennis_bp.route('/tennis/upload/<int:id>', methods=['POST'])
 def tennis_upload(id):
     connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
-    file_share_name = "bhmfiles"  # Replace with your actual file share name
+    file_share_name = "bhmfiles"
     try:
         uploaded_files = []
         index = 1

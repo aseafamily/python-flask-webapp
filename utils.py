@@ -4,6 +4,7 @@ from sqlalchemy.exc import OperationalError
 from db import db_uri
 from datetime import datetime, timedelta
 import pytz
+import re
 
 # Hardcoded dictionary mapping user IDs to names
 user_dict = {
@@ -82,3 +83,27 @@ def get_match_round_abbreviation(match):
 
     return round_name.upper()
 
+def generate_title(location_name, ignore_digits=True):
+    # Remove any non-alphabetic characters and convert to uppercase
+    location_name = re.sub('[^A-Za-z ]', '', location_name).upper()
+
+    # Check if location_name is already an acronym (less than four uppercase characters)
+    if len(location_name) <= 4 and location_name.isupper():
+        return location_name
+    
+    # Split the location name into words
+    words = location_name.split()
+
+    # Initialize acronym
+    acronym = ""
+
+    # Build acronym from first letters of each word (up to 4 characters)
+    for word in words:
+        if not (ignore_digits and word.isdigit()):  # Skip words that are numbers if ignore_digits is True
+            acronym += word[0].upper()
+
+            # Break loop if acronym length reaches 4 characters
+            if len(acronym) >= 4:
+                break
+
+    return acronym

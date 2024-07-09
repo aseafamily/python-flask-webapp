@@ -8,13 +8,15 @@ from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String, desc
-from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation
+from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title
 from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
 import re
 import os
 from azure.storage.fileshare import ShareFileClient, ShareServiceClient
+from azure.core.exceptions import ResourceNotFoundError
+from io import BytesIO
 
 match_bp = Blueprint('match', __name__)
 
@@ -58,6 +60,8 @@ def match_index():
 
         round_name = get_match_round_abbreviation(match.Match)
 
+        tournament_logo = generate_title(match.Match.match_name)
+
         match_data = {
             'match': match.Match,
             'player1_first_name': match.player1_first_name,
@@ -71,6 +75,7 @@ def match_index():
             'team1_name': team1_name,
             'team2_name': team2_name,
             'round_name': round_name,
+            'tournament_logo': tournament_logo,
             'show_match_name': match.Match.match_name != last_match_name
         }
         results.append(match_data)
@@ -81,3 +86,43 @@ def match_index():
 def get_name_short(first_name, last_name):
     name = f"{first_name} {last_name[0]}" if last_name else first_name
     return name if name else ''
+
+@match_bp.route('/match/logo/<string:image_id>')
+def get_logo(image_id):
+    file_share_name = "bhmfiles"
+    folder_name = "tennis/logo"
+    connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    try:
+        
+        service_client = ShareServiceClient.from_connection_string(connection_string)
+        directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
+        file_client = directory_client.get_file_client(f"{image_id}.png")
+        stream = file_client.download_file()
+        # Create a BytesIO object to store the downloaded content
+        content = BytesIO()
+        content.write(stream.readall())
+
+        # Seek back to the beginning of the BytesIO object
+        content.seek(0)
+
+        # Return the image file
+        return send_file(content, mimetype='image/png')
+
+    except ResourceNotFoundError:
+        # If image_id.png is not found, return usta.png
+        try:
+            directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
+            file_client = directory_client.get_file_client("usta.png")
+            stream = file_client.download_file()
+            # Create a BytesIO object to store the downloaded content
+            content = BytesIO()
+            content.write(stream.readall())
+
+            # Seek back to the beginning of the BytesIO object
+            content.seek(0)
+
+            # Return the image file
+            return send_file(content, mimetype='image/png')
+        except ResourceNotFoundError:
+            # If usta.png is also not found, return a generic 404 image or handle as needed
+            abort(404)
