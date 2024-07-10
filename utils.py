@@ -116,4 +116,4 @@ def extract_number_from_string(input_string):
             return f"{number}+"
         return f"U{number}"
     else:
- 
+        return generate_title(input_string, False)
