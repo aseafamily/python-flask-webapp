@@ -113,3 +113,10 @@ def get_logo(image_id):
 
     except ResourceNotFoundError:
         abort(404)
+
+@match_bp.route('/match/<int:id>')
+@login_required
+def match_one(id):
+     # tempalte page
+     # https://www.sofascore.com/tennis/match/sun-vekic/QmvsHdDb#id:12460178
+     return render_template('match_one.html')

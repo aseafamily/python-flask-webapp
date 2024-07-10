@@ -1,0 +1,400 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Results</title>
+    <style>
+        :root {
+            --on-color-primary: #ffffff;
+            --on-surface-nLv1: #222226;
+            --on-surface-nLv3: rgba(34, 34, 38, 0.45);
+            --on-surface-nLv4: rgba(34, 34, 38, 0.15);
+            --error-default: #c7361f;
+            --surface-s0: #edf1f6;
+            --surface-s1: #ffffff;
+        }
+
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            -webkit-font-smoothing: antialiased;
+            font-family: "Sofascore Sans", "Arial Unicode MS", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-weight: 400;
+            color: var(--on-surface-nLv1);
+            background-color: var(--surface-s0);
+            font-feature-settings: "kern";
+            font-kerning: normal;
+        }
+
+        .bnpRyo {
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+        }
+
+        .dlyXLO {
+            display: flex;
+            padding: 8px 16px;
+        }
+
+        .lfqAOf {
+            height: 100%;
+        }
+
+        .iZgchw {
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .kFvGEE {
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+        }
+
+        .ddaRLc {
+            display: flex;
+            position: relative;
+            margin-left: 8px;
+        }
+
+        .cORqut {
+            position: relative;
+        }
+
+        .jbaYme {
+            object-fit: cover;
+        }
+
+        img {
+            border-style: none;
+        }
+
+        .HwWyM {
+            position: absolute;
+            top: 24px;
+            left: 0px;
+        }
+
+        .hpocRq {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .kshPLE {
+            display: inline-flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+        }
+
+        .kHVrPs {
+            display: inline-flex;
+            background-color: var(--playoffs-promotion-to-x-playoff);
+            position: absolute;
+            right: 0px;
+            bottom: 2px;
+            z-index: 1;
+            height: 12px;
+            min-width: 16px;
+            border-radius: 8px;
+        }
+
+        .gprDYG {
+            color: var(--surface-s1);
+            text-align: left;
+            font: 500 10px / 1 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+
+        .gtmGgU {
+            padding-left: 16px;
+        }
+
+        .jzDXwu {
+            color: var(--on-surface-nLv1);
+            text-align: left;
+            display: block;
+            font: 700 12px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            text-overflow: ellipsis;
+            overflow-x: clip;
+            white-space: nowrap;
+            min-width: 0px;
+        }
+
+        .hKtpIg {
+            color: var(--on-surface-nLv3);
+            text-align: left;
+            display: block;
+            font: 700 12px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            text-overflow: ellipsis;
+            overflow-x: clip;
+            white-space: nowrap;
+            min-width: 0px;
+        }
+
+        .dsybxc {
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .eJCdjm {
+            display: flex;
+            width: 100%;
+        }
+
+        .gyrVAS {
+            display: flex;
+            -webkit-box-pack: end;
+            justify-content: flex-end;
+        }
+
+        .hQZSQ {
+            display: flex;
+            height: 84px;
+            width: 100%;
+        }
+
+        .cIAUBs {
+            display: flex;
+            align-items: flex-end;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+
+        .hELCex {
+            display: flex;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+
+        .cORqut {
+            position: relative;
+        }
+
+        .gvJSKx {
+            position: relative;
+            border: 1px solid transparent;
+            overflow: hidden;
+        }
+
+        .MkeW {
+            display: flex;
+            align-items: flex-end;
+            flex-direction: column;
+        }
+
+        .jTiCHC {
+            display: flex;
+            position: relative;
+            height: 17px;
+            min-width: 16px;
+        }
+
+        .gvJSKx .previousScore, .gvJSKx .currentScore {
+            min-width: 16px;
+            position: relative;
+        }
+
+        .jvWolF {
+            background-color: unset;
+            color: var(--on-surface-nLv1);
+            text-align: center;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+
+        .gvJSKx .previousScore, .gvJSKx .currentScore {
+            min-width: 16px;
+            position: relative;
+        }
+
+        .dAVuIr {
+            background-color: unset;
+            color: var(--on-surface-nLv3);
+            text-align: center;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+
+        .bnvMps {
+            display: flex;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+
+        .fxruDL {
+            display: flex;
+            height: 100%;
+        }
+
+        .kFvGEE {
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+        }
+
+        .bSuBER {
+            display: flex;
+            height: 24px;
+        }
+
+        .yZqSj {
+            display: inline-block;
+            flex: 0 0 1px;
+            align-self: stretch;
+            width: 1px;
+            background-color: var(--on-surface-nLv4);
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+
+        .fIcwJd {
+            color: var(--on-surface-nLv3);
+            text-align: center;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+
+        .fFdGkQ .previousScore, .fFdGkQ .currentScore {
+            min-width: 16px;
+            position: relative;
+        }
+
+        .fjeMtb {
+            color: var(--on-surface-nLv1);
+            text-align: center;
+            font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
+
+        .ilbQji {
+            display: flex;
+            position: relative;
+            height: 24px;
+            min-width: 16px;
+            padding-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header panel -->
+    <div class="Box bPNjiv">
+        <div display="flex" class="Box Flex dlyXLO bnpRyo">
+            <div display="flex" direction="column" class="Box Flex ggRYVx kphZwG">
+                <div class="Box lfqAOf">
+                    <div display="flex" direction="row" class="Box Flex ggRYVx iZgchw">
+                        <a href="/team/tennis/sun/195182">
+                            <div display="flex" class="Box Flex ddaRLc kFvGEE">
+                                <div class="Box cORqut">
+                                    <div class="Box cORqut">
+                                        <img src="https://api.sofascore.app/api/v1/team/195182/image" width="40" height="40" alt="Sun L." class="Img jbaYme">
+                                        <div class="Box HwWyM">
+                                            <img src="/static/images/flags/nz.png" width="16" height="16" class="Img hpocRq">
+                                        </div>
+                                    </div>
+                                    <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
+                                        <span color="surface.s1" class="Text gprDYG">Q</span>
+                                    </div>
+                                </div>
+                                <div class="Box gtmGgU">
+                                    <bdi class="Text jzDXwu">Sun L.</bdi>
+                                    <bdi color="onSurface.nLv3" class="Text hKtpIg">WTA 123.</bdi>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="Box lfqAOf">
+                    <div display="flex" direction="row" class="Box Flex ggRYVx iZgchw">
+                        <a href="/team/tennis/vekic-donna/50641">
+                            <div display="flex" class="Box Flex ddaRLc kFvGEE">
+                                <div class="Box cORqut">
+                                    <div class="Box cORqut">
+                                        <img src="https://api.sofascore.app/api/v1/team/50641/image" width="40" height="40" alt="Vekić D." class="Img jbaYme">
+                                        <div class="Box HwWyM">
+                                            <img src="/static/images/flags/hr.png" width="16" height="16" class="Img hpocRq">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="Box gtmGgU">
+                                    <bdi class="Text jzDXwu">Vekić D.</bdi>
+                                    <bdi color="onSurface.nLv3" class="Text hKtpIg">WTA 37.</bdi>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div display="flex" direction="column" class="Box Flex eJCdjm dsybxc">
+                <div display="flex" class="Box Flex hQZSQ gyrVAS">
+                    <div display="flex" direction="column" class="Box Flex hELCex cIAUBs">
+                        <div class="Box cORqut">
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color:unset !important">
+                                <span color="onSurface.nLv1" class="Text jvWolF currentScore" style="font-weight:bold;font-size:14px">7</span>
+                            </div>
+                        </div>
+                        <div class="Box cORqut">
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color:unset !important">
+                                <span color="onSurface.nLv3" class="Text dAVuIr currentScore" style="font-weight:bold;font-size:14px">5</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div display="flex" direction="column" class="Box Flex hELCex cIAUBs">
+                        <div class="Box cORqut">
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
+                                <span color="onSurface.nLv3" class="Text dAVuIr currentScore" style="font-weight:bold;font-size:14px">4</span>
+                            </div>
+                        </div>
+                        <div class="Box cORqut">
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
+                                <span color="onSurface.nLv1" class="Text jvWolF currentScore" style="font-weight:bold;font-size:14px">6</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div display="flex" direction="column" class="Box Flex hELCex cIAUBs">
+                        <div class="Box cORqut">
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-iHGNWf fFdGkQ score-box" style="background-color: unset !important;">
+                                <span color="onSurface.nLv3" class="Text dAVuIr currentScore" style="font-weight: bold; font-size: 14px;">1</span>
+                            </div>
+                        </div>
+                        <div class="Box cORqut">
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-iHGNWf fFdGkQ score-box" style="background-color: unset !important;">
+                                <span color="onSurface.nLv1" class="Text jvWolF currentScore" style="font-weight: bold; font-size: 14px;">6</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div display="flex" direction="column" class="Box Flex fxruDL bnvMps">
+                        <div display="flex" class="Box Flex bSuBER kFvGEE">
+                            <div class="VerticalDivider yZqSj"></div>
+                            <div display="flex" direction="column" class="Box Flex ilbQji MkeW sc-iHGNWf fFdGkQ score-box" style="background-color:undefined !important">
+                                <span color="onSurface.nLv3" class="Text fIcwJd currentScore" style="font-weight: bold; font-size: 18px;">1</span>
+                            </div>
+                        </div>
+                        <div display="flex" class="Box Flex bSuBER kFvGEE">
+                            <div class="VerticalDivider yZqSj"></div>
+                            <div display="flex" direction="column" class="Box Flex ilbQji MkeW sc-iHGNWf fFdGkQ score-box" style="background-color:undefined !important">
+                                <span color="onSurface.nLv1" class="Text fjeMtb currentScore" style="font-weight: bold; font-size: 18px;">2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
