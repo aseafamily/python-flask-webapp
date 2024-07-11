@@ -60,7 +60,8 @@ def match_index():
 
         round_name = get_match_round_abbreviation(match.Match)
 
-        tournament_logo = generate_title(match.Match.match_name)
+        including_year = match.Match.match_event is not None and "Adults" in match.Match.match_event
+        tournament_logo = generate_title(match.Match.match_name, True, including_year)
 
         event_name = extract_number_from_string(match.Match.match_event)
 

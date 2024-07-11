@@ -83,13 +83,20 @@ def get_match_round_abbreviation(match):
 
     return round_name.upper()
 
-def generate_title(location_name, ignore_digits=True):
+def generate_title(location_name, ignore_digits=True, including_year=False):
+    # Extract year if including_year is True
+    year = ""
+    if including_year:
+        year_match = re.search(r'\b\d{4}\b', location_name)
+        if year_match:
+            year = year_match.group()
+    
     # Remove any non-alphabetic characters and convert to uppercase
     location_name = re.sub('[^A-Za-z ]', '', location_name).upper()
 
     # Check if location_name is already an acronym (less than four uppercase characters)
     if len(location_name) <= 4 and location_name.isupper():
-        return location_name
+        return year + location_name if year else location_name
     
     # Split the location name into words
     words = location_name.split()
@@ -106,7 +113,7 @@ def generate_title(location_name, ignore_digits=True):
             if len(acronym) >= 4:
                 break
 
-    return acronym
+    return year + acronym if year else acronym
 
 def extract_number_from_string(input_string):
     match = re.search(r'\d+', input_string)
