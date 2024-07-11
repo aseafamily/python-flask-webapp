@@ -70,7 +70,8 @@ def match_index():
         diff_games = team1_games - team2_games
         if diff_games < 0:
              diff_games = diff_games * -1
-        diff_indicator = (diff_games / (team1_games if match.Match.team1_won else team2_games)) if team1_games else 0
+        games = team1_games if match.Match.team1_won else team2_games
+        diff_indicator = (diff_games / games) if games else 0
         diff_indicator = diff_indicator * 100 * 0.95 + 5
 
         match_data = {
