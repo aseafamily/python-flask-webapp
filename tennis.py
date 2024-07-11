@@ -493,6 +493,10 @@ def tennis_update(id):
     
         db.session.commit()
 
+        return_url = request.form['return_url']
+        if return_url:
+            return redirect(return_url)
+            
         redirect_url = f'/tennis?u={uid}'
         category_filter = request.args.get('category', '')
         if category_filter:

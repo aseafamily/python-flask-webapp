@@ -64,6 +64,7 @@
 
     <div class="form">
         <form action="{% block form_action %}{% endblock %}?u={{ u }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}" method="POST">
+            <input type="hidden" name="return_url" value="{{ request.args.get('return_url', '') }}">
             <table>
                 <tr style="background-color: lightgrey;">
                     <td>Date:</td>

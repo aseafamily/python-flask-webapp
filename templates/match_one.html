@@ -656,6 +656,8 @@
                     {% else %}
                         {{ '{}m'.format(minutes) }}
                     {% endif %}
+                    <div display="inline-block" class="Box ittMsX"></div>
+                    <a href="/tennis/update/{{ match_data.Match.tennis_id }}?u={{ match_data.Match.player1 }}&return_url={{ request.url }}">{{ match_data.Match.tennis_id }}</a>
                 </span>
             </div>
         </div>
@@ -680,7 +682,8 @@
             <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
                 <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Location</span>
                 <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">
-                    {% if match_data.Match.is_indoor %}Indoor{% else %}Outdoor{% endif %} | 
+                    {% if match_data.Match.is_indoor %}Indoor{% else %}Outdoor{% endif %}
+                    <div display="inline-block" class="Box ittMsX"></div>
                     {{ match_data.Match.match_city }}, {{ match_data.Match.match_state }}
                 </span>
             </div>
