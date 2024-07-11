@@ -12,6 +12,7 @@
             --error-default: #c7361f;
             --surface-s0: #edf1f6;
             --surface-s1: #ffffff;
+            --playoffs-promotion-to-x-playoff: #0a8dff;
         }
 
         body {
@@ -24,6 +25,11 @@
             background-color: var(--surface-s0);
             font-feature-settings: "kern";
             font-kerning: normal;
+            margin: 0;
+        }
+
+        .bPNjiv {
+            background-color: var(--surface-s1);
         }
 
         .bnpRyo {
@@ -343,9 +349,11 @@
                                         <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
                                     </div>
                                 </div>
+                                {% if match_data.Match.player1_seed %}
                                 <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
                                     <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player1_seed if match_data.Match.player1_seed }}</span>
                                 </div>
+                                {% endif %}
                             </div>
                             {% if is_doubles%}
                             <div class="Box cORqut">
@@ -360,9 +368,6 @@
                                     <div class="Box kWtIQi">
                                         <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
                                     </div>
-                                </div>
-                                <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
-                                    <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player1_seed if match_data.Match.player1_seed }}</span>
                                 </div>
                             </div>
                             {% endif %}
@@ -394,9 +399,11 @@
                                     <div class="Box HwWyM">
                                         <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
                                     </div>
+                                    {% if match_data.Match.player2_seed %}
                                     <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
                                         <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player2_seed if match_data.Match.player2_seed }}</span>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             {% if is_doubles%}
@@ -412,9 +419,6 @@
                                     <div class="Box kWtIQi">
                                         <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
                                     </div>
-                                </div>
-                                <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
-                                    <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player1_seed if match_data.Match.player1_seed }}</span>
                                 </div>
                             </div>
                             {% endif %}
