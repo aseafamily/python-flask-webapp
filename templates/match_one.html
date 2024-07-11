@@ -693,12 +693,19 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--on-surface-nLv1)" class="SvgWrapper hwgeMK"><path d="M2 4v16h20V4H2zm10 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-8 1h2V9H4V6h7v2.14c-1.72.45-3 2-3 3.86 0 1.86 1.28 3.41 3 3.86V18H4v-3zm16-6h-2v6h2v3h-7v-2.14c1.72-.45 3-2 3-3.86 0-1.86-1.28-3.41-3-3.86V6h7v3z" w="16px" h="16px" fill="var(--on-surface-nLv1)"></path>
             </svg>
             <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
-                <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Location</span>
+                <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Venue</span>
                 <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">
-                    {% if match_data.Match.is_indoor %}Indoor{% else %}Outdoor{% endif %}
+                    {{ match_data.Match.location }}
                     <div display="inline-block" class="Box ittMsX"></div>
-                    {{ match_data.Match.match_city }}, {{ match_data.Match.match_state }}
+                    {% if match_data.Match.is_indoor %}Indoor{% else %}Outdoor{% endif %}
                 </span>
+            </div>
+        </div>
+        <div display="flex" class="Box Flex dlyXLO jLRkRA">
+            <img src="https://www.sofascore.com/static/images/flags/us.png" alt="US" class="Img jbiuyT">
+            <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
+                <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Location</span>
+                <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">{{ match_data.Match.match_city }}, {{ match_data.Match.match_state }}</span>
             </div>
         </div>
         <div display="flex" class="Box Flex dlyXLO jLRkRA">
