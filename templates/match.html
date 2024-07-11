@@ -30,7 +30,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px 0;
+            padding-bottom: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -311,6 +311,13 @@
 </head>
 <body>
     <div class="container">
+        <div style="background-color: #374df5; display: flex; justify-content: space-between;padding: 5px;">
+            <a href="/">
+                <div style="width: 40px;text-align: center;vertical-align: middle;">       
+                    <span style="color: white;font-weight: 800; font-size: 20px;">Home</span>
+                </div>
+            </a>
+        </div>
         
         <!-- Start results iteration -->
         {% for match_data in results %}

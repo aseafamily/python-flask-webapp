@@ -445,6 +445,19 @@
     </style>
 </head> 
 <body>
+    <div style="background-color: #374df5; display: flex; justify-content: space-between;padding: 5px;">
+        <a href="/match?u={{ match_data.Match.player1 }}">
+            <div style="width: 40px;text-align: center;vertical-align: middle;">       
+                <!--<span style="color: white;font-weight: 800; font-size: 20px;">&lt;</span>-->
+                <svg width="24px" height="24px" viewBox="-102.4 -102.4 1228.80 1228.80" fill="#FFFFFF" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#FFFFFF" stroke-width="86.01599999999999"><g id="SVGRepo_bgCarrier" stroke-width="0"><rect x="-102.4" y="-102.4" width="1228.80" height="1228.80" rx="0" fill="#374df5" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill=""></path></g></svg>
+            </div>
+        </a>
+        <a href="/tennis/update/{{ match_data.Match.tennis_id }}?u={{ match_data.Match.player1 }}&return_url={{ request.url }}">
+            <div>       
+                <svg width="24px" height="24px" viewBox="-2.4 -2.4 28.80 28.80" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#FFFFFF"><g id="SVGRepo_bgCarrier" stroke-width="0"><rect x="-2.4" y="-2.4" width="28.80" height="28.80" rx="0" fill="#374df5" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20.1498 7.93997L8.27978 19.81C7.21978 20.88 4.04977 21.3699 3.32977 20.6599C2.60977 19.9499 3.11978 16.78 4.17978 15.71L16.0498 3.84C16.5979 3.31801 17.3283 3.03097 18.0851 3.04019C18.842 3.04942 19.5652 3.35418 20.1004 3.88938C20.6356 4.42457 20.9403 5.14781 20.9496 5.90463C20.9588 6.66146 20.6718 7.39189 20.1498 7.93997V7.93997Z" stroke="#FFFFFF" stroke-width="1.8719999999999999" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+            </div>
+        </a>
+    </div>
     <!-- Header panel -->
     {% set is_doubles = match_data.Match.type == 'D' %}
     <div class="Box bPNjiv">
@@ -652,9 +665,9 @@
                     {% set minutes = duration_minutes % 60 %}
                     <div display="inline-block" class="Box ittMsX"></div>
                     {% if hours > 0 %}
-                        {{ '{}h{}m'.format(hours, minutes) }}
+                        {{ '{}h{}m'.format(hours, minutes) if minutes > 0 else '{}h'.format(hours) }}
                     {% else %}
-                        {{ '{}m'.format(minutes) }}
+                        {{ '{}m'.format(minutes) if minutes > 0 else '0m' }}
                     {% endif %}
                     <div display="inline-block" class="Box ittMsX"></div>
                     <a href="/tennis/update/{{ match_data.Match.tennis_id }}?u={{ match_data.Match.player1 }}&return_url={{ request.url }}">{{ match_data.Match.tennis_id }}</a>
