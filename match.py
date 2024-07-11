@@ -120,4 +120,35 @@ def get_logo(image_id):
 def match_one(id):
      # tempalte page
      # https://www.sofascore.com/tennis/match/sun-vekic/QmvsHdDb#id:12460178
-     return render_template('match_one.html')
+
+    player1 = aliased(Player)
+    player2 = aliased(Player)
+    player3 = aliased(Player)
+    player4 = aliased(Player)
+
+    match_query = db.session.query(
+        Match,
+        player1.first_name.label('player1_first_name'), player1.last_name.label('player1_last_name'),
+        player2.first_name.label('player2_first_name'), player2.last_name.label('player2_last_name'),
+        player3.first_name.label('player3_first_name'), player3.last_name.label('player3_last_name'),
+        player4.first_name.label('player4_first_name'), player4.last_name.label('player4_last_name')
+    ).join(player1, Match.player1 == player1.id, isouter=True) \
+    .join(player2, Match.player2 == player2.id, isouter=True) \
+    .join(player3, Match.player3 == player3.id, isouter=True) \
+    .join(player4, Match.player4 == player4.id, isouter=True) \
+    .filter(Match.id == id) \
+    .first()
+
+    match_data = {
+        'Match': match_query.Match,
+        'player1_first_name': match_query.player1_first_name,
+        'player1_last_name': match_query.player1_last_name,
+        'player2_first_name': match_query.player2_first_name,
+        'player2_last_name': match_query.player2_last_name,
+        'player3_first_name': match_query.player3_first_name,
+        'player3_last_name': match_query.player3_last_name,
+        'player4_first_name': match_query.player4_first_name,
+        'player4_last_name': match_query.player4_last_name
+    }
+
+    return render_template('match_one.html', match_data = match_data)

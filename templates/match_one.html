@@ -125,7 +125,7 @@
             color: var(--on-surface-nLv1);
             text-align: left;
             display: block;
-            font: 700 12px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            font: 700 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
             text-overflow: ellipsis;
             overflow-x: clip;
             white-space: nowrap;
@@ -293,8 +293,24 @@
         .kphZwG > * + * {
                 margin-top: 8px;
         }
+
+        .player_container {
+            background-color: lightblue;
+            height: 40px;
+            width: 40px;
+            margin-left: 1px;
+            margin-right: 1px;
+            border-radius: 50%;
+        }
+
+        .ihwaOf {
+            width: 40px;
+            color: var(--on-color-primary);
+            text-align: center;
+            font: 700 18px / 40px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+        }
     </style>
-</head>
+</head> 
 <body>
     <!-- Header panel -->
     <div class="Box bPNjiv">
@@ -306,18 +322,22 @@
                             <div display="flex" class="Box Flex ddaRLc kFvGEE">
                                 <div class="Box cORqut">
                                     <div class="Box cORqut">
-                                        <img src="https://api.sofascore.app/api/v1/team/195182/image" width="40" height="40" alt="Sun L." class="Img jbaYme">
+                                        <div class="Box player_container">
+                                            <div class="ihwaOf">
+                                                {{ match_data.player1_first_name[0] if match_data.player1_first_name }}{{ match_data.player1_last_name[0] if match_data.player1_last_name }}
+                                            </div>
+                                        </div>
                                         <div class="Box HwWyM">
-                                            <img src="/static/images/flags/nz.png" width="16" height="16" class="Img hpocRq">
+                                            <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
                                         </div>
                                     </div>
                                     <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
-                                        <span color="surface.s1" class="Text gprDYG">Q</span>
+                                        <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player1_seed if match_data.Match.player1_seed }}</span>
                                     </div>
                                 </div>
                                 <div class="Box gtmGgU">
-                                    <bdi class="Text jzDXwu">Sun L.</bdi>
-                                    <bdi color="onSurface.nLv3" class="Text hKtpIg">WTA 123.</bdi>
+                                    <bdi class="Text jzDXwu">{{ match_data.player1_first_name }} {{ match_data.player1_last_name }}</bdi>
+                                    <bdi color="onSurface.nLv3" class="Text hKtpIg"></bdi>
                                 </div>
                             </div>
                         </a>
@@ -329,15 +349,25 @@
                             <div display="flex" class="Box Flex ddaRLc kFvGEE">
                                 <div class="Box cORqut">
                                     <div class="Box cORqut">
+                                        <!--
                                         <img src="https://api.sofascore.app/api/v1/team/50641/image" width="40" height="40" alt="Vekić D." class="Img jbaYme">
+                                        -->
+                                        <div class="Box player_container">
+                                            <div class="ihwaOf">
+                                                {{ match_data.player2_first_name[0] if match_data.player2_first_name }}{{ match_data.player2_last_name[0] if match_data.player2_last_name }}
+                                            </div>
+                                        </div>
                                         <div class="Box HwWyM">
-                                            <img src="/static/images/flags/hr.png" width="16" height="16" class="Img hpocRq">
+                                            <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
+                                        </div>
+                                        <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
+                                            <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player2_seed if match_data.Match.player2_seed }}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="Box gtmGgU">
-                                    <bdi class="Text jzDXwu">Vekić D.</bdi>
-                                    <bdi color="onSurface.nLv3" class="Text hKtpIg">WTA 37.</bdi>
+                                    <bdi class="Text jzDXwu">{{ match_data.player2_first_name }} {{ match_data.player2_last_name }}</bdi>
+                                    <bdi color="onSurface.nLv3" class="Text hKtpIg"></bdi>
                                 </div>
                             </div>
                         </a>
@@ -372,13 +402,13 @@
                     </div>
                     <div display="flex" direction="column" class="Box Flex hELCex cIAUBs">
                         <div class="Box cORqut">
-                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-iHGNWf fFdGkQ score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv3" class="Text dAVuIr currentScore" style="font-weight: bold; font-size: 14px;">1</span>
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
+                                <span color="onSurface.nLv3" class="Text dAVuIr currentScore" style="font-weight:bold;font-size:14px">4</span>
                             </div>
                         </div>
                         <div class="Box cORqut">
-                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-iHGNWf fFdGkQ score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv1" class="Text jvWolF currentScore" style="font-weight: bold; font-size: 14px;">6</span>
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
+                                <span color="onSurface.nLv1" class="Text jvWolF currentScore" style="font-weight:bold;font-size:14px">6</span>
                             </div>
                         </div>
                     </div>
