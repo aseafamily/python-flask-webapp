@@ -211,7 +211,7 @@
             position: relative;
         }
 
-        .jvWolF {
+        .won_score {
             background-color: unset;
             color: var(--on-surface-nLv1);
             text-align: center;
@@ -223,7 +223,7 @@
             position: relative;
         }
 
-        .dAVuIr {
+        .lost_score {
             background-color: unset;
             color: var(--on-surface-nLv3);
             text-align: center;
@@ -265,7 +265,7 @@
             margin-right: 8px;
         }
 
-        .fIcwJd {
+        .match_lost {
             color: var(--on-surface-nLv3);
             text-align: center;
             font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
@@ -276,7 +276,7 @@
             position: relative;
         }
 
-        .fjeMtb {
+        .match_won {
             color: var(--on-surface-nLv1);
             text-align: center;
             font: 400 14px / 1.14 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
@@ -309,120 +309,205 @@
             text-align: center;
             font: 700 18px / 40px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
         }
+
+        .double_margin {
+            margin-right: -8px;
+        }
+
+        .kWtIQi {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+        }
     </style>
 </head> 
 <body>
     <!-- Header panel -->
+    {% set is_doubles = match_data.Match.type == 'D' %}
     <div class="Box bPNjiv">
         <div display="flex" class="Box Flex dlyXLO bnpRyo">
             <div display="flex" direction="column" class="Box Flex ggRYVx kphZwG">
                 <div class="Box lfqAOf">
                     <div display="flex" direction="row" class="Box Flex ggRYVx iZgchw">
-                        <a href="/team/tennis/sun/195182">
-                            <div display="flex" class="Box Flex ddaRLc kFvGEE">
+                        <div display="flex" class="Box Flex ddaRLc kFvGEE">
+                            <div class="Box cORqut{% if is_doubles%} double_margin{% endif %}">
                                 <div class="Box cORqut">
-                                    <div class="Box cORqut">
+                                    <a href="/">
                                         <div class="Box player_container">
                                             <div class="ihwaOf">
                                                 {{ match_data.player1_first_name[0] if match_data.player1_first_name }}{{ match_data.player1_last_name[0] if match_data.player1_last_name }}
                                             </div>
                                         </div>
-                                        <div class="Box HwWyM">
-                                            <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
-                                        </div>
-                                    </div>
-                                    <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
-                                        <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player1_seed if match_data.Match.player1_seed }}</span>
+                                    </a>
+                                    <div class="Box HwWyM">
+                                        <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
                                     </div>
                                 </div>
-                                <div class="Box gtmGgU">
-                                    <bdi class="Text jzDXwu">{{ match_data.player1_first_name }} {{ match_data.player1_last_name }}</bdi>
-                                    <bdi color="onSurface.nLv3" class="Text hKtpIg"></bdi>
+                                <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
+                                    <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player1_seed if match_data.Match.player1_seed }}</span>
                                 </div>
                             </div>
-                        </a>
+                            {% if is_doubles%}
+                            <div class="Box cORqut">
+                                <div class="Box cORqut">
+                                    <a href="/">
+                                        <div class="Box player_container">
+                                            <div class="ihwaOf">
+                                                {{ match_data.player3_first_name[0] if match_data.player3_first_name }}{{ match_data.player3_last_name[0] if match_data.player3_last_name }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="Box kWtIQi">
+                                        <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
+                                    </div>
+                                </div>
+                                <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
+                                    <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player1_seed if match_data.Match.player1_seed }}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="Box gtmGgU">
+                                <bdi class="Text jzDXwu">{{ match_data.player1_first_name }} {{ match_data.player1_last_name }}</bdi>
+                                {% if is_doubles%}
+                                <bdi class="Text jzDXwu">{{ match_data.player3_first_name }} {{ match_data.player3_last_name }}</bdi>
+                                {% endif %}
+                                <bdi color="onSurface.nLv3" class="Text hKtpIg"></bdi>
+                            </div>
+                        </div>                        
                     </div>
                 </div>
                 <div class="Box lfqAOf">
                     <div display="flex" direction="row" class="Box Flex ggRYVx iZgchw">
-                        <a href="/team/tennis/vekic-donna/50641">
-                            <div display="flex" class="Box Flex ddaRLc kFvGEE">
+                        <div display="flex" class="Box Flex ddaRLc kFvGEE">
+                            <div class="Box cORqut{% if is_doubles%} double_margin{% endif %}">
                                 <div class="Box cORqut">
-                                    <div class="Box cORqut">
-                                        <!--
-                                        <img src="https://api.sofascore.app/api/v1/team/50641/image" width="40" height="40" alt="Vekić D." class="Img jbaYme">
-                                        -->
+                                    <!--
+                                    <img src="https://api.sofascore.app/api/v1/team/50641/image" width="40" height="40" alt="Vekić D." class="Img jbaYme">
+                                    -->
+                                    <a href="/">
                                         <div class="Box player_container">
                                             <div class="ihwaOf">
                                                 {{ match_data.player2_first_name[0] if match_data.player2_first_name }}{{ match_data.player2_last_name[0] if match_data.player2_last_name }}
                                             </div>
                                         </div>
-                                        <div class="Box HwWyM">
-                                            <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
-                                        </div>
-                                        <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
-                                            <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player2_seed if match_data.Match.player2_seed }}</span>
-                                        </div>
+                                    </a>
+                                    <div class="Box HwWyM">
+                                        <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
+                                    </div>
+                                    <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
+                                        <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player2_seed if match_data.Match.player2_seed }}</span>
                                     </div>
                                 </div>
-                                <div class="Box gtmGgU">
-                                    <bdi class="Text jzDXwu">{{ match_data.player2_first_name }} {{ match_data.player2_last_name }}</bdi>
-                                    <bdi color="onSurface.nLv3" class="Text hKtpIg"></bdi>
+                            </div>
+                            {% if is_doubles%}
+                            <div class="Box cORqut">
+                                <div class="Box cORqut">
+                                    <a href="/">
+                                        <div class="Box player_container">
+                                            <div class="ihwaOf">
+                                                {{ match_data.player4_first_name[0] if match_data.player4_first_name }}{{ match_data.player4_last_name[0] if match_data.player4_last_name }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="Box kWtIQi">
+                                        <img src="https://www.sofascore.com/static/images/flags/us.png" width="16" height="16" class="Img hpocRq">
+                                    </div>
+                                </div>
+                                <div display="inline-flex" class="Box Flex kHVrPs kshPLE">
+                                    <span color="surface.s1" class="Text gprDYG">{{ match_data.Match.player1_seed if match_data.Match.player1_seed }}</span>
                                 </div>
                             </div>
-                        </a>
+                            {% endif %}
+                            <div class="Box gtmGgU">
+                                <bdi class="Text jzDXwu">{{ match_data.player2_first_name }} {{ match_data.player2_last_name }}</bdi>
+                                {% if is_doubles%}
+                                <bdi class="Text jzDXwu">{{ match_data.player4_first_name }} {{ match_data.player4_last_name }}</bdi>
+                                {% endif %}
+                                <bdi color="onSurface.nLv3" class="Text hKtpIg"></bdi>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div display="flex" direction="column" class="Box Flex eJCdjm dsybxc">
                 <div display="flex" class="Box Flex hQZSQ gyrVAS">
                     <div display="flex" direction="column" class="Box Flex hELCex cIAUBs">
+                        {%  set team1_set1_won = (match_data.Match.team1_set1 if match_data.Match.team1_set1 is not none else 0) >= (match_data.Match.team2_set1 if match_data.Match.team2_set1 is not none else 0) %}
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color:unset !important">
-                                <span color="onSurface.nLv1" class="Text jvWolF currentScore" style="font-weight:bold;font-size:14px">7</span>
+                                <span color="onSurface.nLv1" class="Text {% if team1_set1_won %}won_score{% else %}lost_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team1_set1 if match_data.Match.team1_set1 is not none }}</span>
                             </div>
                         </div>
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color:unset !important">
-                                <span color="onSurface.nLv3" class="Text dAVuIr currentScore" style="font-weight:bold;font-size:14px">5</span>
+                                <span color="onSurface.nLv3" class="Text {% if team1_set1_won %}lost_score{% else %}won_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team2_set1 if match_data.Match.team2_set1 is not none }}</span>
                             </div>
                         </div>
                     </div>
-                    <div display="flex" direction="column" class="Box Flex hELCex cIAUBs">
+                    {% set has_set2 = (match_data.Match.team1_set2 is not none) %}
+                    <div display="flex" direction="column" class="Box Flex hELCex cIAUBs" {% if not has_set2 %}style="display: none;"{% endif %}>
+                        {%  set team1_set2_won = (match_data.Match.team1_set2 if match_data.Match.team1_set2 is not none else 0) >= (match_data.Match.team2_set2 if match_data.Match.team2_set2 is not none else 0) %}
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv3" class="Text dAVuIr currentScore" style="font-weight:bold;font-size:14px">4</span>
+                                <span color="onSurface.nLv3" class="Text {% if team1_set2_won %}won_score{% else %}lost_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team1_set2 if match_data.Match.team1_set2 is not none }}</span>
                             </div>
                         </div>
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv1" class="Text jvWolF currentScore" style="font-weight:bold;font-size:14px">6</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div display="flex" direction="column" class="Box Flex hELCex cIAUBs">
-                        <div class="Box cORqut">
-                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv3" class="Text dAVuIr currentScore" style="font-weight:bold;font-size:14px">4</span>
-                            </div>
-                        </div>
-                        <div class="Box cORqut">
-                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv1" class="Text jvWolF currentScore" style="font-weight:bold;font-size:14px">6</span>
+                                <span color="onSurface.nLv1" class="Text {% if team1_set2_won %}lost_score{% else %}won_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team2_set2 if match_data.Match.team2_set2 is not none }}</span>
                             </div>
                         </div>
                     </div>
+                    {% set has_set3 = (match_data.Match.team1_set3 is not none) %}
+                    <div display="flex" direction="column" class="Box Flex hELCex cIAUBs" {% if not has_set3 %}style="display: none;"{% endif %}>
+                        {%  set team1_set3_won = (match_data.Match.team1_set3 if match_data.Match.team1_set3 is not none else 0) >= (match_data.Match.team2_set3 if match_data.Match.team2_set3 is not none else 0) %}
+                        <div class="Box cORqut">
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
+                                <span color="onSurface.nLv3" class="Text {% if team1_set3_won %}won_score{% else %}lost_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team1_set3 if match_data.Match.team1_set3 is not none }}</span>
+                            </div>
+                        </div>
+                        <div class="Box cORqut">
+                            <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
+                                <span color="onSurface.nLv1" class="Text {% if team1_set3_won %}lost_score{% else %}won_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team2_set3 if match_data.Match.team2_set3 is not none }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% set team1_sets_won = 0 %}
+                    {% set team2_sets_won = 0 %}
+
+                    {% if team1_set1_won %}
+                        {% set team1_sets_won = team1_sets_won + 1 %}
+                    {% else %}
+                        {% set team2_sets_won = team2_sets_won + 1 %}
+                    {% endif %}
+
+                    {% if has_set2 %}
+                        {% if team1_set2_won %}
+                            {% set team1_sets_won = team1_sets_won + 1 %}
+                        {% else %}
+                            {% set team2_sets_won = team2_sets_won + 1 %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if has_set3 %}
+                        {% if team1_set3_won %}
+                            {% set team1_sets_won = team1_sets_won + 1 %}
+                        {% else %}
+                            {% set team2_sets_won = team2_sets_won + 1 %}
+                        {% endif %}
+                    {% endif %}
+
                     <div display="flex" direction="column" class="Box Flex fxruDL bnvMps">
                         <div display="flex" class="Box Flex bSuBER kFvGEE">
                             <div class="VerticalDivider yZqSj"></div>
                             <div display="flex" direction="column" class="Box Flex ilbQji MkeW sc-iHGNWf fFdGkQ score-box" style="background-color:undefined !important">
-                                <span color="onSurface.nLv3" class="Text fIcwJd currentScore" style="font-weight: bold; font-size: 18px;">1</span>
+                                <span color="onSurface.nLv3" class="Text {% if match_data.Match.team1_won %}match_won{% else %}match_lost{% endif %} currentScore" style="font-weight: bold; font-size: 18px;">{{ team1_sets_won }}</span>
                             </div>
                         </div>
                         <div display="flex" class="Box Flex bSuBER kFvGEE">
                             <div class="VerticalDivider yZqSj"></div>
                             <div display="flex" direction="column" class="Box Flex ilbQji MkeW sc-iHGNWf fFdGkQ score-box" style="background-color:undefined !important">
-                                <span color="onSurface.nLv1" class="Text fjeMtb currentScore" style="font-weight: bold; font-size: 18px;">2</span>
+                                <span color="onSurface.nLv1" class="Text {% if match_data.Match.team1_won %}match_lost{% else %}match_won{% endif %} currentScore" style="font-weight: bold; font-size: 18px;">{{ team2_sets_won }}</span>
                             </div>
                         </div>
                     </div>
