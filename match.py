@@ -149,6 +149,9 @@ def match_one(id):
     .filter(Match.id == id) \
     .first()
 
+    including_year = match_query.Match.match_event is not None and "Adults" in match_query.Match.match_event
+    tournament_logo = generate_title(match_query.Match.match_name, True, including_year)
+
     match_data = {
         'Match': match_query.Match,
         'player1_first_name': match_query.player1_first_name,
@@ -158,7 +161,8 @@ def match_one(id):
         'player3_first_name': match_query.player3_first_name,
         'player3_last_name': match_query.player3_last_name,
         'player4_first_name': match_query.player4_first_name,
-        'player4_last_name': match_query.player4_last_name
+        'player4_last_name': match_query.player4_last_name,
+        'tournament_logo': tournament_logo
     }
 
     return render_template('match_one.html', match_data = match_data)

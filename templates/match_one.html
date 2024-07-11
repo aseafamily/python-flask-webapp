@@ -13,6 +13,9 @@
             --surface-s0: #edf1f6;
             --surface-s1: #ffffff;
             --playoffs-promotion-to-x-playoff: #0a8dff;
+            --effect-elevation: rgba(34, 34, 38, 0.08);
+            --primary-default: #374df5;
+            --terrain-grass:#62bd40;
         }
 
         body {
@@ -325,6 +328,120 @@
             top: 24px;
             left: 24px;
         }
+
+        .ivSrTP {
+            background-color: var(--surface-s1);
+            margin-top: 8px;
+            margin-bottom: 8px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border-radius: 16px;
+            box-shadow: 0 1px 4px var(--effect-elevation);
+            text-align: center;
+        }
+
+        .jLRkRA {
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+        }
+
+        .dlyXLO {
+            display: flex;
+            padding: 8px 16px;
+        }
+
+        .hwgeMK {
+            height: 16px;
+            width: 16px;
+        }
+
+        svg {
+            vertical-align: top;
+        }
+
+        .crsNnE {
+            display: flex;
+            -webkit-box-pack: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .bttEbg {
+            display: flex;
+            margin-left: 8px;
+        }
+
+        .dDJgpy {
+            color: var(--on-surface-nLv3);
+            text-align: left;
+            font: 400 12px / 16px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            letter-spacing: -0.2px;
+        }
+
+        .bkqxZg {
+            overflow: hidden;
+            color: var(--on-surface-nLv1);
+            text-align: left;
+            font: 400 14px / 16px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            letter-spacing: -0.2px;
+        }
+
+        .ittMsX {
+            display: inline-block;
+            background-color: var(--on-surface-nLv1);
+            position: relative;
+            top: -3px;
+            height: 4px;
+            width: 4px;
+            margin-left: 8px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+
+        .mMMTG {
+            display: flex;
+            padding: 8px 16px;
+        }
+
+        .bIarbf {
+            object-fit: contain;
+        }
+
+        .crsNnE {
+            display: flex;
+            -webkit-box-pack: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .bttEbg {
+            display: flex;
+            margin-left: 8px;
+        }
+
+        .bYlnHB {
+            margin-left: auto;
+            padding-left: 8px;
+        }
+
+        .dlyXLO {
+            display: flex;
+            padding: 8px 16px;
+        }
+
+        .jbiuyT {
+            height: 16px;
+            width: 16px;
+            object-fit: cover;
+        }
+
+        .ictZTN {
+            background-color: var(--terrain-grass);
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+        }
     </style>
 </head> 
 <body>
@@ -516,6 +633,67 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Details panel-->
+    <div elevation="2" class="Box ivSrTP">
+        <div display="flex" class="Box Flex dlyXLO jLRkRA">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--on-surface-nLv1)" class="SvgWrapper hwgeMK">
+                <g id="Asset-Exportable/Icon/Material/ic_calendar_date" stroke="none" stroke-width="1" fill="var(--on-surface-nLv1)" fill-rule="evenodd" w="16px" h="16px"><g id="ic_calendar_date"><polygon id="Bounds" fill-opacity="0.4" opacity="0" points="0 0 24 0 24 24 0 24"></polygon><path d="M22,2 L22,12.11 C21.43,11.52 20.75,11.03 20,10.68 L20,8 L4,8 L4,20 L10.68,20 C11.03,20.75 11.52,21.43 12.11,22 L2,22 L2,2 L22,2 Z M17,12 C18.13,12 19.17,12.37 20,13 C21.21,13.91 22,15.37 22,17 C22,19.76 19.76,22 17,22 C15.37,22 13.91,21.21 13,20 C12.37,19.17 12,18.13 12,17 C12,14.24 14.24,12 17,12 Z M17.5,14 L16.5,14 L16.5,17.51 L18.62,19.63 L19.33,18.93 L17.5,17.1 L17.5,14 Z M20,4 L4,4 L4,6 L20,6 L20,4 Z" id="Combined-Shape"></path></g></g>
+            </svg>
+            <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
+                <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Date and time</span>
+                {% set formatted_date = "%d/%d/%d"|format(match_data.Match.date.year, match_data.Match.date.month, match_data.Match.date.day) %}
+                <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">{{ formatted_date }}
+                    {% set duration_minutes = match_data.Match.duration %}
+                    {% set hours = duration_minutes // 60 %}
+                    {% set minutes = duration_minutes % 60 %}
+                    <div display="inline-block" class="Box ittMsX"></div>
+                    {% if hours > 0 %}
+                        {{ '{}h{}m'.format(hours, minutes) }}
+                    {% else %}
+                        {{ '{}m'.format(minutes) }}
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <a href="{{ match_data.Match.match_link }}">
+            <div display="flex" class="Box Flex mMMTG jLRkRA">
+                <img src="/match/logo/{{ match_data.tournament_logo }}" width="16" height="16" class="Img bIarbf">
+                <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
+                    <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Competition</span>
+                    <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">
+                        {{ match_data.Match.match_name }}, {{ match_data.Match.match_level }}, {{ match_data.Match.match_event }}, {{ match_data.Match.match_draw }}, {{ match_data.Match.match_round }}
+                    </span>
+                </div>
+                <div class="Box bYlnHB">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="var(--primary-default)" class="SvgWrapper fyGiev"><path fill="var(--primary-default)" d="M6 2 4.59 3.41 9.17 8l-4.58 4.59L6 14l6-6z"></path>
+                    </svg>
+                </div>
+            </div>
+        </a>
+        <div display="flex" class="Box Flex dlyXLO jLRkRA">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--on-surface-nLv1)" class="SvgWrapper hwgeMK"><path d="M2 4v16h20V4H2zm10 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-8 1h2V9H4V6h7v2.14c-1.72.45-3 2-3 3.86 0 1.86 1.28 3.41 3 3.86V18H4v-3zm16-6h-2v6h2v3h-7v-2.14c1.72-.45 3-2 3-3.86 0-1.86-1.28-3.41-3-3.86V6h7v3z" w="16px" h="16px" fill="var(--on-surface-nLv1)"></path>
+            </svg>
+            <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
+                <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Location</span>
+                <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">
+                    {% if match_data.Match.is_indoor %}Indoor{% else %}Outdoor{% endif %} | 
+                    {{ match_data.Match.match_city }}, {{ match_data.Match.match_state }}
+                </span>
+            </div>
+        </div>
+        <div display="flex" class="Box Flex dlyXLO jLRkRA">
+            <div class="Box ictZTN"></div>
+            <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
+                <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Note</span>
+                {% macro newline_to_br(text) %}
+                    {{ text.replace('\n', '<br>').replace('\r', '<br>') | safe }}
+                {% endmacro %}
+                <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">{{ newline_to_br(match_data.Match.comments) }}                    
+                </span>
             </div>
         </div>
     </div>
