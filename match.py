@@ -65,6 +65,14 @@ def match_index():
 
         event_name = extract_number_from_string(match.Match.match_event)
 
+        team1_games = (match.Match.team1_set1 if match.Match.team1_set1 else 0) + (match.Match.team1_set2 if match.Match.team1_set2 else 0) + (match.Match.team1_set3 if match.Match.team1_set3 else 0)
+        team2_games = (match.Match.team2_set1 if match.Match.team2_set1 else 0) + (match.Match.team2_set2 if match.Match.team2_set2 else 0) + (match.Match.team2_set3 if match.Match.team2_set3 else 0)
+        diff_games = team1_games - team2_games
+        if diff_games < 0:
+             diff_games = diff_games * -1
+        diff_indicator = (diff_games / (team1_games if match.Match.team1_won else team2_games)) if team1_games else 0
+        diff_indicator = diff_indicator * 100 * 0.95 + 5
+
         match_data = {
             'match': match.Match,
             'player1_first_name': match.player1_first_name,
@@ -80,6 +88,7 @@ def match_index():
             'round_name': round_name,
             'tournament_logo': tournament_logo,
             'event_name': event_name,
+            'diff_indicator': diff_indicator,
             'show_match_name': match.Match.match_name != last_match_name
         }
         results.append(match_data)

@@ -75,6 +75,7 @@
         .match_item {
             display: block;
             border-radius: 2px;
+            margin-bottom: 4px;
         }
         .hshtw {
             -webkit-box-align: center;
@@ -302,6 +303,10 @@
             text-align: center;
             font: 700 14px / 24px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
         }
+        .diff-indicator {
+            display: flex;
+            height: 2px;
+        }
     </style>
 </head>
 <body>
@@ -416,6 +421,7 @@
                         </div>
                     </div>
                 </div>
+                <div display="flex" class="Box diff-indicator" style="width:{{ match_data.diff_indicator }}%;background-color:{% if match_data.match.team1_won %}#0bb32a; float: left;{% else %}var(--error-default);float:right;{% endif %}"></div>
             </div>
         </a>
         {% endfor %}
