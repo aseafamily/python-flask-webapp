@@ -442,6 +442,7 @@ def tennis_update(id):
             else:
                 # Update the match
                 match.duration=duration
+                match.location=location
                 match.date=date
                 match.type='S' if is_singles else 'D'
                 match.player1=player1_id
