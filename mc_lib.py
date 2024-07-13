@@ -39,6 +39,11 @@ def parse_csv_string(csv_string):
     player1 = Player()
     player2 = Player()
 
+    global sets
+    global games
+    sets = {}
+    games = {}
+
     line_no = 0
     # Create a file-like object from the CSV string
     csv_file = StringIO(csv_string)
