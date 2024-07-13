@@ -165,4 +165,24 @@ def match_one(id):
         'tournament_logo': tournament_logo
     }
 
-    return render_template('match_one.html', match_data = match_data)
+    # get scores
+    file_share_name = "bhmfiles"
+    folder_name = f"tennis/{match_query.Match.tennis_id}"
+    connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    scores_html = ''
+    try:
+        service_client = ShareServiceClient.from_connection_string(connection_string)
+        directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
+        file_name = "scores.html"
+        file_client = directory_client.get_file_client(file_name)
+        # Check if the file exists by trying to get its properties
+        file_client.get_file_properties()
+
+        # If the file exists, download its content
+        download = file_client.download_file()
+        scores_html = download.readall().decode('utf-8')
+    except Exception as e:
+        print(f"An error occurred when getting {folder_name}/{file_name}: {e}")
+
+
+    return render_template('match_one.html', match_data = match_data, scores_html=scores_html)
