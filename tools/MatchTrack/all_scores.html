@@ -47,6 +47,7 @@
     height: 40px;
     padding-top: 16px;
     padding-bottom: 8px;
+    cursor: pointer;
 }
 .jankPa {
     color: var(--on-surface-nLv3);
@@ -1318,6 +1319,38 @@
         </div>
     </div>
 </div>    
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleDivs = document.querySelectorAll(".cXlkKQ");
+
+        toggleDivs.forEach(function(toggleDiv) {
+            toggleDiv.addEventListener("click", function() {
+                const siblings = Array.from(toggleDiv.parentNode.children).filter(function(child) {
+                    return child !== toggleDiv && child.tagName.toLowerCase() === 'div'
+                });
+
+                let allHidden = false;
+                siblings.forEach(function(sibling) {
+                    if (sibling.style.display === "flex" || sibling.style.display === "") {
+                        sibling.style.display = "none";
+                        allHidden = true;
+                    } else {
+                        sibling.style.display = "flex";
+                        allHidden = false;
+                    }
+                });
+
+                const svgPath = toggleDiv.querySelector("svg path");
+                if (allHidden) {
+                    svgPath.setAttribute("d", "M11.99 18 4 9.942 5.42 8.51l6.57 6.636 6.6-6.646L20 9.922z");
+                } else {
+                    svgPath.setAttribute("d", "M11.99 6 4 14.058l1.42 1.432 6.57-6.636 6.6 6.646L20 14.078z");
+                }
+            });
+        });
+    });
+</script>
 
 <!-- End generation -->
 

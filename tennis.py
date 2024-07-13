@@ -715,7 +715,7 @@ def tennis_upload(id):
                         nested_directory_client.create_directory()
                    
                     # Create a file client within the specified directory
-                    file_client = nested_directory_client.get_file_client(file.filename)
+                    file_client = nested_directory_client.get_file_client(new_filename)
 
                     # Upload the file
                     file_client.upload_file(file)

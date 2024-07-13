@@ -17,6 +17,7 @@ import os
 from azure.storage.fileshare import ShareFileClient, ShareServiceClient
 from azure.core.exceptions import ResourceNotFoundError
 from io import BytesIO
+from mc_lib import get_scores_html_by_csv
 
 match_bp = Blueprint('match', __name__)
 
@@ -173,14 +174,18 @@ def match_one(id):
     try:
         service_client = ShareServiceClient.from_connection_string(connection_string)
         directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
-        file_name = "scores.html"
+        # file_name = "scores.html"
+        file_name = "data.csv"
         file_client = directory_client.get_file_client(file_name)
         # Check if the file exists by trying to get its properties
         file_client.get_file_properties()
 
         # If the file exists, download its content
         download = file_client.download_file()
-        scores_html = download.readall().decode('utf-8')
+        csv_content = download.readall().decode('utf-8')
+        is_first_serve = True # TODO: get it from database
+        include_var = False
+        scores_html = get_scores_html_by_csv(csv_content, is_first_serve, include_var)
     except Exception as e:
         print(f"An error occurred when getting {folder_name}/{file_name}: {e}")
 

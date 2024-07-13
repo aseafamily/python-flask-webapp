@@ -41,6 +41,7 @@ all_styles = '''
     height: 40px;
     padding-top: 16px;
     padding-bottom: 8px;
+    cursor: pointer;
 }
 .jankPa {
     color: var(--on-surface-nLv3);
@@ -164,6 +165,42 @@ all_styles = '''
     background: none;
 }
 '''
+
+toggle_script_html = '''
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleDivs = document.querySelectorAll(".cXlkKQ");
+
+        toggleDivs.forEach(function(toggleDiv) {
+            toggleDiv.addEventListener("click", function() {
+                const siblings = Array.from(toggleDiv.parentNode.children).filter(function(child) {
+                    return child !== toggleDiv && child.tagName.toLowerCase() === 'div'
+                });
+
+                let allHidden = false;
+                siblings.forEach(function(sibling) {
+                    if (sibling.style.display === "flex" || sibling.style.display === "") {
+                        sibling.style.display = "none";
+                        allHidden = true;
+                    } else {
+                        sibling.style.display = "flex";
+                        allHidden = false;
+                    }
+                });
+
+                const svgPath = toggleDiv.querySelector("svg path");
+                if (allHidden) {
+                    svgPath.setAttribute("d", "M11.99 18 4 9.942 5.42 8.51l6.57 6.636 6.6-6.646L20 9.922z");
+                } else {
+                    svgPath.setAttribute("d", "M11.99 6 4 14.058l1.42 1.432 6.57-6.636 6.6 6.646L20 14.078z");
+                }
+            });
+        });
+    });
+</script>'''
+
+divider_html = '''<hr class="HorizontalDivider BalFY">'''
+
 set_header_html = '''<div display="flex" cursor="pointer" class="Box Flex cXlkKQ kFvGEE">
             <div color="onSurface.nLv3" class="Text jankPa">{SET_NAME}</div>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--on-surface-nLv1)" class="SvgWrapper bhEsNK">
