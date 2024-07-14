@@ -33,7 +33,6 @@ service_points_won_base = 13
 
 sets = {}
 games = {}
-is_ad_scoring = False
 
 # PARSING FUNCTIONS
 def parse_csv_string(csv_string, is_doubles):
@@ -42,9 +41,10 @@ def parse_csv_string(csv_string, is_doubles):
 
     global sets
     global games
-    global is_ad_scoring
     sets = {}
     games = {}
+
+    is_ad_scoring = False
 
     score_start_line = 6 if is_doubles else 4
 
@@ -55,7 +55,9 @@ def parse_csv_string(csv_string, is_doubles):
     reader = csv.reader(csv_file)
     for row in reader:
         if line_no > score_start_line:
-            parse_row(row, player1, player2)
+            result = parse_row(row, player1, player2)
+            if result:
+                is_ad_scoring = True
         else:
             if is_doubles:
                     if line_no == 1:
@@ -111,7 +113,7 @@ def parse_details(desc, playerWon: Player, playerLose: Player):
         playerWon.touch_5_8 = playerWon.touch_5_8 + 1
 
 def parse_row(row, player1: Player, player2: Player):
-    global is_ad_scoring  # Declare is_ad_scoring as global
+    is_ad_scoring = False
 
     # for details
     set_number = int(row[0])
@@ -158,6 +160,8 @@ def parse_row(row, player1: Player, player2: Player):
         if (player1.current_points_in_a_row > player1.max_points_in_a_row):
             player1.max_points_in_a_row = player1.current_points_in_a_row
         player1.current_points_in_a_row = 0
+
+    return is_ad_scoring
 
 def parse_percent(string):
     parts = string.split('/')
