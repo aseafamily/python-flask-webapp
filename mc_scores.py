@@ -146,7 +146,7 @@ def generate_set(set, sets, games, firstServe, set_index, is_ad_scoring):
 
     set_content += games_content
     set_content += div_end
-    return set_content
+    return set_content, firstServe
 
 def get_scores_html(sets, games, firstServe, include_var, is_ad_scoring):
     html_content = get_styles(include_var)
@@ -154,7 +154,7 @@ def get_scores_html(sets, games, firstServe, include_var, is_ad_scoring):
     sets_html = ''
 
     for index, set in enumerate(sets, start=1):
-        set_html = generate_set(set, sets, games, firstServe, index, is_ad_scoring)
+        set_html, firstServe = generate_set(set, sets, games, firstServe, index, is_ad_scoring)
         sets_html = set_html + sets_html
 
     html_content += sets_html
