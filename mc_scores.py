@@ -70,22 +70,21 @@ def generate_game(set_number, game_number, sets, games, firstServe, is_ad_scorin
     if player_one_scores[-1] == '40' and player_two_scores[-1] == '40':
         player1_game = int(player_one_game)
         player2_game = int(player_two_game)
-        if player1_game == player2_game:
-            next_game = games[(set_number, game_number + 1)]
-            if next_game:
-                next_player1_game = '0'
-                next_player2_game = '0'
-                for point in next_game:
-                    if (point[5] == '0' and point[6] == '0'):
-                        next_player1_game = str(point[3])
-                        next_player2_game = str(point[4])
-                        break
-                if player_one_game != next_player1_game:
+        if game_number == 1:
+            is_player_one_won = True if player1_game > player2_game else False
+        else:
+            prev_player1_game = 0
+            if game_number > 1:
+                prev_game = games[(set_number, game_number - 1)]
+                if prev_game:
+                    for point in prev_game:
+                        if (point[5] == '0' and point[6] == '0'):
+                            prev_player1_game = int(point[3])
+                            break
+                if player1_game > prev_player1_game:
                     is_player_one_won = True
                 else:
                     is_player_one_won = False
-        else:
-            is_player_one_won = True if player1_game > player2_game else False
 
     is_tie_break = '1' in player_one_scores or '1' in player_two_scores
     if is_tie_break and game_number == 1:
