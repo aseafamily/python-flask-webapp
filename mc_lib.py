@@ -41,6 +41,7 @@ def parse_csv_string(csv_string):
 
     global sets
     global games
+    global is_ad_scoring
     sets = {}
     games = {}
 
