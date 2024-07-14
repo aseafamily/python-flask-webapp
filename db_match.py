@@ -42,6 +42,7 @@ class Match(db.Model):
     team2_set3 = db.Column(db.Integer, nullable=True)
     team2_set3_tb = db.Column(db.Integer, nullable=True)
     team1_won = db.Column(db.Boolean, nullable=True)
+    team1_serve = db.Column(db.Boolean, nullable=True)
     match_name = db.Column(db.String(200), nullable=True)
     match_level = db.Column(db.String(200), nullable=True)
     match_link = db.Column(db.String(200), nullable=True)

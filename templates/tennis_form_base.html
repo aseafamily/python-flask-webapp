@@ -202,6 +202,13 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>Match serve:</td>
+                                    <td>
+                                        <label><input type="radio" name="match_serve" value="team1_serve" {% block team1_serve %}{% endblock %}> Team 1</label>
+                                        <label><input type="radio" name="match_serve" value="team2_serve" {% block team2_serve %}{% endblock %}> Team 2</label>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Match name:</td>
                                     <td><input type="text" name="match_name" id="match_name" class="match-input" value="{% block match_name %}{% endblock %}"></td>
                                 </tr>

@@ -191,6 +191,7 @@ def tennis_index():
                     team2_set3=get_integer_from_form('team2_set3'),
                     team2_set3_tb=get_integer_from_form('team2_set3_tb'),
                     team1_won=True if request.form['match_outcome'] == 'team1_won' else False,
+                    team1_serve=True if request.form['match_serve'] == 'team1_serve' else False,
                     match_name=request.form['match_name'],
                     match_level=request.form['match_level'],
                     match_link=request.form['match_link'],
@@ -410,6 +411,7 @@ def tennis_update(id):
                     team2_set3=get_integer_from_form('team2_set3'),
                     team2_set3_tb=get_integer_from_form('team2_set3_tb'),
                     team1_won=True if request.form['match_outcome'] == 'team1_won' else False,
+                    team1_serve=True if request.form['match_serve'] == 'team1_serve' else False,
                     match_name=request.form['match_name'],
                     match_level=request.form['match_level'],
                     match_link=request.form['match_link'],
@@ -462,6 +464,7 @@ def tennis_update(id):
                 match.team2_set3=get_integer_from_form('team2_set3')
                 match.team2_set3_tb=get_integer_from_form('team2_set3_tb')
                 match.team1_won=True if request.form['match_outcome'] == 'team1_won' else False
+                match.team1_serve=True if request.form['match_serve'] == 'team1_serve' else False
                 match.match_name=request.form['match_name']
                 match.match_level=request.form['match_level']
                 match.match_link=request.form['match_link']

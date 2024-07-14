@@ -183,7 +183,7 @@ def match_one(id):
         # If the file exists, download its content
         download = file_client.download_file()
         csv_content = download.readall().decode('utf-8')
-        is_first_serve = True # TODO: get it from database
+        is_first_serve = match_query.Match.team1_serve
         include_var = False
         scores_html = get_scores_html_by_csv(csv_content, is_first_serve, include_var)
     except Exception as e:

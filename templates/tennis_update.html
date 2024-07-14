@@ -76,6 +76,18 @@
         {% endif %}
     {% endblock %}
 
+    {% block team1_serve %}
+        {% if match.team1_serve %}
+            checked
+        {% endif %}
+    {% endblock %}
+
+    {% block team2_serve %}
+        {% if not match.team1_serve %}
+            checked
+        {% endif %}
+    {% endblock %}
+
     {% block match_name %}{{match.match_name if match.match_name is not none else ''}}{% endblock %}
     {% block match_level %}{{match.match_level if match.match_level is not none else ''}}{% endblock %}
     {% block match_link %}{{match.match_link if match.match_link is not none else ''}}{% endblock %}
