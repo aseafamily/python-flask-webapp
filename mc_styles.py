@@ -142,6 +142,9 @@ all_styles = '''
     text-align: center;
     font: 400 14px / 20px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
 }
+.match_point {
+    font-weight:bold;
+}
 .dBlMgN {
     height: 20px;
     width: 24px;
@@ -306,7 +309,7 @@ def get_game_header_html(player_one_game, player_two_game, is_player_one_serve, 
     
     return game_header_content
 
-def get_game_score_html(player1_score, player2_score, last_player1_score, last_player2_score, is_ad_scoring, is_player_one_serve, is_player1_set_point, is_player2_set_point):
+def get_game_score_html(player1_score, player2_score, last_player1_score, last_player2_score, is_ad_scoring, is_player_one_serve, is_player1_set_point, is_player2_set_point, is_match_point):
     is_player1_won_point = did_player_one_win(player1_score, last_player1_score)
     player1_point_style = point_won_style_name if is_player1_won_point else point_lost_style_name
     player2_point_style = point_lost_style_name if is_player1_won_point else point_won_style_name
@@ -336,8 +339,11 @@ def get_game_score_html(player1_score, player2_score, last_player1_score, last_p
             if player_one_score == 40:
                 player1_point_style = break_point_style_name
 
-    player1_point_style = set_point_style_name if is_player1_set_point else player1_point_style
-    player2_point_style = set_point_style_name if is_player2_set_point else player2_point_style
+    last_style = set_point_style_name
+    if is_match_point:
+        last_style += " match_point"
+    player1_point_style = last_style if is_player1_set_point else player1_point_style
+    player2_point_style = last_style if is_player2_set_point else player2_point_style
 
     game_score_content = game_score_html.replace("{player1_score}", player1_score)\
         .replace("{player2_score}", player2_score)\

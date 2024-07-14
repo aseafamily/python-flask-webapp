@@ -127,13 +127,43 @@ def generate_game(set_number, game_number, sets, games, firstServe, is_ad_scorin
                 is_player1_set_point = True
             elif player2_score > player1_score and player2_score >= (tie_break_point - 1):
                 is_player2_set_point = True
-        score_content = get_game_score_html(score, player_two_scores[index], last_player1_score, last_player2_score, is_ad_scoring, is_player_one_serve, is_player1_set_point, is_player2_set_point)
+        is_match_point = find_match_point(set_number, sets, games, is_player1_set_point, is_player2_set_point)
+
+        score_content = get_game_score_html(score, player_two_scores[index], last_player1_score, last_player2_score, is_ad_scoring, is_player_one_serve, is_player1_set_point, is_player2_set_point, is_match_point)
         game_content += score_content
 
     game_content += div_end # game_scores_div_start
 
     game_content += div_end # game_div_start
     return game_content
+
+def find_match_point(set_number, sets, games, is_player1_set_point, is_player2_set_point):
+    if not (is_player1_set_point or is_player2_set_point):
+        return False
+    
+    if set_number == 3:
+        return True
+    
+    set_count = len(sets)
+
+    if set_count == 1:
+        return True
+    elif (set_count == 3 or set_count == 2) and set_number == 1:
+        return False
+    
+    last_game = find_last_game_in_set(games, 1)
+    last_point = last_game[-1]
+    player1_game = int(last_point[3])
+    player2_game = int(last_point[4])
+    player1_won_first_set = player1_game > player2_game
+
+    if player1_won_first_set and is_player1_set_point:
+        return True
+    elif (not player1_won_first_set) and is_player2_set_point:
+        return True
+    else:
+        return False
+
 
 def find_last_game_in_set(games, set_number):
     # Filter games to only those in the given set_number
