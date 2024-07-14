@@ -6,6 +6,7 @@ from mc_scores import get_scores_html
 @dataclass
 class Player:
     name: str = ""
+    double_name: str = ""
     first_serve_percent: int = 0
     aces: int = 0
     double_faults: int = 0
@@ -35,7 +36,7 @@ games = {}
 is_ad_scoring = False
 
 # PARSING FUNCTIONS
-def parse_csv_string(csv_string):
+def parse_csv_string(csv_string, is_doubles):
     player1 = Player()
     player2 = Player()
 
@@ -45,18 +46,32 @@ def parse_csv_string(csv_string):
     sets = {}
     games = {}
 
+    score_start_line = 6 if is_doubles else 4
+
     line_no = 0
     # Create a file-like object from the CSV string
     csv_file = StringIO(csv_string)
     
     reader = csv.reader(csv_file)
     for row in reader:
-        if line_no == 1:
-            parse_overall_row(row, player1)
-        elif line_no == 2:
-            parse_overall_row(row, player2)
-        elif line_no > 4:
+        if line_no > score_start_line:
             parse_row(row, player1, player2)
+        else:
+            if is_doubles:
+                    if line_no == 1:
+                        parse_overall_row(row, player1)
+                    elif line_no == 2:
+                        player1.double_name = row[1]
+                    elif line_no == 3:
+                        parse_overall_row(row, player2)
+                    elif line_no == 4:
+                        player2.double_name = row[1]
+            else:
+                if line_no == 1:
+                    parse_overall_row(row, player1)
+                elif line_no == 2:
+                    parse_overall_row(row, player2)
+
         line_no += 1
 
     process_players(player1, player2)
@@ -119,11 +134,11 @@ def parse_row(row, player1: Player, player2: Player):
 
     desc = row[8]
     firstWon = True
-    if (player1.name in desc):
+    if (player1.name in desc or (player1.double_name in desc if player1.double_name else False)):
         if ("loses" in desc):
             firstWon = False
     
-    if (player2.name in desc):
+    if (player2.name in desc or (player2.double_name in desc if player2.double_name else False)):
         if ("winner" in desc):
             firstWon = False
         if ("won" in desc):
@@ -173,7 +188,7 @@ def process_players(player1, player2):
     player1.receiver_points_won = player1.total_points_won - player1.service_points_won
     player2.receiver_points_won = player2.total_points_won - player2.service_points_won
 
-def get_scores_html_by_csv(csv_content, firstServe, include_var):
-    sets, games, is_ad_scoring, player1, player2 = parse_csv_string(csv_content)
+def get_scores_html_by_csv(csv_content, firstServe, include_var, is_doubles):
+    sets, games, is_ad_scoring, player1, player2 = parse_csv_string(csv_content, is_doubles)
     html_content = get_scores_html(sets, games, firstServe, include_var, is_ad_scoring)
     return html_content

@@ -148,7 +148,7 @@ def generate_html_file(sets, games, firstServe, include_var, is_ad_scoring):
 
     print(f"{file_name} has been created with the provided HTML content.")
 
-def generate_html_file_by_csv(csv_file_path, firstServe, include_var):
+def generate_html_file_by_csv(csv_file_path, firstServe, include_var, is_doubles):
     
     # Define the file name
     file_name = "scores.html"
@@ -160,7 +160,7 @@ def generate_html_file_by_csv(csv_file_path, firstServe, include_var):
     with open(csv_file_path, 'r') as file:
             csv_content = file.read()  # Read entire file content as string
 
-    html_content = get_scores_html_by_csv(csv_content, firstServe, include_var)
+    html_content = get_scores_html_by_csv(csv_content, firstServe, include_var, is_doubles)
 
     # Write the string to the file
     with open(file_path, "w") as file:
@@ -170,28 +170,30 @@ def generate_html_file_by_csv(csv_file_path, firstServe, include_var):
 
 # Main
 
-firstServe = False
+firstServe = True
+include_var = True
+is_doubles = True
 
 script_dir = os.path.dirname(__file__)
 # file_path = 'C:\\code\\pyMatchTrack\\data.csv'
-file_name = 'matchtrackexport2024-07-06 172742.csv'
+file_name = 'matchtrackexport2024-07-01 200752.csv'
+#file_name = 'matchtrackexport2024-07-06 172742.csv'
 file_path = os.path.join(f"{script_dir}\\tools\\MatchTrack", file_name)
 
 #file_path = 'data.csv'  # Replace with the path to your CSV file
-sets, games, is_ad_scoring, player1, player2 = parse_csv_file(file_path)
+#sets, games, is_ad_scoring, player1, player2 = parse_csv_file(file_path)
 
 #print(player1)
 #print(player2)
 
 # Print the table of properties
-print_property_table(player1, player2)
+#print_property_table(player1, player2)
 
-print_scores(sets, firstServe)
+#print_scores(sets, firstServe)
 
-include_var = True
 # generate_html_file(sets, games, firstServe, include_var, is_ad_scoring)
 
-generate_html_file_by_csv(file_path, firstServe, include_var)
+generate_html_file_by_csv(file_path, firstServe, include_var, is_doubles)
 
 
 

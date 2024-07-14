@@ -185,7 +185,8 @@ def match_one(id):
         csv_content = download.readall().decode('utf-8')
         is_first_serve = match_query.Match.team1_serve
         include_var = False
-        scores_html = get_scores_html_by_csv(csv_content, is_first_serve, include_var)
+        is_doubles = match_query.Match.type == 'D'
+        scores_html = get_scores_html_by_csv(csv_content, is_first_serve, include_var, is_doubles)
     except Exception as e:
         print(f"An error occurred when getting {folder_name}/{file_name}: {e}")
 
