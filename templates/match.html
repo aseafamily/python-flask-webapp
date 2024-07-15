@@ -307,6 +307,16 @@
             display: flex;
             height: 2px;
         }
+        .tb_seed {
+            top: 0px;
+            left: 14px;
+            color: var(--on-surface-nLv1);
+            text-align: left;
+            font: 400 11px / 1 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            vertical-align: super;
+            margin-left: 5px;
+            margin-top: -3px;
+        }
     </style>
 </head>
 <body>
@@ -360,6 +370,7 @@
                                     </div>
                                     {% endif %}
                                     <bdi class="{% if match_data.match.team1_won %}won_name{% else %}lost_name{% endif %}">{{ match_data.team1_name }}</bdi>
+                                    <sup font-size="micro" class="tb_seed">{{ match_data.match.player1_seed if match_data.match.player1_seed is not none else "" }}</sup>
                                 </div>
                                 <div display="flex" class="Box ggRYVx jLRkRA">
                                     {% if match_data.match.type == 'S' %}
@@ -368,6 +379,7 @@
                                     </div>
                                     {% endif %}
                                     <bdi class="{% if match_data.match.team1_won %}lost_name{% else %}won_name{% endif %}">{{ match_data.team2_name }}</bdi>
+                                    <sup font-size="micro" class="tb_seed">{{ match_data.match.player2_seed if match_data.match.player2_seed is not none else "" }}</sup>
                                 </div>
                             </div>
                             <div display="flex" class="Box eqGkKN hdXfIu">

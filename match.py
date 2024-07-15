@@ -54,10 +54,12 @@ def match_index():
             team1_name = get_name_short(match.player1_first_name, match.player1_last_name) + " / " + get_name_short(match.player3_first_name, match.player3_last_name)
             team2_name = get_name_short(match.player2_first_name, match.player2_last_name) + " / " + get_name_short(match.player4_first_name, match.player4_last_name)
             
+        '''
         if match.Match.player1_seed:
                 team1_name += f" [{match.Match.player1_seed}]"
         if match.Match.player2_seed:
                 team2_name += f" [{match.Match.player2_seed}]"
+        '''
 
         round_name = get_match_round_abbreviation(match.Match)
 
