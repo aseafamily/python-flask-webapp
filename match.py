@@ -174,26 +174,42 @@ def match_one(id):
     file_share_name = "bhmfiles"
     folder_name = f"tennis/{match_query.Match.tennis_id}"
     connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    data_file_name = "data.csv"
     scores_html = ''
+    image_files = []
     try:
         service_client = ShareServiceClient.from_connection_string(connection_string)
         directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
-        # file_name = "scores.html"
-        file_name = "data.csv"
-        file_client = directory_client.get_file_client(file_name)
-        # Check if the file exists by trying to get its properties
-        file_client.get_file_properties()
 
-        # If the file exists, download its content
-        download = file_client.download_file()
-        csv_content = download.readall().decode('utf-8')
-        is_first_serve = match_query.Match.team1_serve
-        include_var = False
-        is_doubles = match_query.Match.type == 'D'
-        scores_html = get_scores_html_by_csv(csv_content, is_first_serve, include_var, is_doubles)
+        # List all files and directories in the directory
+        files = list(directory_client.list_directories_and_files())
+
+        # Filter and retrieve files with extensions .png or .jpg
+        image_files = [file.name for file in files if file.name.lower().endswith(('.png', '.jpg'))]
+
+        updated_images = [f"{match_query.Match.tennis_id}/" + element for element in image_files]
+        for file_name in updated_images:
+            print("Image files found:")
+            print(file_name)
+
+        data_csv_file = next((file.name for file in files if file.name == data_file_name), None)
+
+        if data_csv_file:
+            file_client = directory_client.get_file_client(data_file_name)
+            # Check if the file exists by trying to get its properties
+            file_client.get_file_properties()
+
+            # If the file exists, download its content
+            download = file_client.download_file()
+            csv_content = download.readall().decode('utf-8')
+            is_first_serve = match_query.Match.team1_serve
+            include_var = False
+            is_doubles = match_query.Match.type == 'D'
+            scores_html = get_scores_html_by_csv(csv_content, is_first_serve, include_var, is_doubles)
+        else:
+            print(f"File 'data.csv' not found in the {folder_name}/{data_csv_file}.")
     except Exception as e:
-        print(f"An error occurred when getting {folder_name}/{file_name}: {e}")
-
+        print(f"An error occurred when getting {folder_name}: {e}")
 
     if not scores_html:
         # use simple score from database
@@ -202,4 +218,31 @@ def match_one(id):
             if data_dict:
                 scores_html = get_scores_html(data_dict)
 
-    return render_template('match_one.html', match_data = match_data, scores_html=scores_html)
+    return render_template('match_one.html', match_data = match_data, scores_html=scores_html, image_files=updated_images)
+
+@match_bp.route('/tennis_images/<path:image_path>')
+def tennis_image(image_path):
+    file_share_name = "bhmfiles"
+    try:
+        sub_folder_name, image_name = os.path.split(image_path)
+        folder_name = f"tennis/{sub_folder_name}"
+        connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+        
+        service_client = ShareServiceClient.from_connection_string(connection_string)
+        directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
+        file_client = directory_client.get_file_client(image_name)
+        stream = file_client.download_file()
+        # Create a BytesIO object to store the downloaded content
+        content = BytesIO()
+        content.write(stream.readall())
+
+        # Seek back to the beginning of the BytesIO object
+        content.seek(0)
+
+        # Return the image file
+        return send_file(content, mimetype='image/png')
+
+    except ResourceNotFoundError:
+        abort(404)
+        
+    return None
