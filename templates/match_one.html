@@ -717,11 +717,41 @@
             <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="SvgWrapper hwgeMK"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9 3V5M12 3V5M15 3V5M13 9H9M15 13H9M8.2 21H15.8C16.9201 21 17.4802 21 17.908 20.782C18.2843 20.5903 18.5903 20.2843 18.782 19.908C19 19.4802 19 18.9201 19 17.8V7.2C19 6.0799 19 5.51984 18.782 5.09202C18.5903 4.71569 18.2843 4.40973 17.908 4.21799C17.4802 4 16.9201 4 15.8 4H8.2C7.0799 4 6.51984 4 6.09202 4.21799C5.71569 4.40973 5.40973 4.71569 5.21799 5.09202C5 5.51984 5 6.07989 5 7.2V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
             <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
                 <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Note</span>
+                <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg" id="note"><span>
                 {% macro newline_to_br(text) %}
                     {{ text.replace('\n', '<br>') | safe }}
                 {% endmacro %}
-                <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">{{ newline_to_br(match_data.Match.comments) }}                    
-                </span>
+                <script>
+                    const noteText = `{{ newline_to_br(match_data.Match.comments) }}`;
+                    
+                    const maxLength = 200;
+                    const noteElement = document.getElementById('note');
+
+                    var sliced = false;
+                    var toggled = false;
+            
+                    if (noteText.length > maxLength) {
+                        noteElement.innerHTML = noteText.slice(0, maxLength) + '...';
+                        sliced = true;
+                        toggled = true;
+                    } else {
+                        noteElement.textContent = noteText;
+                    }
+            
+                    noteElement.addEventListener('click', () => {
+                        if (sliced) {
+                            if (toggled) {
+                                noteElement.innerHTML = noteText;
+                                toggled = false;
+                            } else {
+                                noteElement.innerHTML = noteText.slice(0, maxLength) + '...';
+                                toggled = true;
+                            }
+                        }
+                        
+                    });
+                </script>
+            
             </div>
         </div>
     </div>
