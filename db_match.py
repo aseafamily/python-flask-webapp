@@ -53,6 +53,7 @@ class Match(db.Model):
     match_state = db.Column(db.String(200), nullable=True)
     is_indoor = db.Column(db.Boolean, nullable=True)
     comments = db.Column(db.String(2000), nullable=True)
+    scores = db.Column(db.String(2000), nullable=True)
     tennis_id = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):

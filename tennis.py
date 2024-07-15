@@ -202,6 +202,7 @@ def tennis_index():
                     match_state=request.form['match_state'],
                     is_indoor=True if request.form['court_type'] == 'indoor' else False,
                     comments=request.form['match_comments'],
+                    scores=request.form['match_scores'],
                     tennis_id=tennis_instance.id,
                     player1_wtn = get_integer_from_form100('player1_wtn'),
                     player1_utr = get_integer_from_form100('player1_utr'),
@@ -422,6 +423,7 @@ def tennis_update(id):
                     match_state=request.form['match_state'],
                     is_indoor=True if request.form['court_type'] == 'indoor' else False,
                     comments=request.form['match_comments'],
+                    scores=request.form['match_scores'],
                     tennis_id=tennis.id,
                     player1_wtn = get_integer_from_form100('player1_wtn'),
                     player1_utr = get_integer_from_form100('player1_utr'),
@@ -475,6 +477,7 @@ def tennis_update(id):
                 match.match_state=request.form['match_state']
                 match.is_indoor=True if request.form['court_type'] == 'indoor' else False
                 match.comments=request.form['match_comments']
+                match.scores=request.form['match_scores']
                 match.player1_wtn = get_integer_from_form100('player1_wtn')
                 match.player1_utr = get_integer_from_form100('player1_utr')
                 match.player1_usta = get_integer_from_form100('player1_usta')

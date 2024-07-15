@@ -97,6 +97,7 @@
     {% block match_city %}{{match.match_city if match.match_city is not none else ''}}{% endblock %}
     {% block match_state %}{{match.match_state if match.match_state is not none else ''}}{% endblock %}
     {% block match_comments %}{{match.comments if match.match_comments is not none else ''}}{% endblock %}
+    {% block match_scores %}{{match.scores if match.match_scores is not none else ''}}{% endblock %}
 
     {% block court_type_outdoor %}
         {% if not match.is_indoor %}
