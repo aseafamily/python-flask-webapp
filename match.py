@@ -19,7 +19,7 @@ from azure.core.exceptions import ResourceNotFoundError
 from io import BytesIO
 from mc_lib import get_scores_html_by_csv
 import json
-from lib_simple_score import get_scores_html
+from lib_simple_score import get_scores_html, parse_string_to_dict
 
 match_bp = Blueprint('match', __name__)
 
@@ -215,9 +215,15 @@ def match_one(id):
     if not scores_html:
         # use simple score from database
         if match_query.Match.scores:
-            data_dict = json.loads(match_query.Match.scores)
-            if data_dict:
-                scores_html = get_scores_html(data_dict)
+            scores = match_query.Match.scores
+            data_dict = None
+            if scores:
+                if scores.strip().startswith('{'):
+                    data_dict = json.loads(match_query.Match.scores)
+                else:
+                    data_dict = parse_string_to_dict(scores)
+                if data_dict:
+                    scores_html = get_scores_html(data_dict)
 
     return render_template('match_one.html', match_data = match_data, scores_html=scores_html, image_files=updated_images)
 

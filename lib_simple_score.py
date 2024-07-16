@@ -114,3 +114,42 @@ def get_scores_html(data_dict):
 
     html_content += toggle_script_html
     return html_content
+
+def parse_string_to_dict(input_string):
+    lines = input_string.strip().splitlines()
+    result_dict = {
+        'set1': '',
+        'set1_tb': '',
+        'set2': '',
+        'set2_tb': '',
+        'set3': '',
+        'set3_tb': ''
+    }
+    set_number = None
+    tiebreaker = False
+
+    for line in lines:
+        line = line.strip()  # Strip any extra whitespace
+        if not line:
+            continue  # Skip empty lines
+
+        if line.isdigit():
+            # A new set starts
+            set_number = int(line)
+            tiebreaker = False
+        elif line.endswith('t'):
+            # Tiebreaker line
+            tiebreaker = True
+            set_number = int(line[0])
+        else:
+            if set_number is not None:
+                if tiebreaker:
+                    result_dict[f'set{set_number}_tb'] += line + '\n'
+                else:
+                    result_dict[f'set{set_number}'] += line + '\n'
+
+    # Remove trailing newlines
+    for key in result_dict:
+        result_dict[key] = result_dict[key].strip()
+
+    return result_dict

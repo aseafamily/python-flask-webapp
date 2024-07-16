@@ -1,5 +1,5 @@
 import json
-from lib_simple_score import get_scores_html
+from lib_simple_score import get_scores_html, parse_string_to_dict
 
 
 data = {
@@ -65,6 +65,19 @@ with open('simple.json', 'r') as json_file:
 
 data_dict = json.loads(json_content)
 print(data_dict)
+
+new_string = '''
+1
+1-1
+2-2
+2
+1-1
+2-2
+3t
+1-0
+10-0
+'''
+data_dict = parse_string_to_dict(new_string)
 
 html_content = get_scores_html(data_dict)
 
