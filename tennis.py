@@ -700,7 +700,8 @@ def tennis_upload(id):
                     # Generate new filename with format image01.png, image02.jpg, etc.
                     filename = file.filename
                     file_ext = os.path.splitext(filename)[1]  # Get file extension
-                    new_filename = filename
+                    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                    new_filename = f"{os.path.splitext(filename)[0]}_{timestamp}{file_ext}"
                     if file_ext == '.csv':
                         new_filename = 'data.csv'
                     else:

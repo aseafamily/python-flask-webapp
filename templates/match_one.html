@@ -674,7 +674,7 @@
                         {{ '{}m'.format(minutes) if minutes > 0 else '0m' }}
                     {% endif %}
                     <div display="inline-block" class="Box ittMsX"></div>
-                    <a href="/tennis/update/{{ match_data.Match.tennis_id }}?u={{ match_data.Match.player1 }}&return_url={{ request.url }}">{{ match_data.Match.tennis_id }}</a>
+                    <a href="/tennis/uploadpage/{{ match_data.Match.tennis_id }}">{{ match_data.Match.tennis_id }}</a>
                 </span>
             </div>
         </div>
@@ -761,10 +761,32 @@
     {% if image_files %}
     <div elevation="2" class="Box ivSrTP">
         {% for image in image_files %}
-            <img src="/tennis_images/{{ image }}" alt="Image {{ loop.index }}" style="width: 95%; height: auto;">
+            <img src="/tennis_images/{{ image }}" alt="Image {{ loop.index }}" style="width: 95%; height: auto;" ondblclick="confirmDelete('{{ image }}')">
         {% endfor %}
     </div>
     {% endif %}
+
+    <script>
+        function confirmDelete(image) {
+            var result = confirm("Are you sure you want to delete this image?");
+            if (result) {
+                fetch(`/tennis_images/${image}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Failed to delete the image.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while trying to delete the image.');
+                });
+            }
+        }
+    </script>
 
     <!-- All scores panel -->
     <!-- Render scores_html as raw HTML -->

@@ -221,7 +221,7 @@ def match_one(id):
 
     return render_template('match_one.html', match_data = match_data, scores_html=scores_html, image_files=updated_images)
 
-@match_bp.route('/tennis_images/<path:image_path>')
+@match_bp.route('/tennis_images/<path:image_path>', methods=['DELETE', 'GET'])
 def tennis_image(image_path):
     file_share_name = "bhmfiles"
     try:
@@ -232,17 +232,19 @@ def tennis_image(image_path):
         service_client = ShareServiceClient.from_connection_string(connection_string)
         directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
         file_client = directory_client.get_file_client(image_name)
-        stream = file_client.download_file()
-        # Create a BytesIO object to store the downloaded content
-        content = BytesIO()
-        content.write(stream.readall())
 
-        # Seek back to the beginning of the BytesIO object
-        content.seek(0)
-
-        # Return the image file
-        return send_file(content, mimetype='image/png')
-
+        if request.method == 'DELETE':
+            # Handle delete request
+            file_client.delete_file()
+            return '', 204  # No Content response to indicate successful deletion
+        
+        elif request.method == 'GET':
+            # Handle get request
+            stream = file_client.download_file()
+            content = BytesIO()
+            content.write(stream.readall())
+            content.seek(0)
+            return send_file(content, mimetype='image/png')
     except ResourceNotFoundError:
         abort(404)
         
