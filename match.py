@@ -177,6 +177,7 @@ def match_one(id):
     data_file_name = "data.csv"
     scores_html = ''
     image_files = []
+    updated_images = []
     try:
         service_client = ShareServiceClient.from_connection_string(connection_string)
         directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)

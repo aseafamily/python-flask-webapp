@@ -758,11 +758,13 @@
     <!-- End Details panel-->
 
     <!-- image files -->
+    {% if image_files %}
     <div elevation="2" class="Box ivSrTP">
         {% for image in image_files %}
             <img src="/tennis_images/{{ image }}" alt="Image {{ loop.index }}" style="width: 95%; height: auto;">
         {% endfor %}
     </div>
+    {% endif %}
 
     <!-- All scores panel -->
     <!-- Render scores_html as raw HTML -->
