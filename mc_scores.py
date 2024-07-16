@@ -52,6 +52,29 @@ def find_set_point(player_one_game_str, player_two_game_str, is_ad_scoring, play
 
     return is_player1_set_point, is_player2_set_point
 
+def did_player1_won_game(player_one_scores, player_two_scores, player_one_game, player_two_game, game_number, set_number, games):
+    is_player_one_won = True
+    is_player_one_won = did_player_one_win(player_one_scores[-1], player_two_scores[-1])
+    if player_one_scores[-1] == '40' and player_two_scores[-1] == '40':
+        player1_game = int(player_one_game)
+        player2_game = int(player_two_game)
+        if game_number == 1:
+            is_player_one_won = True if player1_game > player2_game else False
+        else:
+            prev_player1_game = 0
+            if game_number > 1:
+                prev_game = games[(set_number, game_number - 1)]
+                if prev_game:
+                    for point in prev_game:
+                        if (point[5] == '0' and point[6] == '0'):
+                            prev_player1_game = int(point[3])
+                            break
+                if player1_game > prev_player1_game:
+                    is_player_one_won = True
+                else:
+                    is_player_one_won = False
+    return is_player_one_won
+
 def generate_game(set_number, game_number, sets, games, firstServe, is_ad_scoring, set_games_play):
     if (set_number == 3 and game_number != 1):
         return
@@ -74,26 +97,7 @@ def generate_game(set_number, game_number, sets, games, firstServe, is_ad_scorin
         player_one_scores.append(point[5])
         player_two_scores.append(point[6])
 
-    is_player_one_won = True
-    is_player_one_won = did_player_one_win(player_one_scores[-1], player_two_scores[-1])
-    if player_one_scores[-1] == '40' and player_two_scores[-1] == '40':
-        player1_game = int(player_one_game)
-        player2_game = int(player_two_game)
-        if game_number == 1:
-            is_player_one_won = True if player1_game > player2_game else False
-        else:
-            prev_player1_game = 0
-            if game_number > 1:
-                prev_game = games[(set_number, game_number - 1)]
-                if prev_game:
-                    for point in prev_game:
-                        if (point[5] == '0' and point[6] == '0'):
-                            prev_player1_game = int(point[3])
-                            break
-                if player1_game > prev_player1_game:
-                    is_player_one_won = True
-                else:
-                    is_player_one_won = False
+    is_player_one_won = did_player1_won_game(player_one_scores, player_two_scores, player_one_game, player_two_game, game_number, set_number, games)
 
     is_tie_break = '1' in player_one_scores or '1' in player_two_scores
     if is_tie_break and game_number == 1:

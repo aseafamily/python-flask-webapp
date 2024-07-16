@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from io import StringIO
 import csv
 from mc_scores import get_scores_html
+from mc_logs import get_logs_html
 
 @dataclass
 class Player:
@@ -195,4 +196,5 @@ def process_players(player1, player2):
 def get_scores_html_by_csv(csv_content, firstServe, include_var, is_doubles):
     sets, games, is_ad_scoring, player1, player2 = parse_csv_string(csv_content, is_doubles)
     html_content = get_scores_html(sets, games, firstServe, include_var, is_ad_scoring)
+    html_content += get_logs_html(sets, games, player1, player2)
     return html_content
