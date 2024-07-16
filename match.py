@@ -178,39 +178,39 @@ def match_one(id):
     scores_html = ''
     image_files = []
     updated_images = []
-    try:
-        service_client = ShareServiceClient.from_connection_string(connection_string)
-        directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
+    #try:
+    service_client = ShareServiceClient.from_connection_string(connection_string)
+    directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
 
-        # List all files and directories in the directory
-        files = list(directory_client.list_directories_and_files())
+    # List all files and directories in the directory
+    files = list(directory_client.list_directories_and_files())
 
-        # Filter and retrieve files with extensions .png or .jpg
-        image_files = [file.name for file in files if file.name.lower().endswith(('.png', '.jpg'))]
+    # Filter and retrieve files with extensions .png or .jpg
+    image_files = [file.name for file in files if file.name.lower().endswith(('.png', '.jpg'))]
 
-        updated_images = [f"{match_query.Match.tennis_id}/" + element for element in image_files]
-        for file_name in updated_images:
-            print("Image files found:")
-            print(file_name)
+    updated_images = [f"{match_query.Match.tennis_id}/" + element for element in image_files]
+    for file_name in updated_images:
+        print("Image files found:")
+        print(file_name)
 
-        data_csv_file = next((file.name for file in files if file.name == data_file_name), None)
+    data_csv_file = next((file.name for file in files if file.name == data_file_name), None)
 
-        if data_csv_file:
-            file_client = directory_client.get_file_client(data_file_name)
-            # Check if the file exists by trying to get its properties
-            file_client.get_file_properties()
+    if data_csv_file:
+        file_client = directory_client.get_file_client(data_file_name)
+        # Check if the file exists by trying to get its properties
+        file_client.get_file_properties()
 
-            # If the file exists, download its content
-            download = file_client.download_file()
-            csv_content = download.readall().decode('utf-8')
-            is_first_serve = match_query.Match.team1_serve
-            include_var = False
-            is_doubles = match_query.Match.type == 'D'
-            scores_html = get_scores_html_by_csv(csv_content, is_first_serve, include_var, is_doubles)
-        else:
-            print(f"File 'data.csv' not found in the {folder_name}/{data_csv_file}.")
-    except Exception as e:
-        print(f"An error occurred when getting {folder_name}: {e}")
+        # If the file exists, download its content
+        download = file_client.download_file()
+        csv_content = download.readall().decode('utf-8')
+        is_first_serve = match_query.Match.team1_serve
+        include_var = False
+        is_doubles = match_query.Match.type == 'D'
+        scores_html = get_scores_html_by_csv(csv_content, is_first_serve, include_var, is_doubles)
+    else:
+        print(f"File 'data.csv' not found in the {folder_name}/{data_csv_file}.")
+    #except Exception as e:
+    #    print(f"An error occurred when getting {folder_name}: {e}")
 
     if not scores_html:
         # use simple score from database

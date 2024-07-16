@@ -83,36 +83,38 @@ def get_logs_html(sets, games, player1, player2):
     html_content = ""
     player1_name = get_team_name(player1)
     player2_name = get_team_name(player2)
-    for set in sets:
-        for game_number in range(1, len(sets[set]) + 1):
-            game = games[(set, game_number)]
-            player_one_scores = []
-            player_two_scores = []
-            for point in game:
-                #print(point)
-                point_content = ''
-                if (point[5] == '0' and point[6] == '0'):
-                    player_one_game = str(point[3])
-                    player_two_game = str(point[4])
-                    is_player_one_won = did_player1_won_game(player_one_scores, player_two_scores, player_one_game, player_two_game, game_number, set, games)
-                    team_won = player1_name if is_player_one_won else player2_name
-                    is_last_game = game_number == len(sets[set])
-                    is_last_set = set == len(sets)
-                    last_game = "Set, " if is_last_game else ''
-                    last_set = "Match, " if (is_last_set and last_game) else ''
-                    game_details = f'Game, {last_game}{last_set}{team_won}'
-                    point_content = html_finish_row.replace("{player1_set_score}", point[3])\
-                        .replace("{player2_set_score}", point[4])\
-                        .replace("{details}", point[8])\
-                        .replace("{game_details}", game_details)
-                else:
-                    player_one_scores.append(point[5])
-                    player_two_scores.append(point[6])
-                    point_content = html_score_row.replace("{player1_set_score}", point[5])\
-                        .replace("{player2_set_score}", point[6])\
-                        .replace("{details}", point[8])
 
-                html_content = point_content + html_content
+    for (set, game_number), game in games.items():
+        player_one_scores = []
+        player_two_scores = []
+        game = games[(set, game_number)]
+        player_one_scores = []
+        player_two_scores = []
+        for point in game:
+            #print(point)
+            point_content = ''
+            if (point[5] == '0' and point[6] == '0'):
+                player_one_game = str(point[3])
+                player_two_game = str(point[4])
+                is_player_one_won = did_player1_won_game(player_one_scores, player_two_scores, player_one_game, player_two_game, game_number, set, games)
+                team_won = player1_name if is_player_one_won else player2_name
+                is_last_game = game_number == len(sets[set])
+                is_last_set = set == len(sets)
+                last_game = "Set, " if is_last_game else ''
+                last_set = "Match, " if (is_last_set and last_game) else ''
+                game_details = f'Game, {last_game}{last_set}{team_won}'
+                point_content = html_finish_row.replace("{player1_set_score}", point[3])\
+                    .replace("{player2_set_score}", point[4])\
+                    .replace("{details}", point[8])\
+                    .replace("{game_details}", game_details)
+            else:
+                player_one_scores.append(point[5])
+                player_two_scores.append(point[6])
+                point_content = html_score_row.replace("{player1_set_score}", point[5])\
+                    .replace("{player2_set_score}", point[6])\
+                    .replace("{details}", point[8])
+
+            html_content = point_content + html_content
 
     html_content = html_styles + html_container_start + html_content + html_div_end
     return html_content
