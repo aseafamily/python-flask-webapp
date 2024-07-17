@@ -298,10 +298,12 @@
     {% block form_loaded %}{% endblock %}
 
     $(document).ready(function() {
+        var local_categories = ["Coach", "Fitness", "Group", "Match", "Play", "Practice ", "Private", "Semi"];
         $('#category').on('focus', function() {
             $(this).autocomplete('search', '');
         });
         $('#category').autocomplete({
+            /*
             source: function(request, response) {
                 $.ajax({
                     url: '/categories',
@@ -314,6 +316,8 @@
                     }
                 });
             },
+            */
+            source: local_categories,
             minLength: 0, // Minimum characters before triggering autocomplete
             select: function(event, ui) {
                 $('#category').val(ui.item.value); // Update input value when an option is selected
@@ -398,7 +402,8 @@
             "CP",
             "RHS",
             "RMS",
-            "WSC"
+            "WSC",
+            "WHS"
         ];
 
         $('#location').on('focus', function() {
