@@ -24,6 +24,47 @@ def get_categories():
     categories_list = [category[0] for category in categories]
     return jsonify(categories_list)
 
+@tennis_bp.route('/locations/<search>', methods=['GET'])
+def get_locations(search):
+    search = search.lower()
+    matching_locations = db.session.query(Tennis.location).filter(Tennis.location.ilike(f'%{search}%')).distinct().all()
+    matching_locations_list = [loc[0] for loc in matching_locations]
+    return jsonify(matching_locations_list)
+
+@tennis_bp.route('/cities/<search>', methods=['GET'])
+def get_cities(search):
+    search = search.lower()
+    matching_locations = db.session.query(Match.match_city).filter(Match.match_city.ilike(f'%{search}%')).distinct().all()
+    matching_locations_list = [loc[0] for loc in matching_locations]
+    return jsonify(matching_locations_list)
+
+@tennis_bp.route('/match_name/<uid>', methods=['GET'])
+def get_match_names(uid):
+    session = db.session
+    
+    # Subquery to get the distinct match names with the latest id
+    subquery = (
+        session.query(
+            Match.match_name,
+            func.max(Match.id).label('max_id')
+        )
+        .filter(Match.player1 == uid)
+        .group_by(Match.match_name)
+        .subquery()
+    )
+
+    # Main query to get the last 5 unique match names based on match.id desc
+    unique_match_names = (
+        session.query(Match.match_name)
+        .join(subquery, Match.id == subquery.c.max_id)
+        .order_by(desc(subquery.c.max_id))
+        .limit(8)
+        .all()
+    )
+
+    names_list = [loc[0] for loc in unique_match_names]
+    return jsonify(names_list)
+
 @tennis_bp.route('/tennis', methods=['POST', 'GET'])
 @login_required
 def tennis_index():

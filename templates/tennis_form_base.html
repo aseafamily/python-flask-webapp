@@ -397,8 +397,38 @@
     });
 
     $(document).ready(function() {
+        $('#match_name').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+        $('#match_name').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: '/match_name/{{ u }}',
+                    dataType: 'json',
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#match_name').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+        $('#match_name').on('focus', function() {
+            if ($('#match_name').val() === '') {
+                $(this).autocomplete('search', ''); // Trigger search on focus
+            }
+        });
+    });
+
+    $(document).ready(function() {
         // Hardcoded array of locations
-        var locations = [
+        var staticLocations = [
             "CP",
             "RHS",
             "RMS",
@@ -406,19 +436,117 @@
             "WHS"
         ];
 
-        $('#location').on('focus', function() {
-            $(this).autocomplete('search', '');
-        });
-
         $('#location').autocomplete({
-            source: locations, // Use the hardcoded array
+            source: function(request, response) {
+                if (request.term.length === 0) {
+                    // If no input, show the static list
+                    response(staticLocations);
+                } else if (request.term.length < 2) {
+                    // If input length is less than 2, do not show any suggestions
+                    response([]);
+                } else {
+                    // Send an AJAX request to the server for the search term
+                    $.ajax({
+                        url: `/locations/${request.term}`,
+                        type: 'GET',
+                        success: function(data) {
+                            // Parse the response data and call the response callback
+                            response(data);
+                        },
+                        error: function() {
+                            // Handle errors
+                            response([]);
+                        }
+                    });
+                }
+            },
             minLength: 0, // Minimum characters before triggering autocomplete
             select: function(event, ui) {
                 $('#location').val(ui.item.value); // Update input value when an option is selected
                 return false; // Prevent default behavior of input field
             }
         });
+
+        $('#location').on('focus', function() {
+            if ($('#location').val() === '') {
+                $(this).autocomplete('search', ''); // Trigger search on focus
+            }
+        });
     });
+
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var staticLocations = [
+            "Bellevue",
+            "Kirkland",
+            "Redmond",
+            "Tacoma",
+            "Vancouver",
+            "Yakima"
+        ];
+
+        $('#match_city').autocomplete({
+            source: function(request, response) {
+                if (request.term.length === 0) {
+                    // If no input, show the static list
+                    response(staticLocations);
+                } else if (request.term.length < 2) {
+                    // If input length is less than 2, do not show any suggestions
+                    response([]);
+                } else {
+                    // Send an AJAX request to the server for the search term
+                    $.ajax({
+                        url: `/cities/${request.term}`,
+                        type: 'GET',
+                        success: function(data) {
+                            // Parse the response data and call the response callback
+                            response(data);
+                        },
+                        error: function() {
+                            // Handle errors
+                            response([]);
+                        }
+                    });
+                }
+            },
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#match_city').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+
+        $('#match_city').on('focus', function() {
+            if ($('#match_city').val() === '') {
+                $(this).autocomplete('search', ''); // Trigger search on focus
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var states = [
+            "WA",
+            "OR",
+            "CA",
+            "FL",
+            "NJ"
+        ];
+
+        $('#match_state').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+
+        $('#match_state').autocomplete({
+            source: states, // Use the hardcoded array
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#match_state').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
+
 
     $(document).ready(function() {
         // Hardcoded array of locations
@@ -429,7 +557,16 @@
             "R16",
             "Quarterfinals",
             "Semifinals",
-            "Finals"
+            "Finals",
+            "Round1",
+            "Round2",
+            "Round3",
+            "Round4",
+            "3.0",
+            "3.5",
+            "6.0",
+            "7.0",
+            "Varsity"
         ];
 
         $('#match_round').on('focus', function() {
@@ -457,8 +594,11 @@
             "Girls'14 & under",
             "Girls'16 & under",
             "Girls'18 & under",
+            "High School",
             "Adults 18+",
+            "Adults 18+ Mix",
             "Adults 40+",
+            "Adults 40+ Mix",
             "Adults 55+"
         ];
 
@@ -509,11 +649,17 @@
             "Level 1",
             "Level 2",
             "Level 3",
+            "Level 3 Open",
             "Level 4",
+            "Level 4 Open",
             "Level 5",
+            "Level 5 Open",
             "Level 6",
             "Level 7",
             "USTA League",
+            "Regular Season",
+            "Playoff",
+            "4A State",
             "USTA Junior Team",
             "Green ball",
             "Red ball"
