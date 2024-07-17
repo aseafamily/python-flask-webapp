@@ -303,7 +303,7 @@ def get_statistics_html(player1, player2):
     p2_b_won, p2_b_all = split_to_ints(player2.data['Break Points Won'] if 'Break Points Won' in player2.data else player2.break_points_won)
     p2_bs_won, p2_bs_all = split_to_ints(player2.data['Break Points Saved'] if 'Break Points Saved' in player2.data else player2.break_points_saved)
     #html_content += generate_item("Break points saved", p1_bs_str, p2_bs_str, p1_bs_percent, p2_bs_percent)
-    html_content += generate_pecent_item("Break points saved", p1_b_won, p1_b_all, p2_b_won, p2_b_all)
+    html_content += generate_pecent_item("Break points saved", p1_bs_won, p1_bs_all, p2_bs_won, p2_bs_all)
     
     html_content += html_section_end
 
@@ -389,7 +389,7 @@ def get_statistics_html(player1, player2):
     html_content += generate_pecent_item("Second serve return points", p1_2s_won_r, p1_2s_all_r, p2_2s_won_r, p2_2s_all_r)
 
     #html_content += generate_item("Break points won", p1_b_str, p2_b_str, p1_b_percent, p2_b_percent)
-    html_content += generate_pecent_item("Break points saved", p1_bs_won, p1_bs_all, p2_bs_won, p2_bs_all, False, True)
+    html_content += generate_pecent_item("Break points won", p1_b_won, p1_b_all, p2_b_won, p2_b_all, False, True)
     html_content += html_section_end
 
     html_content = html_content + html_all_end
