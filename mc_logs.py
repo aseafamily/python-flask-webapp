@@ -42,18 +42,38 @@ html_styles = '''
 }
 .arrow {
     color: #222226;
-    margin-left: 15px;
+    margin-left: 25px;
     margin-right: 10px; /* Spacing between arrow and data */
     transition: transform 0.3s; /* Smooth transition for rotating the arrow */
 }
 .expanded-content {
-    display: block;
+    display: none;
 }
 </style>
 '''
 
 html_container_start = '''<div elevation="2" class="Box ibMVdI">'''
 html_div_end = "</div>"
+
+html_scripts = '''
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+            $('.score-finish-row').click(function() {
+                $(this).next('.expanded-content').toggle();
+
+                // Check the current rotation state
+                if ($(this).find('.arrow').css('transform') === 'none') {
+                    $(this).find('.arrow').css('transform', 'rotate(90deg)');
+                } else {
+                    $(this).find('.arrow').css('transform', '');
+                }
+            });
+        });
+        </script>
+'''
 
 html_finish_row = '''
 <div class="score-finish-row">
@@ -63,7 +83,9 @@ html_finish_row = '''
         <span class="opponent-score" style="font-weight: bold;">{player2_set_score}</span>
     </div>
     <div class="bottom-row">
+        <span class="arrow">&#x25B6;</span>
         <span class="event-detail" align="center" style="color:#333">{details}</span>
+        <span class="opponent-score"></span>
     </div>
 </div>
 '''
@@ -76,6 +98,8 @@ html_score_row = '''
 </div>
 '''
 
+html_game_start = '''<div class="expanded-content">'''
+
 def get_team_name(player):
     return f"{player.name}/{player.double_name}" if player.double_name else player.name
 
@@ -83,6 +107,7 @@ def get_logs_html(sets, games, player1, player2):
     html_content = ""
     player1_name = get_team_name(player1)
     player2_name = get_team_name(player2)
+    game_start = True
 
     for (set, game_number), game in games.items():
         player_one_scores = []
@@ -107,14 +132,23 @@ def get_logs_html(sets, games, player1, player2):
                     .replace("{player2_set_score}", point[4])\
                     .replace("{details}", point[8])\
                     .replace("{game_details}", game_details)
+                
+                point_content = point_content + html_game_start
+                game_start = True
             else:
                 player_one_scores.append(point[5])
                 player_two_scores.append(point[6])
                 point_content = html_score_row.replace("{player1_set_score}", point[5])\
                     .replace("{player2_set_score}", point[6])\
                     .replace("{details}", point[8])
+                if game_start:
+                    point_content = point_content + html_div_end
+                    game_start = False
 
             html_content = point_content + html_content
 
-    html_content = html_styles + html_container_start + html_content + html_div_end
+    if not game_start:
+        html_content = "<div>" + html_content
+
+    html_content = html_styles + html_container_start + html_content + html_div_end + html_scripts
     return html_content

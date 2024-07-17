@@ -311,14 +311,14 @@ def get_statistics_html(player1, player2):
     #html_content += generate_item("Second serve points", P1_2s_won_str, P2_2s_won_str, int(100*p1_2s_won/p1_2s_all), int(100*p2_2s_won/p2_2s_all))
     html_content += generate_pecent_item("Second serve points", p1_2s_won, p1_2s_all, p2_2s_won, p2_2s_all)
 
-    p1_b_won, p1_b_all = split_to_ints(player1.data['Break Points Won'])
-    p1_bs_won, p1_bs_all = split_to_ints(player1.data['Break Points Saved'])
+    p1_b_won, p1_b_all = split_to_ints(player1.data['Break Points Won'] if 'Break Points Won' in player1.data else player1.break_points_won)
+    p1_bs_won, p1_bs_all = split_to_ints(player1.data['Break Points Saved'] if 'Break Points Saved' in player1.data else player1.break_points_saved)
     p1_b_percent = int(100*p1_b_won/p1_b_all) if p1_b_all != 0 else 0
     p1_bs_percent = int(100*p1_bs_won/p1_bs_all) if p1_bs_all !=0 else 100
     p1_b_str = f"{p1_b_won}/{p1_b_all} ({p1_b_percent}%)"
     p1_bs_str = f"{p1_bs_won}/{p1_bs_all} ({p1_bs_percent}%)"
-    p2_b_won, p2_b_all = split_to_ints(player2.data['Break Points Won'])
-    p2_bs_won, p2_bs_all = split_to_ints(player2.data['Break Points Saved'])
+    p2_b_won, p2_b_all = split_to_ints(player2.data['Break Points Won'] if 'Break Points Won' in player2.data else player2.break_points_won)
+    p2_bs_won, p2_bs_all = split_to_ints(player2.data['Break Points Saved'] if 'Break Points Saved' in player2.data else player2.break_points_saved)
     p2_b_percent = int(100*p2_b_won/p2_b_all) if p2_b_all != 0 else 0
     p2_bs_percent = int(100*p2_bs_won/p2_bs_all) if p2_bs_all !=0 else 100
     p2_b_str = f"{p2_b_won}/{p2_b_all} ({p2_b_percent}%)"
