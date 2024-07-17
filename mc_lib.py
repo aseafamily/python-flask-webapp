@@ -4,6 +4,7 @@ import csv
 from mc_scores import get_scores_html
 from mc_logs import get_logs_html
 from mc_statistics import get_statistics_html
+import re
 
 @dataclass
 class Player:
@@ -43,6 +44,9 @@ def parse_csv_string(csv_string, is_doubles):
     player1 = Player()
     player2 = Player()
 
+    player1d = Player()
+    player2d = Player()
+
     global sets
     global games
     sets = {}
@@ -72,10 +76,12 @@ def parse_csv_string(csv_string, is_doubles):
                             parse_overall_row(row, player1, header_row)
                         elif line_no == 2:
                             player1.double_name = row[1]
+                            parse_overall_row(row, player1d, header_row)
                         elif line_no == 3:
                             parse_overall_row(row, player2, header_row)
                         elif line_no == 4:
                             player2.double_name = row[1]
+                            parse_overall_row(row, player2d, header_row)
                 else:
                     if line_no == 1:
                         parse_overall_row(row, player1, header_row)
@@ -84,9 +90,53 @@ def parse_csv_string(csv_string, is_doubles):
 
         line_no += 1
 
+    if is_doubles:
+        merge_doubles(player1, player1d)
+        merge_doubles(player2, player2d)
+
     process_players(player1, player2)
 
     return sets, games, is_ad_scoring, player1, player2
+
+def merge_doubles(player: Player, playerd: Player):
+    player.aces += playerd.aces
+    player.double_faults += playerd.double_faults
+    player.total_points_won += playerd.total_points_won
+    player.winners +=  playerd.winners
+    player.forced_errors += playerd.forced_errors
+    player.unforced_errors += playerd.unforced_errors
+    player.data = merge_dictionaries(player.data, playerd.data)
+
+def merge_dictionaries(dict1, dict2):
+    merged_dict = dict1.copy()  # Start with a copy of dict1
+
+    for key in dict1:
+        if key in dict2:
+            # Convert strings containing only digits to integers
+            val1 = dict1[key]
+            val2 = dict2[key]
+            
+            if isinstance(val1, str) and val1.isdigit():
+                val1 = int(val1)
+            if isinstance(val2, str) and val2.isdigit():
+                val2 = int(val2)
+
+            # Handle integers
+            if isinstance(val1, int) and isinstance(val2, int):
+                merged_dict[key] = val1 + val2
+            # Handle strings with the "number1/number2 90%" format
+            elif isinstance(val1, str) and isinstance(val2, str):
+                match1 = re.match(r"(\d+)/(\d+)", val1)
+                match2 = re.match(r"(\d+)/(\d+)", val2)
+                if match1 and match2:
+                    num1_1, num2_1 = int(match1.group(1)), int(match1.group(2))
+                    num1_2, num2_2 = int(match2.group(1)), int(match2.group(2))
+                    new_num1 = num1_1 + num1_2
+                    new_num2 = num2_1 + num2_2
+                    merged_dict[key] = f"{new_num1}/{new_num2}"
+    
+    return merged_dict
+
         
 def convert_to_integer(string):
     parts = string.split('.')
@@ -225,7 +275,7 @@ def process_players(player1, player2):
 
 def get_scores_html_by_csv(csv_content, firstServe, include_var, is_doubles):
     sets, games, is_ad_scoring, player1, player2 = parse_csv_string(csv_content, is_doubles)
-    html_content = get_statistics_html(player1, player2)
+    html_content = get_statistics_html(player1, player2) if not is_doubles else ''
     html_content += get_scores_html(sets, games, firstServe, include_var, is_ad_scoring)
     html_content += get_logs_html(sets, games, player1, player2)
     return html_content
