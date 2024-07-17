@@ -199,6 +199,9 @@ def generate_item(title, p1, p2, n1, n2, reverse = False):
     return html_item
 
 def split_to_ints(s):
+    # Only consider the part before any whitespace
+    s = s.split()[0]
+    
     # Split the string by the '/' character
     parts = s.split('/')
     
@@ -211,9 +214,6 @@ def split_to_ints(s):
 def percent_to_float(s):
     # Remove the percentage sign and convert to float
     return float(s.strip('%')) / 100
-
-def process_player(player):
-    player.total_points_won = 0
 
 def generate_pecent_item(title, p1_won, p1_all, p2_won, p2_all, reverse = False, default_100 = False):
     p1_percent = int(100*p1_won/p1_all) if p1_all != 0 else (0 if not default_100 else 100)
@@ -234,15 +234,20 @@ def generate_item_not_empty(player1, player2, title, prefix, reverse=False):
 
     return html_content
 
+def fix_player(player):
+    if 'Total Points Won' in player.data:
+        player.total_points_won = player.data['Total Points Won']
+
 def get_statistics_html(player1, player2):
     # make sure data is right
-
+    fix_player(player1)
+    fix_player(player2)
 
     html_content = html_style + html_all_start
 
     # Point
     html_content += html_section_start.replace("{section_name}", "Points")
-    
+
     html_content += generate_item("Total", player1.total_points_won, player2.total_points_won, player1.total_points_won, player2.total_points_won)
 
     p1_1s_won, p1_1s_all = split_to_ints(player1.data['1st Serve Points Won'])
@@ -254,25 +259,15 @@ def get_statistics_html(player1, player2):
     p2_1s_won_r, p2_1s_all_r = split_to_ints(player2.data['1st Return Points Won'])
     p2_2s_won_r, p2_2s_all_r = split_to_ints(player2.data['2nd Return Points Won'])
 
-    p1_1s_percent = int((p1_1s_all / (p1_1s_all + p1_2s_all)) * 100)
-    p2_1s_percent = int((p2_1s_all / (p2_1s_all + p2_2s_all)) * 100)
-    p1_2s_percent = int(((p1_2s_all - int(player1.double_faults)) / p1_2s_all) * 100)
-    p2_2s_percent = int(((p2_2s_all - int(player2.double_faults)) / p2_2s_all) * 100)
-
     p1_s_all = p1_1s_all + p1_2s_all
     p1_s_won = p1_1s_won + p1_2s_won
     p1_s_all_r = p1_1s_all_r + p1_2s_all_r
     p1_s_won_r = p1_1s_won_r + p1_2s_won_r
-    P1_s_won_percent = (p1_s_won / p1_s_all) * 100
-    P1_s_won__r_percent = (p1_s_won_r / p1_s_all_r) * 100
-
+    
     p2_s_all = p2_1s_all + p2_2s_all
     p2_s_won = p2_1s_won + p2_2s_won
     p2_s_all_r = p2_1s_all_r + p2_2s_all_r
     p2_s_won_r = p2_1s_won_r + p2_2s_won_r
-    P2_s_won_percent = (p2_s_won / p2_s_all) * 100
-    P2_s_won__r_percent = (p2_s_won_r / p2_s_all_r) * 100
-
 
     html_content += generate_item("Service points won", p1_s_won, p2_s_won, p1_s_won, p2_s_won)
     html_content += generate_item("Receiver points won", p1_s_won_r, p2_s_won_r, p1_s_won_r, p2_s_won_r)
@@ -291,38 +286,22 @@ def get_statistics_html(player1, player2):
     html_content += generate_item("Aces", player1.aces, player2.aces, player1.aces, player2.aces)
     html_content += generate_item("Double faults", player1.double_faults, player2.double_faults, player1.double_faults, player2.double_faults, True)
     
-    p1_1s_str = f"{p1_1s_all}/{p1_1s_all + p1_2s_all} ({p1_1s_percent}%)"
-    p2_1s_str = f"{p2_1s_all}/{p2_1s_all + p2_2s_all} ({p2_1s_percent}%)"
     #html_content += generate_item("First serve", p1_1s_str, p2_1s_str, p1_1s_percent, p2_1s_percent)
     html_content += generate_pecent_item("First serve", p1_1s_all, (p1_1s_all + p1_2s_all), p2_1s_all, (p2_1s_all + p2_2s_all))
 
-    p1_2s_str = f"{p1_2s_all - int(player1.double_faults)}/{p1_2s_all} ({p1_2s_percent}%)"
-    p2_2s_str = f"{p2_2s_all - int(player2.double_faults)}/{p2_2s_all} ({p2_2s_percent}%)"
     #html_content += generate_item("Second serve", p1_2s_str, p2_2s_str, p1_2s_percent, p2_2s_percent)
     html_content += generate_pecent_item("Second serve", (p1_2s_all - int(player1.double_faults)), p1_2s_all, (p2_2s_all - int(player2.double_faults)), p2_2s_all)
     
-    P1_1s_won_str = f"{p1_1s_won}/{p1_1s_all} ({int(100*p1_1s_won/p1_1s_all)}%)"
-    P2_1s_won_str = f"{p2_1s_won}/{p2_1s_all} ({int(100*p2_1s_won/p2_1s_all)}%)"
     #html_content += generate_item("First serve points", P1_1s_won_str, P2_1s_won_str, int(100*p1_1s_won/p1_1s_all), int(100*p2_1s_won/p2_1s_all))
     html_content += generate_pecent_item("First serve points", p1_1s_won, p1_1s_all, p2_1s_won, p2_1s_all)
 
-    P1_2s_won_str = f"{p1_2s_won}/{p1_2s_all} ({int(100*p1_2s_won/p1_2s_all)}%)"
-    P2_2s_won_str = f"{p2_2s_won}/{p2_2s_all} ({int(100*p2_2s_won/p2_2s_all)}%)"
     #html_content += generate_item("Second serve points", P1_2s_won_str, P2_2s_won_str, int(100*p1_2s_won/p1_2s_all), int(100*p2_2s_won/p2_2s_all))
     html_content += generate_pecent_item("Second serve points", p1_2s_won, p1_2s_all, p2_2s_won, p2_2s_all)
 
     p1_b_won, p1_b_all = split_to_ints(player1.data['Break Points Won'] if 'Break Points Won' in player1.data else player1.break_points_won)
     p1_bs_won, p1_bs_all = split_to_ints(player1.data['Break Points Saved'] if 'Break Points Saved' in player1.data else player1.break_points_saved)
-    p1_b_percent = int(100*p1_b_won/p1_b_all) if p1_b_all != 0 else 0
-    p1_bs_percent = int(100*p1_bs_won/p1_bs_all) if p1_bs_all !=0 else 100
-    p1_b_str = f"{p1_b_won}/{p1_b_all} ({p1_b_percent}%)"
-    p1_bs_str = f"{p1_bs_won}/{p1_bs_all} ({p1_bs_percent}%)"
     p2_b_won, p2_b_all = split_to_ints(player2.data['Break Points Won'] if 'Break Points Won' in player2.data else player2.break_points_won)
     p2_bs_won, p2_bs_all = split_to_ints(player2.data['Break Points Saved'] if 'Break Points Saved' in player2.data else player2.break_points_saved)
-    p2_b_percent = int(100*p2_b_won/p2_b_all) if p2_b_all != 0 else 0
-    p2_bs_percent = int(100*p2_bs_won/p2_bs_all) if p2_bs_all !=0 else 100
-    p2_b_str = f"{p2_b_won}/{p2_b_all} ({p2_b_percent}%)"
-    p2_bs_str = f"{p2_bs_won}/{p2_bs_all} ({p2_bs_percent}%)"
     #html_content += generate_item("Break points saved", p1_bs_str, p2_bs_str, p1_bs_percent, p2_bs_percent)
     html_content += generate_pecent_item("Break points saved", p1_b_won, p1_b_all, p2_b_won, p2_b_all)
     
