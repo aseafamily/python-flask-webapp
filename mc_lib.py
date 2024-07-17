@@ -190,8 +190,8 @@ def parse_overall_row(row, player: Player, header_row):
     data_dict = {header.strip(): value.strip() for header, value in zip(header_row, row)}
     
     player.data = data_dict
-    for key, value in data_dict.items():
-        print(f"{key}: {value}")
+    #for key, value in data_dict.items():
+    #    print(f"{key}: {value}")
 
     if player.is_old_format:
         player.aces = row[8]
