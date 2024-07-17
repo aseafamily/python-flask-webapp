@@ -4,6 +4,7 @@ var_styles = '''
     --on-surface-nLv1: #222226;
     --on-surface-nLv3: rgba(34, 34, 38, 0.45);
     --on-surface-nLv4: rgba(34, 34, 38, 0.15);
+    --on-surface-nLv5: rgba(34, 34, 38, 0.06);
     --error-default: #c7361f;
     --surface-s0: #edf1f6;
     --surface-s1: #ffffff;

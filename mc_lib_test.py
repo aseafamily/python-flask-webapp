@@ -120,13 +120,13 @@ def print_scores(sets, firstServe):
                 firstServe = True
         print('========')
 
-def parse_csv_file(file_path):
+def parse_csv_file(file_path, is_doubles):
     sets = games = is_ad_scoring = player1 = player2 = None
 
     try:
         with open(file_path, 'r') as file:
             csv_content = file.read()  # Read entire file content as string
-            sets, games, is_ad_scoring, player1, player2 = parse_csv_string(csv_content)
+            sets, games, is_ad_scoring, player1, player2 = parse_csv_string(csv_content, is_doubles)
     except FileNotFoundError:
         print(f"Error: File '{file_path}' not found.")
 
@@ -172,22 +172,22 @@ def generate_html_file_by_csv(csv_file_path, firstServe, include_var, is_doubles
 
 firstServe = True
 include_var = True
-is_doubles = True
+is_doubles = False
 
 script_dir = os.path.dirname(__file__)
-# file_path = 'C:\\code\\pyMatchTrack\\data.csv'
-file_name = 'matchtrackexport2024-07-01 200752.csv'
+file_name = 'data.csv'
+#file_name = 'matchtrackexport2024-07-01 200752.csv'
 #file_name = 'matchtrackexport2024-07-06 172742.csv'
 file_path = os.path.join(f"{script_dir}\\tools\\MatchTrack", file_name)
 
 #file_path = 'data.csv'  # Replace with the path to your CSV file
-#sets, games, is_ad_scoring, player1, player2 = parse_csv_file(file_path)
+sets, games, is_ad_scoring, player1, player2 = parse_csv_file(file_path, is_doubles)
 
 #print(player1)
 #print(player2)
 
 # Print the table of properties
-#print_property_table(player1, player2)
+print_property_table(player1, player2)
 
 #print_scores(sets, firstServe)
 

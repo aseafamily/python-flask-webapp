@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, make_response
 from flask import Flask, render_template, url_for, request, redirect, send_file, jsonify, abort
 from db import db
 from db_serve import Serve, ServeAnalysis, ServeStatus
@@ -250,7 +250,10 @@ def tennis_image(image_path):
             content = BytesIO()
             content.write(stream.readall())
             content.seek(0)
-            return send_file(content, mimetype='image/png')
+            # return send_file(content, mimetype='image/png')
+            response = make_response(send_file(content, mimetype='image/png'))
+            response.headers['Cache-Control'] = 'public, max-age=2592000'  # Cache for 1 month
+            return response
     except ResourceNotFoundError:
         abort(404)
         

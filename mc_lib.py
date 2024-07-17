@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from io import StringIO
 import csv
 from mc_scores import get_scores_html
 from mc_logs import get_logs_html
+from mc_statistics import get_statistics_html
 
 @dataclass
 class Player:
@@ -29,6 +30,8 @@ class Player:
     first_return_points_won: str = ""
     second_return_points_won: str = ""
     break_points_won: str = ""
+    data: dict = field(default_factory=dict)
+    is_old_format: bool = False
 
 service_points_won_base = 13
 
@@ -50,6 +53,7 @@ def parse_csv_string(csv_string, is_doubles):
     score_start_line = 6 if is_doubles else 4
 
     line_no = 0
+    header_row = ''
     # Create a file-like object from the CSV string
     csv_file = StringIO(csv_string)
     
@@ -60,20 +64,23 @@ def parse_csv_string(csv_string, is_doubles):
             if result:
                 is_ad_scoring = True
         else:
-            if is_doubles:
-                    if line_no == 1:
-                        parse_overall_row(row, player1)
-                    elif line_no == 2:
-                        player1.double_name = row[1]
-                    elif line_no == 3:
-                        parse_overall_row(row, player2)
-                    elif line_no == 4:
-                        player2.double_name = row[1]
+            if line_no == 0:
+                header_row = row
             else:
-                if line_no == 1:
-                    parse_overall_row(row, player1)
-                elif line_no == 2:
-                    parse_overall_row(row, player2)
+                if is_doubles:
+                        if line_no == 1:
+                            parse_overall_row(row, player1, header_row)
+                        elif line_no == 2:
+                            player1.double_name = row[1]
+                        elif line_no == 3:
+                            parse_overall_row(row, player2, header_row)
+                        elif line_no == 4:
+                            player2.double_name = row[1]
+                else:
+                    if line_no == 1:
+                        parse_overall_row(row, player1, header_row)
+                    elif line_no == 2:
+                        parse_overall_row(row, player2, header_row)
 
         line_no += 1
 
@@ -168,11 +175,33 @@ def parse_percent(string):
     parts = string.split('/')
     return int(parts[0])
 
-def parse_overall_row(row, player: Player):
+def insert_zero_at_tenth_position(arr):
+    # Check if the array length is more than 10
+    if len(arr) > 10:
+        # Insert "0" as the 10th element
+        arr.insert(10, '0')
+    return arr
+
+def parse_overall_row(row, player: Player, header_row):
+    player.is_old_format = len(row) < 50
+    if player.is_old_format:
+        row.insert(10, '0')
+
+    data_dict = {header.strip(): value.strip() for header, value in zip(header_row, row)}
+    
+    player.data = data_dict
+    for key, value in data_dict.items():
+        print(f"{key}: {value}")
+
+    if player.is_old_format:
+        player.aces = row[8]
+        player.double_faults = row[9]
+    else:
+        player.aces = data_dict["Aces"]
+        player.double_faults = data_dict["Double Faults"]
+
     player.name = row[1]
     player.first_serve_percent = convert_to_integer(row[7])
-    player.aces = row[8]
-    player.double_faults = row[9]
     player.service_points_won = parse_percent(row[service_points_won_base]) + parse_percent(row[service_points_won_base+1])
     player.first_serve_points_won = row[service_points_won_base]
     player.second_serve_points_won = row[service_points_won_base+1]
@@ -180,6 +209,7 @@ def parse_overall_row(row, player: Player):
     player.first_return_points_won = row[service_points_won_base+3]
     player.second_return_points_won = row[service_points_won_base+4]
     player.break_points_won = row[service_points_won_base+5]
+
 
 def process_players(player1, player2):
     total_points = player1.total_points_won + player2.total_points_won
@@ -195,6 +225,7 @@ def process_players(player1, player2):
 
 def get_scores_html_by_csv(csv_content, firstServe, include_var, is_doubles):
     sets, games, is_ad_scoring, player1, player2 = parse_csv_string(csv_content, is_doubles)
-    html_content = get_scores_html(sets, games, firstServe, include_var, is_ad_scoring)
+    html_content = get_statistics_html(player1, player2)
+    html_content += get_scores_html(sets, games, firstServe, include_var, is_ad_scoring)
     html_content += get_logs_html(sets, games, player1, player2)
     return html_content
