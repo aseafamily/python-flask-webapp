@@ -124,8 +124,9 @@ def get_logo(image_id):
         # Seek back to the beginning of the BytesIO object
         content.seek(0)
 
-        # Return the image file
-        return send_file(content, mimetype='image/png')
+        response = make_response(send_file(content, mimetype='image/png'))
+        response.headers['Cache-Control'] = 'public, max-age=2592000'  # Cache for 1 month
+        return response
 
     except ResourceNotFoundError:
         abort(404)

@@ -682,14 +682,20 @@ def tennis_diagram():
 
     return render_template('tennis_diagram.html', tennis_all=tennis_all, weekly_stats=weekly_stats)
 
-@tennis_bp.route('/tennis/uploadpage/<int:id>')
+@tennis_bp.route('/tennis/uploadpage/<string:id>')
 def tennis_uploadpage(id):
     return render_template('tennis_uploadpage.html', id=id)
 
-@tennis_bp.route('/tennis/upload/<int:id>', methods=['POST'])
+@tennis_bp.route('/tennis/upload/<string:id>', methods=['POST'])
 def tennis_upload(id):
     connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
     file_share_name = "bhmfiles"
+    is_logo = False
+    try:
+        int_id = int(id)
+    except ValueError:
+        is_logo = True
+
     try:
         uploaded_files = []
         index = 1
@@ -700,14 +706,16 @@ def tennis_upload(id):
                     # Generate new filename with format image01.png, image02.jpg, etc.
                     filename = file.filename
                     file_ext = os.path.splitext(filename)[1]  # Get file extension
+
                     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
                     new_filename = f"{os.path.splitext(filename)[0]}_{timestamp}{file_ext}"
                     if file_ext == '.csv':
                         new_filename = 'data.csv'
                     else:
                         index += 1
-                    #file_path = os.path.join(app.instance_path, 'uploads', new_filename)
-                    #file.save(file_path)
+                    
+                    if is_logo:
+                        new_filename = f"{id}{file_ext}"
 
                     # Create the ShareServiceClient object which will be used to create a file client
                     service_client = ShareServiceClient.from_connection_string(connection_string)
@@ -717,7 +725,10 @@ def tennis_upload(id):
                     if not parent_directory_client.exists():
                         parent_directory_client.create_directory()
 
-                    nested_directory_client = parent_directory_client.get_subdirectory_client(str(id))
+                    sub_folder = id
+                    if is_logo:
+                        sub_folder = "logo"
+                    nested_directory_client = parent_directory_client.get_subdirectory_client(sub_folder)
                     if not nested_directory_client.exists():
                         nested_directory_client.create_directory()
                    
@@ -727,7 +738,7 @@ def tennis_upload(id):
                     # Upload the file
                     file_client.upload_file(file)
 
-                    uploaded_files.append(f"{parent_directory_name}/{id}/{new_filename}")
+                    uploaded_files.append(f"{parent_directory_name}/{sub_folder}/{new_filename}")
                 else:
                     return jsonify({'error': 'File type not allowed'}), 400
             

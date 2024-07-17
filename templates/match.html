@@ -337,7 +337,8 @@
                 width="auto" 
                 height="36" 
                 class="Img bIarbf"
-                onerror="this.onerror=null; this.src='/match/logo/PNW';">
+                onerror="this.onerror=null; this.src='/match/logo/PNW';"
+                ondblclick="window.location.href='/tennis/uploadpage/{{ match_data.tournament_logo }}';">
             <div display="flex" direction="column" class="Box gFVOUS iWGVcA">
                 <a href="{{ match_data.match.match_link }}" target="_blank">
                     <bdi class="dDpJHe">{{ match_data.match.match_level }}: {{ match_data.match.match_name }}</bdi>
