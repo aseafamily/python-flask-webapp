@@ -8,7 +8,7 @@ from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String, desc
-from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string
+from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string, generate_level
 from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
@@ -263,7 +263,7 @@ def tennis_index():
                     player4_seed = get_integer_from_form('player4_seed')
                 )
                 db.session.add(new_match)
-                tennis_instance.details = generate_match_summary(new_match)
+                tennis_instance.details = generate_match_summary(new_match, request.form['player2'], request.form['player3'], request.form['player4'])
                 db.session.commit()
             except:
                 db.session.rollback()
@@ -536,7 +536,7 @@ def tennis_update(id):
                 match.player4_usta = get_integer_from_form100('player4_usta')
                 match.player4_seed = get_integer_from_form('player4_seed')
 
-            tennis.details = generate_match_summary(match)
+            tennis.details = generate_match_summary(match, request.form['player2'], request.form['player3'], request.form['player4'])
 
     
         db.session.commit()
@@ -583,13 +583,13 @@ def tennis_update(id):
         
         return render_template('tennis_update.html', tennis=tennis, match=match, player1_name=player1_name, player2_name=player2_name, player3_name=player3_name, player4_name=player4_name)
 
-def generate_match_summary(match):
+def generate_match_summary(match, player2, player3, player4):
     # Extract player names
     player1_name = '' # get_brief_player_name(request.form['player1'])
-    player2_name = get_brief_player_name(request.form['player2'])
+    player2_name = get_brief_player_name(player2)
     if match.type == 'D':
-        player3_name = get_brief_player_name(request.form['player3'])
-        player4_name = get_brief_player_name(request.form['player4'])
+        player3_name = get_brief_player_name(player3)
+        player4_name = get_brief_player_name(player4)
         player1_name = f"/{player3_name} "
         player2_name = f"{player2_name}/{player4_name}"
 
@@ -615,7 +615,7 @@ def generate_match_summary(match):
     match_summary += ";".join(sets_summary)
     match_summary += f" {player2_name}"
 
-    level = generate_title(match.match_level, False)
+    level = generate_level(match.match_level)
     title = generate_title(match.match_name, True)
     round = get_match_round_abbreviation(match)
     event = extract_number_from_string(match.match_event)

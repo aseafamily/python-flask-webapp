@@ -83,6 +83,28 @@ def get_match_round_abbreviation(match):
 
     return round_name.upper()
 
+def generate_level(level_name):
+    # Check if the level_name is a string
+    level_name = str(level_name)
+
+    # Remove leading and trailing spaces
+    level_name = level_name.strip()
+
+    # Handle "Level X" and "Level X Open" formats
+    match = re.match(r'Level (\d)( Open)?', level_name, re.IGNORECASE)
+    if match:
+        level = match.group(1)
+        open_suffix = match.group(2)
+        return f"L{level}" + ("O" if open_suffix else "")
+
+    # Handle "USTA X.X" format
+    match = re.match(r'USTA (\d\.\d)', level_name, re.IGNORECASE)
+    if match:
+        return match.group(1)
+
+    # If no pattern matched, return the original string as-is
+    return generate_title(level_name)
+
 def generate_title(location_name, ignore_digits=True, including_year=False):
     # Extract year if including_year is True
     year = ""
