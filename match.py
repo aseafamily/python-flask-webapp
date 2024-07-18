@@ -7,7 +7,7 @@ from db_match import Match
 from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
-from sqlalchemy import cast, String, desc
+from sqlalchemy import cast, String, desc, or_
 from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string
 from flask_login import login_required
 import math
@@ -42,7 +42,14 @@ def match_index():
     .join(player2, Match.player2 == player2.id, isouter=True) \
     .join(player3, Match.player3 == player3.id, isouter=True) \
     .join(player4, Match.player4 == player4.id, isouter=True) \
-    .filter(Match.player1 == player_id) \
+    .filter(
+        or_(
+            Match.player1 == player_id,
+            Match.player2 == player_id,
+            Match.player3 == player_id,
+            Match.player4 == player_id
+        )
+    ) \
     .order_by(desc(Match.date), desc(Match.id)) \
     .all()
 

@@ -473,7 +473,7 @@
                         <div display="flex" class="Box Flex ddaRLc kFvGEE">
                             <div class="Box cORqut{% if is_doubles%} double_margin{% endif %}">
                                 <div class="Box cORqut">
-                                    <a href="/">
+                                    <a href="/match?u={{ match_data.Match.player1 }}">
                                         <div class="Box player_container">
                                             <div class="ihwaOf">
                                                 {{ match_data.player1_first_name[0] if match_data.player1_first_name }}{{ match_data.player1_last_name[0] if match_data.player1_last_name }}
@@ -493,7 +493,7 @@
                             {% if is_doubles%}
                             <div class="Box cORqut">
                                 <div class="Box cORqut">
-                                    <a href="/">
+                                    <a href="/match?u={{ match_data.Match.player3 }}">
                                         <div class="Box player_container">
                                             <div class="ihwaOf">
                                                 {{ match_data.player3_first_name[0] if match_data.player3_first_name }}{{ match_data.player3_last_name[0] if match_data.player3_last_name }}
@@ -524,7 +524,7 @@
                                     <!--
                                     <img src="https://api.sofascore.app/api/v1/team/50641/image" width="40" height="40" alt="Vekić D." class="Img jbaYme">
                                     -->
-                                    <a href="/">
+                                    <a href="/match?u={{ match_data.Match.player2 }}">
                                         <div class="Box player_container">
                                             <div class="ihwaOf">
                                                 {{ match_data.player2_first_name[0] if match_data.player2_first_name }}{{ match_data.player2_last_name[0] if match_data.player2_last_name }}
@@ -544,7 +544,7 @@
                             {% if is_doubles%}
                             <div class="Box cORqut">
                                 <div class="Box cORqut">
-                                    <a href="/">
+                                    <a href="/match?u={{ match_data.Match.player3 }}">
                                         <div class="Box player_container">
                                             <div class="ihwaOf">
                                                 {{ match_data.player4_first_name[0] if match_data.player4_first_name }}{{ match_data.player4_last_name[0] if match_data.player4_last_name }}
