@@ -1,3 +1,5 @@
+from mc_common import did_player_one_win
+
 var_styles = '''
 :root {
     --on-color-primary: #ffffff;
@@ -231,7 +233,7 @@ game_header_html = '''<div class="Box dflyPx">
 div_end = '</div>'
 match_div_start = '''<div elevation="2" class="Box ibMVdI">'''
 set_div_start = '''<div class="Box fTPNOD">'''
-game_div_start = '''<div display="flex" class="Box Flex kfFlmy cQgcrM">'''
+game_div_start = '''<div display="flex" class="Box Flex kfFlmy cQgcrM game-item-for-log">'''
 color_won_style_name = 'iDpWxX'
 color_lost_style_name = 'hykCvB'
 serve_html = '''<div class="Box jJmlRA"></div>'''
@@ -259,21 +261,6 @@ def ordinal(n):
     else:
         suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
     return str(n) + suffix
-
-def did_player_one_win(player_one_score, player_two_score):
-    # Convert "A" to 100
-    if player_one_score == "A":
-        player_one_score = 100
-    else:
-        player_one_score = int(player_one_score)
-
-    if player_two_score == "A":
-        player_two_score = 100
-    else:
-        player_two_score = int(player_two_score)
-
-    # Determine if player one won
-    return player_one_score > player_two_score
 
 def get_styles(include_var):
     result = "<style>"

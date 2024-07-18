@@ -17,6 +17,55 @@
             --terrain-grass:#62bd40;
             --sofa-singles-value:#e59c03;
         }
+    
+    .score-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #e1e1e1;
+        font: 400 14px / 20px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+    }
+    .score-finish-row {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #e1e1e1;
+        color: #000;
+        background-color: #0bb32a;
+        font: 400 14px / 20px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+    }
+    .top-row, .bottom-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0;
+        width: 100%;
+    }
+    .score-row:last-child {
+        border-bottom: none;
+    }
+    .player-score, .opponent-score {
+        width: 60px;
+        text-align: center;
+        color: #333;
+    }
+    .event-detail {
+        flex: 1;
+        margin: 0 40px;
+        color: #666;
+    }
+    .arrow {
+        color: #222226;
+        margin-left: 15px;
+        margin-right: 10px; /* Spacing between arrow and data */
+        transition: transform 0.3s; /* Smooth transition for rotating the arrow */
+    }
+    .expanded-content {
+        display: block;
+    }
     </style>
 </head>
 <body>
@@ -355,6 +404,43 @@
                     <div color="onSurface.nLv3" class="Text gcTSCL">0</div>
                     <div color="secondary.default" class="Text gGggNo">40</div>
                 </div>
+            </div>
+        </div>
+        <div class="score-finish-row">
+            <div class="top-row">
+                <span class="player-score" style="font-weight: bold; color: #fff">8</span>
+                <span class="event-detail" align="center" style="font-weight: bold; color: #fff">Game, Set, Match, Andrew Ma/Jovian </span>
+                <span class="opponent-score" style="font-weight: bold; color: #fff">4</span>
+            </div>
+            <div class="bottom-row">
+                <span class="event-detail" align="center" style="color: #fff">Pranav loses the point with a forced error</span>
+            </div>
+        </div>
+        <div class="expanded-content">
+            <div class="score-row">
+                <span class="player-score">40</span>
+                <span class="event-detail" align="center">Jovian  loses the point with a forehand volley unforced error</span>
+                <span class="opponent-score">30</span>
+            </div>
+            <div class="score-row">
+                <span class="player-score">40</span>
+                <span class="event-detail" align="center">Andrew Ma loses the point with a forced error</span>
+                <span class="opponent-score">15</span>
+            </div>
+            <div class="score-row">
+                <span class="player-score">40</span>
+                <span class="event-detail" align="center">Jovian  wins the point with a forehand volley winner</span>
+                <span class="opponent-score">0</span>
+            </div>
+            <div class="score-row">
+                <span class="player-score">30</span>
+                <span class="event-detail" align="center">Jason loses the point with a forced error</span>
+                <span class="opponent-score">0</span>
+            </div>
+            <div class="score-row">
+                <span class="player-score">15</span>
+                <span class="event-detail" align="center">Jovian  wins the point with a forehand volley winner</span>
+                <span class="opponent-score">0</span>
             </div>
         </div>
         <div display="flex" class="Box Flex kfFlmy cQgcrM">

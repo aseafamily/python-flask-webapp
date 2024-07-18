@@ -97,7 +97,7 @@ def generate_set(data_dict, set_index, set_length):
     set_content += div_end
     return set_content
 
-def get_scores_html(data_dict):
+def get_simple_scores_html(data_dict):
     html_content = get_styles(True)
     html_content += match_div_start
     sets_html = ''

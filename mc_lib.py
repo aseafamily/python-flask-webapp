@@ -276,6 +276,10 @@ def process_players(player1, player2):
 def get_scores_html_by_csv(csv_content, firstServe, include_var, is_doubles):
     sets, games, is_ad_scoring, player1, player2 = parse_csv_string(csv_content, is_doubles)
     html_content = get_statistics_html(player1, player2) if not is_doubles else ''
-    html_content += get_scores_html(sets, games, firstServe, include_var, is_ad_scoring)
-    html_content += get_logs_html(sets, games, player1, player2)
+    
+    log_in_scores = True
+    html_content += get_scores_html(sets, games, firstServe, include_var, is_ad_scoring, player1, player2, log_in_scores)
+
+    if not log_in_scores:
+        html_content += get_logs_html(sets, games, player1, player2)
     return html_content

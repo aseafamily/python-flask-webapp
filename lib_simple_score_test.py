@@ -79,7 +79,7 @@ new_string = '''
 '''
 data_dict = parse_string_to_dict(new_string)
 
-html_content = get_scores_html(data_dict)
+html_content = get_simple_scores_html(data_dict)
 
 # Write the string to the file
 file_name = "test.html"

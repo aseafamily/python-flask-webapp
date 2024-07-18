@@ -1,4 +1,6 @@
 from mc_styles import *
+from mc_logs import html_log_styles, get_game_log_html, html_in_score_scripts
+from mc_common import did_player1_won_game
 
 # HTML RENDER FUNCTIONS
 def find_one_set_point(player_one_game, player_two_game, is_ad_scoring, player1_score, player2_score, set_games_play):
@@ -51,29 +53,6 @@ def find_set_point(player_one_game_str, player_two_game_str, is_ad_scoring, play
     is_player2_set_point = find_one_set_point(player_two_game, player_one_game, is_ad_scoring, player2_score, player1_score, set_games_play)
 
     return is_player1_set_point, is_player2_set_point
-
-def did_player1_won_game(player_one_scores, player_two_scores, player_one_game, player_two_game, game_number, set_number, games):
-    is_player_one_won = True
-    is_player_one_won = did_player_one_win(player_one_scores[-1], player_two_scores[-1])
-    if player_one_scores[-1] == '40' and player_two_scores[-1] == '40':
-        player1_game = int(player_one_game)
-        player2_game = int(player_two_game)
-        if game_number == 1:
-            is_player_one_won = True if player1_game > player2_game else False
-        else:
-            prev_player1_game = 0
-            if game_number > 1:
-                prev_game = games[(set_number, game_number - 1)]
-                if prev_game:
-                    for point in prev_game:
-                        if (point[5] == '0' and point[6] == '0'):
-                            prev_player1_game = int(point[3])
-                            break
-                if player1_game > prev_player1_game:
-                    is_player_one_won = True
-                else:
-                    is_player_one_won = False
-    return is_player_one_won
 
 def generate_game(set_number, game_number, sets, games, firstServe, is_ad_scoring, set_games_play):
     if (set_number == 3 and game_number != 1):
@@ -197,7 +176,7 @@ def find_set_games_play(games, set_number):
     
     return result
 
-def generate_set(set, sets, games, firstServe, set_index, is_ad_scoring, set_games_play):
+def generate_set(set, sets, games, firstServe, set_index, is_ad_scoring, set_games_play, player1, player2, include_log):
     set_name = f"{ordinal(set_index)} set"
     set_content = set_div_start
     if set_index < len(sets):
@@ -205,8 +184,19 @@ def generate_set(set, sets, games, firstServe, set_index, is_ad_scoring, set_gam
     set_content += get_set_header_html(set_name)
     games_content = ''
 
+    game_start = True
+
     for game_number in range(1, len(sets[set]) + 1):
         game_content = generate_game(set, game_number, sets, games, firstServe, is_ad_scoring, set_games_play)
+        game_log = ''
+        if include_log:
+            #print(f"{set}, {game_number}")
+            if not (set == 3 and game_number != 1):                
+                game_log, game_start = get_game_log_html(sets, games, player1, player2, set, game_number, game_start, True)
+                if set == 3 and game_number == 1:
+                    game_log = "<div>" + game_log
+                if game_log:
+                    game_content += game_log
         if game_content:
             games_content = game_content + games_content
         if (firstServe):
@@ -218,18 +208,25 @@ def generate_set(set, sets, games, firstServe, set_index, is_ad_scoring, set_gam
     set_content += div_end
     return set_content, firstServe
 
-def get_scores_html(sets, games, firstServe, include_var, is_ad_scoring):
+def get_scores_html(sets, games, firstServe, include_var, is_ad_scoring, player1, player2, include_log = False):
     html_content = get_styles(include_var)
+
+    if include_log:
+        html_content += html_log_styles
+
     html_content += match_div_start
     sets_html = ''
 
     for index, set in enumerate(sets, start=1):
         set_games_play = find_set_games_play(games, set)
-        set_html, firstServe = generate_set(set, sets, games, firstServe, index, is_ad_scoring, set_games_play)
+        set_html, firstServe = generate_set(set, sets, games, firstServe, index, is_ad_scoring, set_games_play, player1, player2, include_log)
         sets_html = set_html + sets_html
 
     html_content += sets_html
     html_content += div_end
 
     html_content += toggle_script_html
+
+    if include_log:
+        html_content += html_in_score_scripts
     return html_content
