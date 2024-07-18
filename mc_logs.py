@@ -92,10 +92,10 @@ html_in_score_scripts = '''
                     
                     // Check if the next sibling has the .log-container class
                     if ($nextSibling.hasClass('log-container')) {
-                        $nextSibling.toggle();
+                        $nextSibling.slideToggle(400);
                     } else {
                         // Find the first child element with the class .log-container and toggle it
-                        $nextSibling.find('.log-container').first().toggle();
+                        $nextSibling.find('.log-container').first().slideToggle(400);
                     }
                 });
             });
