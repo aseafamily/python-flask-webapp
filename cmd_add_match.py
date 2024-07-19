@@ -47,15 +47,20 @@ class Club:
 
 # Initialize club objects
 clubs = {
+    'am': Club('Amy Yee Indoor Tennis Center', 'Seattle', 'WA'),
     'bc': Club('Bellevue Club', 'Bellevue', 'WA'),
     'cp': Club('Central Park Tennis Club', 'Kirkland', 'WA'),
     'etc': Club('Eastside Tennis Center', 'Kirkland', 'WA'),
     'fc': Club('Forest Crest Athletic Club', 'Mountlake Terrace', 'WA'),
     'hs': Club('Harbor Square Athletic Club', 'Edmonds', 'WA'),    
+    'mi': Club('Mercer Island Country Club', 'Mercer Island', 'WA'),    
     'ntc': Club('Nordstrom Tennis Center', 'Seattle', 'WA'),
+    'pl': Club('Pine Lake Columbia Athletic Clubs', 'Sammamish', 'WA'),
     'rb': Club('Robinswood Tennis Center', 'Bellevue', 'WA'),
+    'sl': Club('Silver Lake Columbia Athletic Club', 'Everett', 'WA'),
     'sp': Club('Tennis Center Sand Point', 'Seattle', 'WA'),
-    'ttc': Club('Tualatin Hills Tennis Stadium', 'Beaverton', 'OR')
+    'ttc': Club('Tualatin Hills Tennis Stadium', 'Beaverton', 'OR'),
+    'vtc': Club('Vancouver Tennis Center', 'Vancouver', 'WA')
 }
 ###################
 # Input for every match
@@ -67,36 +72,38 @@ use_googleKeep = True
 
 ##### The following need change
 is_singles = False
-date_input = "2017-11-18"
+date_input = "2019-11-17"
 duration = ""
 is_indoor=True
-club_key = "cp"
+club_key = "etc"
 location = clubs[club_key].name
 match_city=clubs[club_key].city
 match_state=clubs[club_key].state
-
+ 
 #location = "The Valley Athletic Club"
 #match_city="Tumwater"
 #match_state="WA"
 
-match_name = "2018 Mixed 18 & Over 6.0"
-match_level="USTA Mix 6.0"
-match_link="https://tennislink.usta.com/leagues/Main/StatsAndStandings.aspx?t=0&par1=2010809878#&&s=7%7c%7c0%7c%7c1006144802%7c%7c2018"
+match_name = "2019 Mixed 18 & Over 6.0 D"
+match_level="USTA 3.0"
+match_link="https://tennislink.usta.com/leagues/Main/StatsAndStandings.aspx?t=0&par1=2010809878#&&s=7%7c%7c0%7c%7c1007439257%7c%7c2020"
 match_event="Adults 18+"
-match_draw="Doubles 3"
+match_draw="Doubles 1"
 match_round="Season"
 comments='''
-ETC-TOPSpinners-Krishnamoorthy vs CP-Grobstok
-D3, 0-3
+ETC-ZenSpinners-Acuario vs EDG-Couples Doubles-Kirkegaard
+D1, 2-1
+
+AlexM/Kristin played D1 against a team that EDG stacked. We started extremely well, breaking an early serve and taking the lead in the 1st set. Alex hit some great down-the-line shots and lobs, really forcing the opponents to figure out how to play against him. The opponents were trying to target Kristin but she was like a wall, getting everything back. Some aggressive net points on our side gave us a 6-3 win in the 1st set. In the 2nd set, it looked like AlexM/Kristin really figured out how to play against these opponents. We did a great job keeping the ball deep and staying aggressive at the net (that's how we should be playing all the time! lol) ... Alex and Kristin played great and loose tennis, and their hard work paid off: we won the 2nd set 6-1. 
 '''
 scores=''
 
 match_string = """
-(2.45)
-/Celeste Sather (2.95)
-6-2; 2-6; 0-1
-Lawrence McCarthy (3.20)
-/Shelly Enstrom (2.42)
+(2.65)
+/Kristin Burton (2.78)
+6-3; 6-1
+Denny He (2.78)
+/Hong Ma (2.72)
 """
 
 ###################
