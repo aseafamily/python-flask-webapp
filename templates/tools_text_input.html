@@ -46,14 +46,47 @@
         button:hover {
             background-color: #0056b3;
         }
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
     </style>
 </head>
 <body>
 
 <form action="/tools/text-reader" method="post">
     <textarea name="text" id="text" placeholder="Enter your text here..."></textarea>
-    <button type="submit">Submit</button>
+    <div class="buttons-container">
+        <button type="button" id="pasteButton">Paste</button>
+        <button type="button" id="clearButton">Clear</button>
+        <button type="submit">Submit</button>
+    </div>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+            document.getElementById('text').value = text;
+        } catch (err) {
+            console.error('Failed to read clipboard contents: ', err);
+        }
+    });
+
+    document.getElementById('pasteButton').addEventListener('click', async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+            document.getElementById('text').value = text;
+        } catch (err) {
+            console.error('Failed to read clipboard contents: ', err);
+        }
+    });
+
+    document.getElementById('clearButton').addEventListener('click', () => {
+        document.getElementById('text').value = '';
+    });
+</script>
 
 </body>
 </html>

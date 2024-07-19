@@ -24,8 +24,11 @@
 </head>
 <body>
 
+    {% macro newline_to_br(text) %}
+        {{ text.replace('\n', '<br>') | safe }}
+    {% endmacro %}
 <div class="content">
-    {{ text }}
+    {{ newline_to_br(text) }}
 </div>
 
 <a class="link" href="/tools/text-reader">Back</a>

@@ -49,56 +49,50 @@ def parse_tennis_result(result_string):
     team1_won = team1_wins > team2_wins
     return team1_won, result
 
-def parse_match_string(match_string):
+def parse_match_string(match_string, rank_types):
+    def extract_rankings(player_string):
+        player_string = player_string.replace('/', '').strip()
+        rankings = {}
+        if '(' in player_string:
+            player_name, rank_str = player_string.split('(', 1)
+            rank_str = rank_str.replace(')', '').strip()
+            rank_values = re.split('[,;]', rank_str)
+            for i, rank_value in enumerate(rank_values):
+                if i < len(rank_types):
+                    rank_type = rank_types[i]
+                    rankings[f"{rank_type}"] = re.sub(r'[^\d.]+', '', rank_value)
+            player_name = player_name.strip()
+        else:
+            player_name = player_string
+        return player_name, rankings
+
     lines = match_string.strip().split('\n')
     is_doubles = len(lines) == 5
     match_info = {}
 
-    match_info['player1_usta'] = ''
-    match_info['player2_usta'] = ''
-    match_info['player3_usta'] = ''
-    match_info['player4_usta'] = ''
-    
+    player_keys = ['player1', 'player2', 'player3', 'player4']
+    for key in player_keys:
+        for rank_type in rank_types:
+            match_info[f"{key}_{rank_type}"] = ''
+
     if is_doubles:
-        match_info['player1'] = lines[0].replace('/', '').strip()
-        match_info['player3'] = lines[1].replace('/', '').strip()
-        match_info['player2'] = lines[3].replace('/', '').strip()
-        match_info['player4'] = lines[4].replace('/', '').strip()
+        match_info['player1'], player1_ranks = extract_rankings(lines[0])
+        match_info['player3'], player3_ranks = extract_rankings(lines[1])
+        match_info['player2'], player2_ranks = extract_rankings(lines[3])
+        match_info['player4'], player4_ranks = extract_rankings(lines[4])
         
-        if '(' in match_info['player1']:
-            match_info['player1'], match_info['player1_usta'] = match_info['player1'].split('(')
-            match_info['player1_usta'] = match_info['player1_usta'].replace(')', '').strip()
-            match_info['player1'] = match_info['player1'].strip()
-
-        if '(' in match_info['player2']:
-            match_info['player2'], match_info['player2_usta'] = match_info['player2'].split('(')
-            match_info['player2_usta'] = match_info['player2_usta'].replace(')', '').strip()
-            match_info['player2'] = match_info['player2'].strip()
-
-        if '(' in match_info['player3']:
-            match_info['player3'], match_info['player3_usta'] = match_info['player3'].split('(')
-            match_info['player3_usta'] = match_info['player3_usta'].replace(')', '').strip()
-            match_info['player3'] = match_info['player3'].strip()
-
-        if '(' in match_info['player4']:
-            match_info['player4'], match_info['player4_usta'] = match_info['player4'].split('(')
-            match_info['player4_usta'] = match_info['player4_usta'].replace(')', '').strip()
-            match_info['player4'] = match_info['player4'].strip()
+        match_info.update({f'player1_{k}': v for k, v in player1_ranks.items()})
+        match_info.update({f'player2_{k}': v for k, v in player2_ranks.items()})
+        match_info.update({f'player3_{k}': v for k, v in player3_ranks.items()})
+        match_info.update({f'player4_{k}': v for k, v in player4_ranks.items()})
 
         team1_won, result = parse_tennis_result(lines[2])
     else:
-        match_info['player1'] = lines[0].replace('/', '').strip()
-        match_info['player2'] = lines[2].strip()
+        match_info['player1'], player1_ranks = extract_rankings(lines[0])
+        match_info['player2'], player2_ranks = extract_rankings(lines[2])
         
-        if '(' in match_info['player1']:
-            match_info['player1'], match_info['player1_usta'] = match_info['player1'].split('(')
-            match_info['player1_usta'] = match_info['player1_usta'].replace(')', '').strip()
-            match_info['player1'] = match_info['player1'].strip()
-
-        if '(' in match_info['player2']:
-            match_info['player2'], match_info['player2_usta'] = match_info['player2'].split('(')
-            match_info['player2_usta'] = match_info['player2_usta'].replace(')', '').strip()
-            match_info['player2'] = match_info['player2'].strip()
+        match_info.update({f'player1_{k}': v for k, v in player1_ranks.items()})
+        match_info.update({f'player2_{k}': v for k, v in player2_ranks.items()})
 
         team1_won, result = parse_tennis_result(lines[1])
 
@@ -106,15 +100,14 @@ def parse_match_string(match_string):
     return team1_won, match_info
 
 # Example usage
-'''
 match_string = """
-(2.20)
-/Tom Lash (2.12)
-6-0; 6-4
-Christopher Nunes (2.08)
-/Jason Zhong (1.84)
+(2.73) (A)
+/Yuan Wang (2.69, UTR4)
+6-2; 6-3
+Stuart Howe (3.0S, UTR3)
+/CRAIG MONTGOMERY (2.5S, UTR3)
 """
-team1_won, match_info = parse_match_string(match_string)
-print(f"Team 1 won: {team1_won}")
-print(match_info)
-'''
+
+rank_types = ["usta", "utr"]
+team1_won, match_info = parse_match_string(match_string, rank_types)
+#print(match_info)
