@@ -229,7 +229,7 @@ def generate_item_not_empty(player1, player2, title, prefix, reverse=False):
     v1 = int(player1.data[key])
     v2 = int(player2.data[key])
 
-    if v1 and v2:
+    if v1 or v2:
         return generate_item(title, v1, v2, v1, v2, reverse)
 
     return html_content
