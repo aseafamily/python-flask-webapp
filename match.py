@@ -138,6 +138,11 @@ def get_logo(image_id):
     except ResourceNotFoundError:
         abort(404)
 
+def format_player_number(var1, var2, var3):
+    variables = [var1, var2, var3]
+    non_none_variables = ["{:.2f}".format(int(var) / 100) for var in variables if var is not None]
+    return ", ".join(non_none_variables)
+
 @match_bp.route('/match/<int:id>')
 @login_required
 def match_one(id):
@@ -175,7 +180,11 @@ def match_one(id):
         'player3_last_name': match_query.player3_last_name,
         'player4_first_name': match_query.player4_first_name,
         'player4_last_name': match_query.player4_last_name,
-        'tournament_logo': tournament_logo
+        'tournament_logo': tournament_logo,
+        'player1_number': format_player_number(match_query.Match.player1_wtn, match_query.Match.player1_utr, match_query.Match.player1_usta),
+        'player2_number': format_player_number(match_query.Match.player2_wtn, match_query.Match.player2_utr, match_query.Match.player2_usta),
+        'player3_number': format_player_number(match_query.Match.player3_wtn, match_query.Match.player3_utr, match_query.Match.player3_usta),
+        'player4_number': format_player_number(match_query.Match.player4_wtn, match_query.Match.player4_utr, match_query.Match.player4_usta)
     }
 
     # get scores

@@ -90,6 +90,9 @@ def divide_and_format(value):
         # Handle the case where the input is not an integer
         return None
 
+@app.template_filter('filter_none')
+def filter_none(variables):
+    return [var for var in variables if var is not None]
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

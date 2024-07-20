@@ -215,7 +215,7 @@
             display: flex;
             position: relative;
             height: 17px;
-            min-width: 16px;
+            min-width: 20px;
         }
 
         .gvJSKx .previousScore, .gvJSKx .currentScore {
@@ -446,6 +446,19 @@
             border-radius: 50%;
         }
 
+        .tb_score {
+            position: absolute;
+            top: 0px;
+            left: 9px;
+            color: var(--on-surface-nLv1);
+            text-align: left;
+            font: 400 10px / 1 "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            vertical-align: super;
+        }
+
+        .score_container {
+            width: 100%;
+        }
 
     </style>
 </head> 
@@ -508,10 +521,12 @@
                             {% endif %}
                             <div class="Box gtmGgU">
                                 <bdi class="Text jzDXwu">{{ match_data.player1_first_name }} {{ match_data.player1_last_name }}</bdi>
+                                <bdi color="onSurface.nLv3" class="Text hKtpIg">{{ match_data.player1_number }}</bdi>
                                 {% if is_doubles%}
                                 <bdi class="Text jzDXwu">{{ match_data.player3_first_name }} {{ match_data.player3_last_name }}</bdi>
+                                <bdi color="onSurface.nLv3" class="Text hKtpIg">{{ match_data.player3_number }}</bdi>
                                 {% endif %}
-                                <bdi color="onSurface.nLv3" class="Text hKtpIg"></bdi>
+                                
                             </div>
                         </div>                        
                     </div>
@@ -559,10 +574,11 @@
                             {% endif %}
                             <div class="Box gtmGgU">
                                 <bdi class="Text jzDXwu">{{ match_data.player2_first_name }} {{ match_data.player2_last_name }}</bdi>
+                                <bdi color="onSurface.nLv3" class="Text hKtpIg">{{ match_data.player2_number }}</bdi>
                                 {% if is_doubles%}
                                 <bdi class="Text jzDXwu">{{ match_data.player4_first_name }} {{ match_data.player4_last_name }}</bdi>
+                                <bdi color="onSurface.nLv3" class="Text hKtpIg">{{ match_data.player4_number }}</bdi>
                                 {% endif %}
-                                <bdi color="onSurface.nLv3" class="Text hKtpIg"></bdi>
                             </div>
                         </div>
                     </div>
@@ -574,12 +590,18 @@
                         {%  set team1_set1_won = (match_data.Match.team1_set1 if match_data.Match.team1_set1 is not none else 0) >= (match_data.Match.team2_set1 if match_data.Match.team2_set1 is not none else 0) %}
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color:unset !important">
-                                <span color="onSurface.nLv1" class="Text {% if team1_set1_won %}won_score{% else %}lost_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team1_set1 if match_data.Match.team1_set1 is not none }}</span>
+                                <div class="score_container">
+                                    <span color="onSurface.nLv1" class="Text {% if team1_set1_won %}won_score{% else %}lost_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team1_set1 if match_data.Match.team1_set1 is not none }}</span>
+                                </div>
+                                <sup font-size="micro" class="tb_score">{{ match_data.Match.team1_set1_tb if match_data.Match.team1_set1_tb is not none }}</sup>
                             </div>
                         </div>
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color:unset !important">
-                                <span color="onSurface.nLv3" class="Text {% if team1_set1_won %}lost_score{% else %}won_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team2_set1 if match_data.Match.team2_set1 is not none }}</span>
+                                <div class="score_container">
+                                    <span color="onSurface.nLv3" class="Text {% if team1_set1_won %}lost_score{% else %}won_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team2_set1 if match_data.Match.team2_set1 is not none }}</span>
+                                </div>
+                                <sup font-size="micro" class="tb_score">{{ match_data.Match.team2_set1_tb if match_data.Match.team2_set1_tb is not none }}</sup>
                             </div>
                         </div>
                     </div>
@@ -588,12 +610,18 @@
                         {%  set team1_set2_won = (match_data.Match.team1_set2 if match_data.Match.team1_set2 is not none else 0) >= (match_data.Match.team2_set2 if match_data.Match.team2_set2 is not none else 0) %}
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv3" class="Text {% if team1_set2_won %}won_score{% else %}lost_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team1_set2 if match_data.Match.team1_set2 is not none }}</span>
+                                <div class="score_container">
+                                    <span color="onSurface.nLv3" class="Text {% if team1_set2_won %}won_score{% else %}lost_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team1_set2 if match_data.Match.team1_set2 is not none }}</span>
+                                </div>
+                                <sup font-size="micro" class="tb_score">{{ match_data.Match.team1_set2_tb if match_data.Match.team1_set2_tb is not none }}</sup>
                             </div>
                         </div>
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv1" class="Text {% if team1_set2_won %}lost_score{% else %}won_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team2_set2 if match_data.Match.team2_set2 is not none }}</span>
+                                <div class="score_container">
+                                    <span color="onSurface.nLv1" class="Text {% if team1_set2_won %}lost_score{% else %}won_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team2_set2 if match_data.Match.team2_set2 is not none }}</span>
+                                </div>
+                                <sup font-size="micro" class="tb_score">{{ match_data.Match.team2_set2_tb if match_data.Match.team2_set2_tb is not none }}</sup>
                             </div>
                         </div>
                     </div>
@@ -602,12 +630,18 @@
                         {%  set team1_set3_won = (match_data.Match.team1_set3 if match_data.Match.team1_set3 is not none else 0) >= (match_data.Match.team2_set3 if match_data.Match.team2_set3 is not none else 0) %}
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv3" class="Text {% if team1_set3_won %}won_score{% else %}lost_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team1_set3 if match_data.Match.team1_set3 is not none }}</span>
+                                <div class="score_container">
+                                    <span color="onSurface.nLv3" class="Text {% if team1_set3_won %}won_score{% else %}lost_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team1_set3 if match_data.Match.team1_set3 is not none }}</span>
+                                </div>
+                                <sup font-size="micro" class="tb_score">{{ match_data.Match.team1_set3_tb if match_data.Match.team1_set3_tb is not none }}</sup>
                             </div>
                         </div>
                         <div class="Box cORqut">
                             <div display="flex" direction="column" class="Box Flex jTiCHC MkeW sc-eeDRCY gvJSKx score-box" style="background-color: unset !important;">
-                                <span color="onSurface.nLv1" class="Text {% if team1_set3_won %}lost_score{% else %}won_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team2_set3 if match_data.Match.team2_set3 is not none }}</span>
+                                <div class="score_container">
+                                    <span color="onSurface.nLv1" class="Text {% if team1_set3_won %}lost_score{% else %}won_score{% endif %} currentScore" style="font-weight:bold;font-size:14px">{{ match_data.Match.team2_set3 if match_data.Match.team2_set3 is not none }}</span>
+                                </div>
+                                <sup font-size="micro" class="tb_score">{{ match_data.Match.team2_set3_tb if match_data.Match.team2_set3_tb is not none }}</sup>
                             </div>
                         </div>
                     </div>
