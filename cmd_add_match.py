@@ -49,18 +49,23 @@ class Club:
 clubs = {
     'am': Club('Amy Yee Indoor Tennis Center', 'Seattle', 'WA'),
     'bc': Club('Bellevue Club', 'Bellevue', 'WA'),
+    'bta': Club('Bellevue Tennis Academy', 'Bellevue', 'WA'),
     'cp': Club('Central Park Tennis Club', 'Kirkland', 'WA'),
     'etc': Club('Eastside Tennis Center', 'Kirkland', 'WA'),
     'fc': Club('Forest Crest Athletic Club', 'Mountlake Terrace', 'WA'),
     'hs': Club('Harbor Square Athletic Club', 'Edmonds', 'WA'),    
+    'mc': Club('Mill Creek Tennis Club', 'Mill Creek', 'WA'),    
     'mi': Club('Mercer Island Country Club', 'Mercer Island', 'WA'),    
     'ntc': Club('Nordstrom Tennis Center', 'Seattle', 'WA'),
+    'pc': Club('PRO Club Bellevue', 'Bellevue', 'WA'),
     'pl': Club('Pine Lake Columbia Athletic Clubs', 'Sammamish', 'WA'),
     'rb': Club('Robinswood Tennis Center', 'Bellevue', 'WA'),
     'sl': Club('Silver Lake Columbia Athletic Club', 'Everett', 'WA'),
+    'stc': Club('Seattle Tennis Club', 'Seattle', 'WA'),
     'sp': Club('Tennis Center Sand Point', 'Seattle', 'WA'),
     'ttc': Club('Tualatin Hills Tennis Stadium', 'Beaverton', 'OR'),
-    'vtc': Club('Vancouver Tennis Center', 'Vancouver', 'WA')
+    'vtc': Club('Vancouver Tennis Center', 'Vancouver', 'WA'),
+    'wsc': Club('Woodinville Sports Club', 'Woodinville', 'WA')
 }
 ###################
 # Input for every match
@@ -71,11 +76,11 @@ team1_serve = True
 use_googleKeep = True
 
 ##### The following need change
-is_singles = False
-date_input = "2020-01-09"
+is_singles = False # will be changed laster
+date_input = "2022-07-30"
 duration = ""
 is_indoor=True
-club_key = "pl"
+club_key = "cp"
 location = clubs[club_key].name
 match_city=clubs[club_key].city
 match_state=clubs[club_key].state
@@ -84,33 +89,31 @@ match_state=clubs[club_key].state
 #match_city="Tumwater"
 #match_state="WA"
 
-match_name = "2020 Adult 40 & Over - 3.0 Men"
-match_level="USTA 3.0"
-match_link="https://tennislink.usta.com/leagues/Main/StatsAndStandings.aspx?t=0&par1=2010809878#&&s=7%7c%7c0%7c%7c1007658036%7c%7c2020"
+match_name = "2022 Mixed 40 & Over 7.0"
+match_level="USTA Mix 7.0"
+match_link="https://tennislink.usta.com/leagues/Main/StatsAndStandings.aspx?t=0&par1=2010809878#&&s=7%7c%7c0%7c%7c1009084118%7c%7c2022"
 match_event="Adults 40+"
-match_draw="Doubles 3"
+match_draw="Doubles 1"
 match_round="Season"
 comments='''
-ETC-RazorBacks-Che vs PL-Rangaswami
-D3, 5-0 
+CP-Key in Bowl-Chen vs EDG-Netsetters-Gliner
+D1, 0-3
 '''
 scores=''
 
 match_string = """
-(2.73, UTR4.47) (A)
-/Shu Shen (2.93, UTR5)
-7-5; 6-4
-David Presba (2.65, UTR4)
-/Gregory Snow (2.86, UTR4)
+(2.85, UTR4.27, 22.6)
+/Merrie Vieco (3.73, UTR4.83, 19.3)
+3-6; 6-4; 0(8)-1(10)
+Brad Lee (3.62, UTR6.48, 16.9)
+/Gunjan Tykodi (2.84, UTR2.64, 24.3)
 """
 rank_types = ["usta", "utr"]
 ###################
 
-
+team1_won, match_info, is_singles = parse_match_string(match_string, rank_types)
 
 ###################
-
-team1_won, match_info = parse_match_string(match_string, rank_types)
 
 # Player info
 player2 = match_info["player2"]

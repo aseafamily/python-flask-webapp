@@ -97,7 +97,7 @@ def parse_match_string(match_string, rank_types):
         team1_won, result = parse_tennis_result(lines[1])
 
     match_info.update(result)
-    return team1_won, match_info
+    return team1_won, match_info, (not is_doubles)
 
 # Example usage
 match_string = """
@@ -109,5 +109,5 @@ Stuart Howe (3.0S, UTR3)
 """
 
 rank_types = ["usta", "utr"]
-team1_won, match_info = parse_match_string(match_string, rank_types)
+team1_won, match_info, is_singles = parse_match_string(match_string, rank_types)
 #print(match_info)
