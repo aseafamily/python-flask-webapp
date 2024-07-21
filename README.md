@@ -13,6 +13,19 @@ pip install -r requirements.txt
 flask run
 
 
+# Git process
+
+1. git status
+On branch master
+
+2. git checkout -b (emily)(andrew)/new-feature
+Switched to a new branch 'feature/new-feature'
+
+3. git push origin feature/new-feature
+Push the new branch to the remote repository:
+
+4. Create a pull request.
+
 # Deploy a Python (Flask) web app to Azure App Service - Sample Application
 
 This is the sample Flask application for the Azure Quickstart [Deploy a Python (Django or Flask) web app to Azure App Service](https://docs.microsoft.com/en-us/azure/app-service/quickstart-python). For instructions on how to create the Azure resources and deploy the application to Azure, refer to the Quickstart article.

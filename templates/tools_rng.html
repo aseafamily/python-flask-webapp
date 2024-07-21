@@ -8,13 +8,26 @@
       body {
         font-family: Arial, sans-serif;
         text-align: center;
-        margin-top: 50px;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f4;
       }
-      input[type="text"] {
-        padding: 8px;
-        margin: 5px;
-        width: 100px;
+      .container {
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      input[type="number"] {
+        padding: 10px;
+        margin: 10px 0;
+        width: calc(100% - 20px);
+        box-sizing: border-box;
         text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
       }
       button {
         padding: 10px 20px;
@@ -22,6 +35,7 @@
         color: white;
         border: none;
         cursor: pointer;
+        border-radius: 4px;
       }
       button:hover {
         background-color: #45a049;
@@ -33,14 +47,16 @@
     </style>
   </head>
   <body>
-    <h2>Random Number Generator</h2>
-    <label for="min">Min:</label>
-    <input type="text" id="min" value="1" />
-    <label for="max">Max:</label>
-    <input type="text" id="max" value="100" />
-    <br /><br />
-    <button onclick="generateRandomNumber()">Generate Random Number</button>
-    <div id="result"></div>
+    <div class="container">
+      <h2>Random Number Generator</h2>
+      <label for="min">Min:</label>
+      <input type="number" id="min" value="1" inputmode="numeric" pattern="[0-9]*" />
+      <label for="max">Max:</label>
+      <input type="number" id="max" value="100" inputmode="numeric" pattern="[0-9]*" />
+      <br /><br />
+      <button onclick="generateRandomNumber()">Generate Random Number</button>
+      <div id="result"></div>
+    </div>
 
     <script>
       function generateRandomNumber() {
