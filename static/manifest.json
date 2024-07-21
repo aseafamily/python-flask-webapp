@@ -1,0 +1,21 @@
+{
+    "short_name": "BHM",
+    "name": "Blue House Mall",
+    "icons": [
+      {
+        "src": "/static/images/bhm_icon_192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/static/images/bhm_icon_512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "/",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "theme_color": "#000000"
+  }
+  

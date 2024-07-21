@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome to Blue House Mall</title>
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/test.css') }}">
+    <meta name="apple-mobile-web-app-title" content="BHM">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <style>
         .emily {
             color: black !important;
@@ -111,6 +115,7 @@
                             <a href="/tennis/diagram?u=0" class="small">Diagrams</a>,
                             <a href="/match?u=0">Match</a>,
                             <a href="/tools/text-reader">Text Reader</a>
+                            pwa
                         </div>
                         <div class="entry">
                             <a href="/serve/status">Tennis Status</a>,
