@@ -10,4 +10,8 @@ def get_text_reader():
         return render_template("tools_text_reader.html", text=text)
     else:
         return render_template("tools_text_input.html")
+
+@tools_bp.route('/tools/rng')
+def get_rng():
+    return render_template("tools_rng.html")
     
