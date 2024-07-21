@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Number Generator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+      input[type="text"] {
+        padding: 8px;
+        margin: 5px;
+        width: 100px;
+        text-align: center;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      #result {
+        font-size: 24px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Random Number Generator</h2>
+    <label for="min">Min:</label>
+    <input type="text" id="min" value="1" />
+    <label for="max">Max:</label>
+    <input type="text" id="max" value="100" />
+    <br /><br />
+    <button onclick="generateRandomNumber()">Generate Random Number</button>
+    <div id="result"></div>
+
+    <script>
+      function generateRandomNumber() {
+        var min = parseInt(document.getElementById("min").value);
+        var max = parseInt(document.getElementById("max").value);
+
+        if (isNaN(min) || isNaN(max)) {
+          alert("Please enter valid numbers for Min and Max.");
+          return;
+        }
+
+        var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        document.getElementById("result").textContent =
+          "Random Number: " + randomNumber;
+      }
+    </script>
+  </body>
+</html>
