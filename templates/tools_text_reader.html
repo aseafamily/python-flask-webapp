@@ -5,21 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Large Text for Reader Mode</title>
     <style>
-        body {
-            font-family: Georgia, 'Times New Roman', Times, serif;
-            line-height: 1.6;
-            margin: 20px;
-        }
-        .content {
-            font-size: 1.2em;
-        }
-        .link {
-            display: block;
-            margin-top: 20px;
-            font-size: 1.1em;
-            color: #0066cc;
-            text-decoration: none;
-        }
+        /* General body styling for dark mode */
+body {
+    font-family: Georgia, serif; /* A classic serif font for readability */
+    line-height: 1.6; /* Increased line height for better readability */
+    color: #e0e0e0; /* Light text color for near-black background */
+    background-color: #000000; /* True black background */
+    padding: 20px; /* Padding around the content */
+    margin: 0; /* Remove default margin */
+}
+
+/* Styling for large text blocks */
+.large-text {
+    font-size: 1.5em; /* Increase font size for better readability */
+    line-height: 1.7; /* Adjust line height for larger text */
+    max-width: 800px; /* Limit the width to prevent overly long lines of text */
+    margin: 0 auto; /* Center the text block */
+    padding: 10px; /* Padding within the text block */
+    background-color: #000000; /* Very dark gray background for text block */
+    border-radius: 8px; /* Rounded corners for a softer appearance */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
+}
+
+/* Additional styling for headings */
+.large-text h1, .large-text h2, .large-text h3 {
+    margin-top: 1.5em; /* Space above headings */
+    margin-bottom: 0.5em; /* Space below headings */
+    font-weight: bold; /* Bold headings for emphasis */
+    color: #e0e0e0; /* Lighter color for headings to stand out */
+}
+
+/* Paragraph styling */
+.large-text p {
+    margin-bottom: 1.5em; /* Space between paragraphs */
+}
+
+/* Links within the text */
+.large-text a {
+    color: #4a90e2; /* Bright blue color for links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.large-text a:hover {
+    text-decoration: underline; /* Underline links on hover */
+}
+
     </style>
 </head>
 <body>
@@ -27,7 +57,7 @@
     {% macro newline_to_br(text) %}
         {{ text.replace('\n', '<br>') | safe }}
     {% endmacro %}
-<div class="content">
+<div class="large-text">
     {{ newline_to_br(text) }}
 </div>
 
