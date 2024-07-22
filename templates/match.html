@@ -599,6 +599,10 @@
                             <div class="Box {% if match_data.match.team1_won %}won_sign{% else %}lost_sign{% endif %}">
                                 <div class="ihwaOf">{% if match_data.match.team1_won %}W{% else %}L{% endif %}</div>
                             </div>
+                            {% if match_data.match.team1_won %}
+                                {% set win_count = stats.singles_won + stats.doubles_won - match_data.wins + 1 %}
+                                <div style="font-size: 11px; text-align: center; margin-top: 3px;{% if win_count % 10 == 0 %}font-weight: bold;color:#0bb32a;{% endif %}">{{ win_count }}</div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

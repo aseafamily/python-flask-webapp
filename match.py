@@ -71,6 +71,8 @@ def match_index():
     stats.doubles_all = 0
     stats.titles = 0
 
+    wins = 0
+
     for match in match_query:
 
         if query_type == 's' and match.Match.type != 'S':
@@ -131,6 +133,9 @@ def match_index():
         diff_indicator = (diff_games / games) if games else 0
         diff_indicator = diff_indicator * 100 * 0.95 + 5
 
+        if match.Match.team1_won:
+            wins += 1
+
         match_data = {
             'match': match.Match,
             'player1_first_name': match.player1_first_name,
@@ -147,7 +152,8 @@ def match_index():
             'tournament_logo': tournament_logo,
             'event_name': event_name,
             'diff_indicator': diff_indicator,
-            'show_match_name': match.Match.match_name != last_match_name
+            'show_match_name': match.Match.match_name != last_match_name, 
+            'wins': wins
         }
         results.append(match_data)
         last_match_name = match.Match.match_name
