@@ -26,7 +26,13 @@ match_bp = Blueprint('match', __name__)
 @match_bp.route('/match')
 @login_required
 def match_index():
+    class Stats:
+        # Empty class
+        pass
+
     player_id = request.args.get('u')
+    player = Player.query.get_or_404(player_id)
+
     player1 = aliased(Player)
     player2 = aliased(Player)
     player3 = aliased(Player)
@@ -55,13 +61,35 @@ def match_index():
 
     results = []
     last_match_name = None
+    stats = Stats()
+    stats.singles_won = 0
+    stats.singles_all = 0
+    stats.doubles_won = 0
+    stats.doubles_all = 0
+    stats.titles = 0
+
     for match in match_query:
+        i_am_team1 = (int(player_id) == int(match.Match.player1) or (match.Match.player3 is not None and int(player_id) == int(match.Match.player3)))
+
+        i_won = False
+        if i_am_team1:
+            if match.Match.team1_won:
+                i_won = True
+        else:
+            if not match.Match.team1_won:
+                i_won = True
         if match.Match.type == 'S':
             team1_name = f"{match.player1_first_name} {match.player1_last_name}"
             team2_name = f"{match.player2_first_name} {match.player2_last_name}"
+            stats.singles_all += 1
+            if i_won:
+                stats.singles_won += 1
         else:  # Assuming 'Doubles'
             team1_name = get_name_short(match.player1_first_name, match.player1_last_name) + " / " + get_name_short(match.player3_first_name, match.player3_last_name)
             team2_name = get_name_short(match.player2_first_name, match.player2_last_name) + " / " + get_name_short(match.player4_first_name, match.player4_last_name)
+            stats.doubles_all += 1
+            if i_won:
+                stats.doubles_won += 1
             
         '''
         if match.Match.player1_seed:
@@ -107,7 +135,7 @@ def match_index():
         results.append(match_data)
         last_match_name = match.Match.match_name
 
-    return render_template('match.html', results=results)
+    return render_template('match.html', results=results, stats=stats, player=player)
 
 def get_name_short(first_name, last_name):
     name = f"{first_name} {last_name[0]}" if last_name else first_name

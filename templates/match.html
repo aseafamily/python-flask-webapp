@@ -317,16 +317,72 @@
             margin-left: 5px;
             margin-top: -3px;
         }
+
+.player_profile {
+    color: #fff;
+    width: 100%;
+    padding: 12px;
+}
+.player_name {
+    padding: 0;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+}
+.player_row {
+    display: flex;
+    justify-content: space-between;
+}
+.player-stats {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+.player-stats-details {
+    display: flex;
+    margin-top: 5px;
+}
+.player-stats-details .type {
+    margin-right: 8px;
+}
     </style>
 </head>
 <body>
     <div class="container">
         <div style="background-color: #374df5; display: flex; justify-content: space-between;padding: 5px;">
-            <a href="/">
-                <div style="width: 40px;text-align: center;vertical-align: middle;">       
-                    <span style="color: white;font-weight: 800; font-size: 20px;">Home</span>
+            <div class="player_profile">
+                <div class="player_row">
+                    <div class="player_name">
+                        <span>{{ player.first_name }} {{ player.last_name }}</span>
+                    </div>
+                    <div>
+                        <a href="/">
+                            <div style="text-align: center;vertical-align: middle;">       
+                                <span style="color: white; font-size: 20px;">Home</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>                
+                
+                <div class="player-stats">
+                    <div class="player-stats-details">
+                        <div class="type">Singles:</div>
+                        <div class="wins">{{ stats.singles_won }} - {{ stats.singles_all - stats.singles_won }}<span class="stat-label">
+                            {% if stats.singles_all != 0 %}
+                                ({{ ((stats.singles_won / stats.singles_all) * 100) | round | int }}%)
+                            {% endif %}
+                        </span></div>
+                    </div>
+                    <div class="player-stats-details">
+                        <div class="type">Doubles:</div>
+                        <div class="wins">{{ stats.doubles_won }} - {{ stats.doubles_all - stats.doubles_won }}<span class="stat-label">
+                            {% if stats.doubles_all != 0 %}
+                                ({{ ((stats.doubles_won / stats.doubles_all) * 100) | round | int }}%)
+                            {% endif %}
+                        </span></div>
+                    </div>
                 </div>
-            </a>
+            </div>
         </div>
         
         <!-- Start results iteration -->
