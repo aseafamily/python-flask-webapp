@@ -33,6 +33,9 @@ def match_index():
     player_id = request.args.get('u')
     player = Player.query.get_or_404(player_id)
 
+    query_type = request.args.get('type')
+    query_year = request.args.get('year')
+
     player1 = aliased(Player)
     player2 = aliased(Player)
     player3 = aliased(Player)
@@ -69,6 +72,20 @@ def match_index():
     stats.titles = 0
 
     for match in match_query:
+
+        if query_type == 's' and match.Match.type != 'S':
+            continue
+        elif query_type == 'd' and match.Match.type != 'D':
+            continue
+
+        filter_year = 0
+        if query_year is not None and query_year.isdigit():
+            filter_year = int(query_year)
+        
+        if filter_year > 0:
+            if match.Match.date.year != filter_year:
+                continue
+
         i_am_team1 = (int(player_id) == int(match.Match.player1) or (match.Match.player3 is not None and int(player_id) == int(match.Match.player3)))
 
         i_won = False

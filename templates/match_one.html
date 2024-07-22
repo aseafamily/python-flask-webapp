@@ -461,10 +461,49 @@
         }
 
     </style>
+
+    <script>
+        // Function to get a cookie
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function updateHyperlink() {
+            const type = getCookie('selectedType');
+            const year = getCookie('selectedYear');
+            const link = document.getElementById('back-url');
+            
+            if (!link) return; // If the link does not exist, exit the function
+            
+            let url = new URL(link.href);
+            
+            // Set or update 'type' parameter if available
+            if (type) {
+                url.searchParams.set('type', type);
+            }
+            
+            // Set or update 'year' parameter if available
+            if (year) {
+                url.searchParams.set('year', year);
+            }
+            
+            link.href = url.toString();
+        }
+
+        // Initialize the hyperlink update on page load
+        window.onload = updateHyperlink;
+    </script>
 </head> 
 <body>
     <div style="background-color: #374df5; display: flex; justify-content: space-between;padding: 5px;">
-        <a href="/match?u={{ match_data.Match.player1 }}">
+        <a id="back-url" href="/match?u={{ match_data.Match.player1 }}">
             <div style="width: 40px;text-align: center;vertical-align: middle;">       
                 <!--<span style="color: white;font-weight: 800; font-size: 20px;">&lt;</span>-->
                 <svg width="24px" height="24px" viewBox="-102.4 -102.4 1228.80 1228.80" fill="#FFFFFF" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#FFFFFF" stroke-width="86.01599999999999"><g id="SVGRepo_bgCarrier" stroke-width="0"><rect x="-102.4" y="-102.4" width="1228.80" height="1228.80" rx="0" fill="#374df5" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M669.6 849.6c8.8 8 22.4 7.2 30.4-1.6s7.2-22.4-1.6-30.4l-309.6-280c-8-7.2-8-17.6 0-24.8l309.6-270.4c8.8-8 9.6-21.6 2.4-30.4-8-8.8-21.6-9.6-30.4-2.4L360.8 480.8c-27.2 24-28 64-0.8 88.8l309.6 280z" fill=""></path></g></svg>
