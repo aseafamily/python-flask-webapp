@@ -520,7 +520,15 @@
                                     </div>
                                     {% endif %}
                                     <bdi class="{% if match_data.match.team1_won %}won_name{% else %}lost_name{% endif %}">{{ match_data.team1_name }}</bdi>
-                                    <sup font-size="micro" class="tb_seed">{{ match_data.match.player1_seed if match_data.match.player1_seed is not none else "" }}</sup>
+                                    <sup font-size="micro" class="tb_seed">
+                                        {% if match_data.match.player1 == 0 %}
+                                            {{ match_data.match.player1_usta | divide_and_format if match_data.match.player1_usta is not none else "" }}
+                                        {% else %}
+                                            {% if match_data.match.type == 'S' %}
+                                                {{ match_data.match.player1_utr | divide_and_format if match_data.match.player1_utr is not none else "" }}
+                                            {% endif %}
+                                        {% endif %}
+                                    </sup>
                                 </div>
                                 <div display="flex" class="Box ggRYVx jLRkRA">
                                     {% if match_data.match.type == 'S' %}
@@ -529,7 +537,11 @@
                                     </div>
                                     {% endif %}
                                     <bdi class="{% if match_data.match.team1_won %}lost_name{% else %}won_name{% endif %}">{{ match_data.team2_name }}</bdi>
-                                    <sup font-size="micro" class="tb_seed">{{ match_data.match.player2_seed if match_data.match.player2_seed is not none else "" }}</sup>
+                                    <sup font-size="micro" class="tb_seed">
+                                        {% if match_data.match.player1 != 0 and match_data.match.type == 'S' %}
+                                            {{ match_data.match.player2_utr | divide_and_format if match_data.match.player2_utr is not none else "" }}
+                                        {% endif %}
+                                    </sup>
                                 </div>
                             </div>
                             <div display="flex" class="Box eqGkKN hdXfIu">
