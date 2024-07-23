@@ -12,6 +12,9 @@ import math
 
 serve_bp = Blueprint('serve', __name__)
 
+stats_start_date = datetime.strptime("2024-04-15", "%Y-%m-%d")
+
+
 @serve_bp.route('/serve', methods=['POST', 'GET'])
 @login_required
 def serve_index():
@@ -303,7 +306,7 @@ def calculate_total_serves(player_id):
     return total_serves if total_serves is not None else 0
 
 def calculate_total_tennis_duration(player_id):
-    total_serves = Tennis.query.filter_by(player=player_id).with_entities(db.func.sum(Tennis.duration)).scalar()
+    total_serves = Tennis.query.filter_by(player=player_id).filter(Tennis.date > stats_start_date).with_entities(db.func.sum(Tennis.duration)).scalar()
     return total_serves if total_serves is not None else 0
 
 def calculate_weekly_tennis_duration(player_id):
@@ -312,6 +315,7 @@ def calculate_weekly_tennis_duration(player_id):
                                                 func.sum(Tennis.duration),
                                                 func.count(Tennis.id)) \
                                     .filter(Tennis.player == player_id) \
+                                    .filter(Tennis.date > stats_start_date) \
                                     .group_by(func.extract('year', Tennis.date), func.extract('week', Tennis.date)) \
                                     .all()
     total_duration_weekly = 0

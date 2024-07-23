@@ -5,10 +5,10 @@ from tennis import get_or_create_player, generate_match_summary
 from datetime import datetime, timedelta
 from db_tennis import Tennis
 from db_match import Match
-from cmd_match_score import parse_match_string
+from cmd_match_score import parse_match_string, parse_title
 
 def get_integer_from_form(key: str) -> int:
-    if key in match_info:
+    if key in match_info and match_info[key]:
         try:
             return int(match_info[key])
         except ValueError:
@@ -49,17 +49,22 @@ class Club:
 clubs = {
     'am': Club('Amy Yee Indoor Tennis Center', 'Seattle', 'WA'),
     'bc': Club('Bellevue Club', 'Bellevue', 'WA'),
+    'betc': Club('Boeing Employees Tennis Club', 'Kent', 'WA'),
     'bta': Club('Bellevue Tennis Academy', 'Bellevue', 'WA'),
     'cp': Club('Central Park Tennis Club', 'Kirkland', 'WA'),
+    'eb': Club('Edgebrook Club', 'Bellevue', 'WA'),
     'etc': Club('Eastside Tennis Center', 'Kirkland', 'WA'),
     'fc': Club('Forest Crest Athletic Club', 'Mountlake Terrace', 'WA'),
     'hs': Club('Harbor Square Athletic Club', 'Edmonds', 'WA'),    
+    'jtc': Club('Jupiter Tennis Center', 'Edgewood', 'WA'),    
     'mc': Club('Mill Creek Tennis Club', 'Mill Creek', 'WA'),    
-    'mi': Club('Mercer Island Country Club', 'Mercer Island', 'WA'),    
+    'micc': Club('Mercer Island Country Club', 'Mercer Island', 'WA'),    
+    'nh': Club('Newport Hills Swim and Tennis Club', 'Bellevue', 'WA'),
     'ntc': Club('Nordstrom Tennis Center', 'Seattle', 'WA'),
     'pc': Club('PRO Club Bellevue', 'Bellevue', 'WA'),
     'pl': Club('Pine Lake Columbia Athletic Clubs', 'Sammamish', 'WA'),
     'rb': Club('Robinswood Tennis Center', 'Bellevue', 'WA'),
+    'rtc': Club('Redmond Tennis Center', 'Redmond', 'WA'),
     'sl': Club('Silver Lake Columbia Athletic Club', 'Everett', 'WA'),
     'stc': Club('Seattle Tennis Club', 'Seattle', 'WA'),
     'sp': Club('Tennis Center Sand Point', 'Seattle', 'WA'),
@@ -69,18 +74,59 @@ clubs = {
 }
 ###################
 # Input for every match
-player1_id = 0
+player1_id = 2
 team1_serve = True
 
 
 use_googleKeep = True
 
-##### The following need change
+##### 
 is_singles = False # will be changed laster
 date_input = "2022-07-30"
 duration = ""
 is_indoor=True
 club_key = "cp"
+
+##################################
+
+##### The following need change
+title_string = '''
+6/19/2021 RTC
+'''
+
+match_string = """
+[1] (2.49)
+6-4; 6(5)-7(7); 1(10)-0(7)
+[2] Sisong Li (1)
+"""
+rank_types = ["utr"]
+
+match_name = "Redmond GTA Girls Level 6"
+#match_name = "NW Washington Winter 2020 Junior Team Tennis 12U Intermediate"
+match_level="Level 4"
+#match_level="USTA Junior Team"
+#match_level="UTR Event"
+match_link="https://playtennis.usta.com/Competitions/redmondtenniscenter/Tournaments/draws/ABF5CD89-BDFA-4984-9387-A8820E134133"
+match_event="Girls'12 & under"
+#match_event="12 & under"
+#match_event="Level-based Singles"
+match_draw="Main"
+#match_draw="Consolation"
+#match_draw="Doubles 2"
+match_round="Final"
+#match_round="Season"
+#match_round="Match 3"
+comments='''
+'''
+scores='''
+'''
+
+###################
+
+date_input, club_key, duration = parse_title(title_string)
+#duration = "210"
+
+
 location = clubs[club_key].name
 match_city=clubs[club_key].city
 match_state=clubs[club_key].state
@@ -88,28 +134,6 @@ match_state=clubs[club_key].state
 #location = "The Valley Athletic Club"
 #match_city="Tumwater"
 #match_state="WA"
-
-match_name = "2022 Mixed 40 & Over 7.0"
-match_level="USTA Mix 7.0"
-match_link="https://tennislink.usta.com/leagues/Main/StatsAndStandings.aspx?t=0&par1=2010809878#&&s=7%7c%7c0%7c%7c1009084118%7c%7c2022"
-match_event="Adults 40+"
-match_draw="Doubles 1"
-match_round="Season"
-comments='''
-CP-Key in Bowl-Chen vs EDG-Netsetters-Gliner
-D1, 0-3
-'''
-scores=''
-
-match_string = """
-(2.85, UTR4.27, 22.6)
-/Merrie Vieco (3.73, UTR4.83, 19.3)
-3-6; 6-4; 0(8)-1(10)
-Brad Lee (3.62, UTR6.48, 16.9)
-/Gunjan Tykodi (2.84, UTR2.64, 24.3)
-"""
-rank_types = ["usta", "utr"]
-###################
 
 team1_won, match_info, is_singles = parse_match_string(match_string, rank_types)
 
