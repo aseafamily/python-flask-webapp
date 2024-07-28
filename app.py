@@ -131,6 +131,10 @@ def index():
 def favicon():
     abort(404)
 
+@app.route("/test/mansonry")
+def test_mansonry():
+    return render_template("test-masonry-js.html")
+
 if __name__ == "__main__":
     app.debug = True
     app.run(debug=True)

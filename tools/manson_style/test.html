@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masonry Style Text Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .masonry {
+            column-count: 4; /* Adjust the number of columns as needed */
+            column-gap: 16px;
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .masonry-item {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 100%; /* Ensure items take full column width */
+            text-align: center;
+        }
+
+        .masonry-item p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="masonry">
+        <div class="masonry-item">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+        <div class="masonry-item">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula.</p>
+        </div>
+        <div class="masonry-item">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula. Proin luctus lorem nec nunc vehicula, a cursus arcu congue.</p>
+        </div>
+        <div class="masonry-item">
+            <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+        <div class="masonry-item">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula. Proin luctus lorem nec nunc vehicula, a cursus arcu congue. In hac habitasse platea dictumst. Integer nec dolor sit amet nisl euismod aliquam. Nullam accumsan velit at facilisis tempus.</p>
+        </div>
+        <!-- Add more text items as needed -->
+    </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+    <style>
+        .grid-item 
+        { 
+            width: 200px;
+            background: white;
+        }
+        .grid-item--width2 { width: 400px; }
+        .grid-content
+        {
+            margin: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .img-container img
+        {
+            width: 100%;
+        }
+
+        .text-container
+        {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <button onclick="sayHello()">Click Me</button>
+
+        <script>
+            function sayHello() {
+                var $grid = $('.grid').masonry({
+                    // options
+                    itemSelector: '.grid-item',
+                    columnWidth: 200
+                });
+                $grid.masonry('layout');
+            }
+        </script>
+    </div>
+    <!-- from: https://masonry.desandro.com/ -->
+    <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: #e2f6d3;">
+                <div class="img-container">
+                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+                </div>
+                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: #efeff1;">
+                <div class="img-container">
+                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+                </div>
+                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula.</div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: #f39f76;">
+                <div class="img-container">
+                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+                </div>
+                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula. Proin luctus lorem nec nunc vehicula, a cursus arcu congue.</div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: #e9e3d4;">
+                <div class="img-container">
+                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+                </div>
+                <div class="text-container">Lorem ipsum dolor sit amet.</div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: lightskyblue;">
+                <div class="img-container">
+                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+                </div>
+                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula. Proin luctus lorem nec nunc vehicula, a cursus arcu congue. In hac habitasse platea dictumst. Integer nec dolor sit amet nisl euismod aliquam. Nullam accumsan velit at facilisis tempus.</div>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+
+</html>

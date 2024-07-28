@@ -48,15 +48,24 @@ class Club:
 # Initialize club objects
 clubs = {
     'am': Club('Amy Yee Indoor Tennis Center', 'Seattle', 'WA'),
+    'aytc': Club('Amy Yee Indoor Tennis Center', 'Seattle', 'WA'),
     'bc': Club('Bellevue Club', 'Bellevue', 'WA'),
     'betc': Club('Boeing Employees Tennis Club', 'Kent', 'WA'),
     'bta': Club('Bellevue Tennis Academy', 'Bellevue', 'WA'),
     'cp': Club('Central Park Tennis Club', 'Kirkland', 'WA'),
+    'cph': Club('Lakewood Racquet and Sport Club', 'Tacoma', 'WA'),
+    'cttc': Club('Timberhill Tennis Club', 'CORVALLIS', 'OR'),
     'eb': Club('Edgebrook Club', 'Bellevue', 'WA'),
+    'ect': Club('El Conquistador Tennis', 'Tucson', 'AZ'),
+    'edgebrook': Club('Edgebrook Club', 'Bellevue', 'WA'),
+    'estc': Club('Eugene Swim and Tennis Club', 'Eugene', 'WA'),
     'etc': Club('Eastside Tennis Center', 'Kirkland', 'WA'),
     'fc': Club('Forest Crest Athletic Club', 'Mountlake Terrace', 'WA'),
+    'gtc': Club('Galbraith Tennis Center', 'Tacoma', 'WA'),
+    'gts': Club('Gorin Tennis at Sprinker Recreation Center', 'Tacoma', 'WA'),
     'hs': Club('Harbor Square Athletic Club', 'Edmonds', 'WA'),    
     'jtc': Club('Jupiter Tennis Center', 'Edgewood', 'WA'),    
+    'jupiter': Club('Jupiter Tennis Center', 'Edgewood', 'WA'),    
     'mc': Club('Mill Creek Tennis Club', 'Mill Creek', 'WA'),    
     'micc': Club('Mercer Island Country Club', 'Mercer Island', 'WA'),    
     'nh': Club('Newport Hills Swim and Tennis Club', 'Bellevue', 'WA'),
@@ -69,12 +78,16 @@ clubs = {
     'stc': Club('Seattle Tennis Club', 'Seattle', 'WA'),
     'sp': Club('Tennis Center Sand Point', 'Seattle', 'WA'),
     'ttc': Club('Tualatin Hills Tennis Stadium', 'Beaverton', 'OR'),
+    'untc': Club('USTA National Tennis Center', 'Flushing', 'NY'),
+    'utsa': Club('The University of Texas at San Antonio', 'San Antonio', 'TX'),
     'vtc': Club('Vancouver Tennis Center', 'Vancouver', 'WA'),
-    'wsc': Club('Woodinville Sports Club', 'Woodinville', 'WA')
+    'wrac': Club('Wenatchee Racquet And Athletic Club', 'Wenatchee', 'WA'),
+    'wsc': Club('Woodinville Sports Club', 'Woodinville', 'WA'),
+    'ytc': Club('Yakima Tennis Club', 'Yakima', 'WA')
 }
 ###################
 # Input for every match
-player1_id = 2
+player1_id = 1
 team1_serve = True
 
 
@@ -83,56 +96,55 @@ use_googleKeep = True
 ##### 
 is_singles = False # will be changed laster
 date_input = "2022-07-30"
-duration = ""
-is_indoor=True
+duration = "90"
 club_key = "cp"
 
 ##################################
-
 ##### The following need change
+is_indoor=True
+
 title_string = '''
-6/19/2021 RTC
+2/11/2024 ytc
 '''
 
 match_string = """
-[1] (2.49)
-6-4; 6(5)-7(7); 1(10)-0(7)
-[2] Sisong Li (1)
+[1]
+6(6)-7(8); 2-6
+[3] Jason Ye
 """
-rank_types = ["utr"]
+rank_types = ["utr", "wtn"]
 
-match_name = "Redmond GTA Girls Level 6"
-#match_name = "NW Washington Winter 2020 Junior Team Tennis 12U Intermediate"
-match_level="Level 4"
+match_name = '''VTC Boys Tournament'''
+#match_name = "Seattle: Flex Leagues April 12th-May 16th (Winter Session 3)"
+match_level="Level 3"
+#match_level="Little Mo Regionals"
 #match_level="USTA Junior Team"
-#match_level="UTR Event"
-match_link="https://playtennis.usta.com/Competitions/redmondtenniscenter/Tournaments/draws/ABF5CD89-BDFA-4984-9387-A8820E134133"
-match_event="Girls'12 & under"
-#match_event="12 & under"
-#match_event="Level-based Singles"
+#match_level="UTR"
+match_link="https://playtennis.usta.com/competitions/vancouver-tennis-center/Tournaments/draws/963BEB96-9BAB-44F7-93AA-A939E19C7B2A"
+match_event="Boys'12 & under"
+#match_event="Singles"
+#match_event="12 & under league"
+#match_event="Level Based Singles"
 match_draw="Main"
 #match_draw="Consolation"
-#match_draw="Doubles 2"
-match_round="Final"
+#match_draw="Doubles 3"
+#match_round="Quarterfinals"
+#match_round="Semifinals"
 #match_round="Season"
-#match_round="Match 3"
+match_round="Semifinals"
 comments='''
 '''
 scores='''
 '''
-
 ###################
-
 date_input, club_key, duration = parse_title(title_string)
 #duration = "210"
-
-
 location = clubs[club_key].name
 match_city=clubs[club_key].city
 match_state=clubs[club_key].state
  
-#location = "The Valley Athletic Club"
-#match_city="Tumwater"
+#location = "Grasslawn Park"
+#match_city="Bellevue"
 #match_state="WA"
 
 team1_won, match_info, is_singles = parse_match_string(match_string, rank_types)
