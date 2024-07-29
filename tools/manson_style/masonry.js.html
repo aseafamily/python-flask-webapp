@@ -5,7 +5,7 @@
     <style>
         .grid-item 
         { 
-            width: 200px;
+            width: 48%;
             background: white;
         }
         .grid-item--width2 { width: 400px; }
@@ -37,14 +37,15 @@
                 var $grid = $('.grid').masonry({
                     // options
                     itemSelector: '.grid-item',
-                    columnWidth: 200
+                    //columnWidth: 450
+                    percentPosition: true
                 });
                 $grid.masonry('layout');
             }
         </script>
     </div>
     <!-- from: https://masonry.desandro.com/ -->
-    <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+    <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 450 }'>
         <div class="grid-item">
             <div class="grid-content" style="background-color: #e2f6d3;">
                 <div class="img-container">

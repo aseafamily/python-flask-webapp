@@ -408,6 +408,26 @@
                         <span>{{ player.first_name }} {{ player.last_name }}</span>
                     </div>
                     <div>
+                        <a href="#" id="masonry-link">
+                            <div style="text-align: center;vertical-align: middle;">       
+                                <span style="color: white; font-size: 20px;">Masonry View</span>
+                            </div>
+                        </a>
+                    </div>
+                    <script>
+                        // Get the current URL
+                        const currentUrl = window.location.href;
+                
+                        // Create a new URL object from the current URL
+                        const url = new URL(currentUrl);
+                
+                        // Set or update the query string parameter
+                        url.searchParams.set('view', '1'); // Change 'param' and 'value' as needed
+                
+                        // Update the href attribute of the link
+                        document.getElementById('masonry-link').href = url.href;
+                    </script>
+                    <div>
                         <a href="/">
                             <div style="text-align: center;vertical-align: middle;">       
                                 <span style="color: white; font-size: 20px;">Home</span>

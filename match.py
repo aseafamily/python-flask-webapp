@@ -8,7 +8,7 @@ from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String, desc, or_
-from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string
+from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string, generate_match_summary
 from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
@@ -35,6 +35,7 @@ def match_index():
 
     query_type = request.args.get('type')
     query_year = request.args.get('year')
+    query_view = request.args.get('view')
 
     player1 = aliased(Player)
     player2 = aliased(Player)
@@ -136,6 +137,8 @@ def match_index():
         if match.Match.team1_won:
             wins += 1
 
+        summary = generate_match_summary(match.Match, f"{match.player2_first_name} {match.player2_last_name}", f"{match.player3_first_name} {match.player3_last_name}", f"{match.player4_first_name} {match.player4_last_name}")
+
         match_data = {
             'match': match.Match,
             'player1_first_name': match.player1_first_name,
@@ -153,12 +156,15 @@ def match_index():
             'event_name': event_name,
             'diff_indicator': diff_indicator,
             'show_match_name': match.Match.match_name != last_match_name, 
-            'wins': wins
+            'wins': wins,
+            'summary': summary
         }
         results.append(match_data)
         last_match_name = match.Match.match_name
 
-    return render_template('match.html', results=results, stats=stats, player=player)
+    template_page = 'match_masonry.html' if query_view == '1' else 'match.html'
+
+    return render_template(template_page, results=results, stats=stats, player=player)
 
 def get_name_short(first_name, last_name):
     name = f"{first_name} {last_name[0]}" if last_name else first_name
@@ -294,6 +300,32 @@ def match_one(id):
                     scores_html = get_simple_scores_html(data_dict)
 
     return render_template('match_one.html', match_data = match_data, scores_html=scores_html, image_files=updated_images)
+
+@match_bp.route('/tennis_images_for/<path:image_path>')
+def tennis_images_for(image_path):
+    file_share_name = "bhmfiles"
+    folder_name = f"tennis/{image_path}"
+    connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    image_files = []
+    updated_images = []
+    try:
+        service_client = ShareServiceClient.from_connection_string(connection_string)
+        directory_client = service_client.get_share_client(file_share_name).get_directory_client(folder_name)
+
+        # List all files and directories in the directory
+        files = list(directory_client.list_directories_and_files())
+
+        # Filter and retrieve files with extensions .png or .jpg
+        image_files = [file.name for file in files if file.name.lower().endswith(('.png', '.jpg'))]
+
+        updated_images = [f"{image_path}/" + element for element in image_files]
+        for file_name in updated_images:
+            print("Image files found:")
+            print(file_name)
+        
+    except Exception as e:
+        print(f"An error occurred when getting {folder_name}: {e}")
+    return jsonify(updated_images)
 
 @match_bp.route('/tennis_images/<path:image_path>', methods=['DELETE', 'GET'])
 def tennis_image(image_path):

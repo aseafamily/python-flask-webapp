@@ -26,14 +26,17 @@
         {
             padding: 10px;
         }
+
+        a {
+            text-decoration: none;
+            background-color: transparent;
+        }
     </style>
 </head>
 <body>
     <div>
-        <button onclick="sayHello()">Click Me</button>
-
         <script>
-            function sayHello() {
+            function Relayout() {
                 var $grid = $('.grid').masonry({
                     // options
                     itemSelector: '.grid-item',
@@ -41,18 +44,52 @@
                 });
                 $grid.masonry('layout');
             }
+
+            // Function to fetch and generate images
+            async function fetchAndGenerateImages(matchId) {
+                try {
+                    const response = await fetch(`/tennis_images_for/${matchId}`);
+                    const data = await response.json();
+
+                    const matchDiv = document.getElementById(`match_images_${matchId}`);
+
+                    data.forEach(imageUrl => {
+                        if (imageUrl) {
+                            const img = document.createElement('img');
+                            img.src = "/tennis_images/" + imageUrl;
+                            img.onload = function() {
+                                Relayout(); // Call the external Relayout function
+                            };
+                            matchDiv.appendChild(img);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error fetching images:', error);
+                }
+            }
         </script>
     </div>
     <!-- from: https://masonry.desandro.com/ -->
     <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 450 }'>
-        <div class="grid-item">
-            <div class="grid-content" style="background-color: #e2f6d3;">
-                <div class="img-container">
-                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+        {% for match_data in results %}
+            <div class="grid-item">
+                <div class="grid-content" style="background-color: #e2f6d3;">
+                    <div class="img-container" id="match_images_{{ match_data.match.tennis_id }}">
+                    </div>
+                    {% set formatted_date = "%d/%d/%d"|format(match_data.match.date.year, match_data.match.date.month, match_data.match.date.day) %}
+                    <div class="text-container">
+                        <a class="match_item" href="/match/{{ match_data.match.id }}">
+                            <div>{{ formatted_date }} {{ match_data.match.location }} {{ match_data.match.city }}, {{ match_data.match.state }}</div>
+                            <div>{{ match_data.summary }}</div>
+                        </a>
+                    </div>
                 </div>
-                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
             </div>
-        </div>
+            <script>
+                fetchAndGenerateImages({{ match_data.match.tennis_id }});
+            </script>
+        {% endfor %}
+        <!--
         <div class="grid-item">
             <div class="grid-content" style="background-color: #efeff1;">
                 <div class="img-container">
@@ -85,6 +122,7 @@
                 <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula. Proin luctus lorem nec nunc vehicula, a cursus arcu congue. In hac habitasse platea dictumst. Integer nec dolor sit amet nisl euismod aliquam. Nullam accumsan velit at facilisis tempus.</div>
             </div>
         </div>
+        -->
     </div>
 
     
