@@ -35,9 +35,9 @@
             padding: 10px;
             letter-spacing: .00625em;
             font-family: "Google Sans", Roboto, Arial, sans-serif;
-            font-size: .95rem;
+            font-size: 1rem;
             font-weight: 500;
-            line-height: 1.25rem;
+            line-height: 1.5rem;
             padding-top: 12px;
             color: #222226;
         }
@@ -241,7 +241,7 @@
                 }
             }
 
-            Relayout();
+            window.onload = Relayout;
 
             // Function to fetch and generate images
             async function fetchAndGenerateImages(matchId, force_layout = false) {
@@ -395,7 +395,7 @@
                             </div>
                         </a>
                         {% if match_data.match.comments %}
-                        <div style="color: midnightblue;word-wrap: break-word; white-space: pre-wrap; margin-top: 5px;">{{ match_data.match.comments }}</div>
+                        <div style="color: #374df5;word-wrap: break-word; white-space: pre-wrap; margin-top: 5px;">{{ match_data.match.comments }}</div>
                         {% endif %}
                     </div>
                     <div class="IZ65Hb-hSRGPd-e1YmVc-FCjw3e">

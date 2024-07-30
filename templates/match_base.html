@@ -234,6 +234,10 @@
                 const selectYearElement = document.getElementById('year-select');
                 if (year) {
                     selectYearElement.value = year;
+                } else {
+                    // Set to the current year if 'year' parameter is not available
+                    const currentYear = new Date().getFullYear();
+                    selectYearElement.value = currentYear;
                 }
             }
 

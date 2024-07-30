@@ -82,7 +82,12 @@ def match_index():
             continue
 
         filter_year = 0
-        if query_year is not None and query_year.isdigit():
+        current_year = datetime.now().year
+        if query_year == "all":
+            filter_year = 0
+        elif query_year is None or query_year.strip() == "":
+            filter_year = current_year
+        elif query_year.isdigit():
             filter_year = int(query_year)
         
         if filter_year > 0:
