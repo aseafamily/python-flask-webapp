@@ -34,9 +34,9 @@
             padding: 10px;
             letter-spacing: .00625em;
             font-family: "Google Sans", Roboto, Arial, sans-serif;
-            font-size: .875rem;
+            font-size: .95rem;
             font-weight: 500;
-            line-height: 1.5rem;
+            line-height: 1.25rem;
             padding-top: 12px;
             color: #222226;
         }
@@ -346,7 +346,7 @@
                     {% set minutes = duration_minutes % 60 %}
                     
                     <div class="text-container">
-                        <a class="match_item hSRGPd-e1YmVc-r4nke" href="/match/{{ match_data.match.id }}">
+                        <a class="match_item" href="/match/{{ match_data.match.id }}">
                             <div>{{ formatted_date }} 
                                 <span class="hSRGPd-e1YmVc-hSRGPd">
                                 {{ match_data.match.location | short_name }}, {{ match_data.match.match_city }}, {{ match_data.match.match_state }}
