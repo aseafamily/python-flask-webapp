@@ -1,6 +1,7 @@
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'match_base.html' %}
+
+{% block match_list %}
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
     <style>
@@ -216,9 +217,8 @@
     position: relative;
 }        
     </style>
-</head>
-<body>
-    <div>
+
+    
         <script>
             // JavaScript to detect iOS devices
             function isIOS() {
@@ -310,7 +310,7 @@
                 }
             }
         </script>
-    </div>
+    
     <!-- from: https://masonry.desandro.com/ -->
 
     <div class="overlay" id="overlay">
@@ -425,6 +425,4 @@
     </div>
 
     
-</body>
-
-</html>
+{% endblock %}
