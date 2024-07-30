@@ -56,6 +56,46 @@
         .match_item > *:not(:first-child) {
             margin-top: 15px;
         }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .overlay-content {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .overlay iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -85,12 +125,19 @@
             Relayout();
 
             // Function to fetch and generate images
-            async function fetchAndGenerateImages(matchId) {
+            async function fetchAndGenerateImages(matchId, force_layout = false) {
                 try {
                     const response = await fetch(`/tennis_images_for/${matchId}`);
                     const data = await response.json();
 
                     const matchDiv = document.getElementById(`match_images_${matchId}`);
+
+                    // Clear all existing elements within matchDiv
+                    matchDiv.innerHTML = '';
+
+                    if (force_layout) {
+                        Relayout();
+                    }
 
                     data.forEach(imageUrl => {
                         if (imageUrl) {
@@ -99,6 +146,9 @@
                             img.onload = function() {
                                 Relayout(); // Call the external Relayout function
                             };
+                            img.ondblclick = function() {
+                                confirmDelete(imageUrl, matchId);
+                            };
                             matchDiv.appendChild(img);
                         }
                     });
@@ -106,9 +156,51 @@
                     console.error('Error fetching images:', error);
                 }
             }
+
+            var overlay_tennis_id = '';
+
+            function openOverlay(tennis_id) {
+                overlay_tennis_id = tennis_id;
+                document.getElementById('overlay').style.display = 'flex';
+                document.getElementById('iframe').src = '/tennis/uploadpage/' + tennis_id;
+            }
+            
+            function closeOverlay() {
+                document.getElementById('overlay').style.display = 'none';
+                fetchAndGenerateImages(overlay_tennis_id); // Call the function when overlay is closed
+            }
+
+            function confirmDelete(image, matchId) {
+                var result = confirm("Are you sure you want to delete this image?");
+                if (result) {
+                    fetch(`/tennis_images/${image}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            //location.reload();
+                            fetchAndGenerateImages(matchId, true);
+                        } else {
+                            alert('Failed to delete the image.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while trying to delete the image.');
+                    });
+                }
+            }
         </script>
     </div>
     <!-- from: https://masonry.desandro.com/ -->
+
+    <div class="overlay" id="overlay">
+        <div class="overlay-content">
+            <button class="close-button" onclick="closeOverlay()">X</button>
+            <iframe src="https://www.example.com" id="iframe"></iframe>
+        </div>
+    </div>
+
     <div class="grid">
         {% for match_data in results %}
             <div class="grid-item">
@@ -180,6 +272,9 @@
                             </div>
                             <div>{{ match_data.match.location }}, {{ match_data.match.match_city }}, {{ match_data.match.match_state }}</div>
                         </a>
+                        <div>
+                            <button onclick="openOverlay({{ match_data.match.tennis_id }})">Add images</button>
+                        </div>
                     </div>
                 </div>
             </div>
