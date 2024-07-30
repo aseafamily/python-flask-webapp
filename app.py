@@ -9,7 +9,7 @@ from serve import serve_bp
 from tennis import tennis_bp
 from games import games_bp
 from match import match_bp
-from utils import user_dict
+from utils import user_dict, generate_title
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms import LoginForm
 from user import User, users
@@ -93,6 +93,10 @@ def divide_and_format(value):
 @app.template_filter('filter_none')
 def filter_none(variables):
     return [var for var in variables if var is not None]
+
+@app.template_filter('short_name')
+def short_name(variables):
+    return generate_title(variables)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
