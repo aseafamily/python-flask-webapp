@@ -8,6 +8,9 @@
             width: 450px;
             background: white;
         }
+        body.ios .grid-item {
+            width: 100%;
+        }
         .grid-item--width2 { width: 400px; }
         .grid-content
         {
@@ -15,6 +18,9 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+        }
+        body.ios .grid-content {
+            margin-bottom: 20px;
         }
 
         .img-container img
@@ -25,6 +31,7 @@
         .text-container
         {
             padding: 10px;
+            font:400 20px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
         }
 
         a {
@@ -36,14 +43,28 @@
 <body>
     <div>
         <script>
-            function Relayout() {
-                var $grid = $('.grid').masonry({
-                    // options
-                    itemSelector: '.grid-item',
-                    columnWidth: 450
-                });
-                $grid.masonry('layout');
+            // JavaScript to detect iOS devices
+            function isIOS() {
+                return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             }
+
+            // Add class to body if iOS is detected
+            if (isIOS()) {
+                document.body.classList.add('ios');
+            }
+
+            function Relayout() {
+                if (!isIOS()) {
+                    var $grid = $('.grid').masonry({
+                        // options
+                        itemSelector: '.grid-item',
+                        columnWidth: 450
+                    });
+                    $grid.masonry('layout');
+                }
+            }
+
+            Relayout();
 
             // Function to fetch and generate images
             async function fetchAndGenerateImages(matchId) {
@@ -70,16 +91,30 @@
         </script>
     </div>
     <!-- from: https://masonry.desandro.com/ -->
-    <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 450 }'>
+    <div class="grid">
         {% for match_data in results %}
             <div class="grid-item">
-                <div class="grid-content" style="background-color: #e2f6d3;">
+                {% set background_color = '#e2f6d3' %} <!-- Default color -->
+                {% if match_data.match.type == 'S' %}
+                    {% if match_data.match.team1_won %}
+                        {% set background_color = '#e2f6d3' %}
+                    {% else %}
+                        {% set background_color = '#efeff1' %}
+                    {% endif %}
+                {% else %}
+                    {% if match_data.match.team1_won %}
+                        {% set background_color = '#f39f76' %}
+                    {% else %}
+                        {% set background_color = '#e9e3d4' %}
+                    {% endif %}
+                {% endif %}
+                <div class="grid-content" style="background-color: {{ background_color }}">
                     <div class="img-container" id="match_images_{{ match_data.match.tennis_id }}">
                     </div>
                     {% set formatted_date = "%d/%d/%d"|format(match_data.match.date.year, match_data.match.date.month, match_data.match.date.day) %}
                     <div class="text-container">
                         <a class="match_item" href="/match/{{ match_data.match.id }}">
-                            <div>{{ formatted_date }} {{ match_data.match.location }} {{ match_data.match.city }}, {{ match_data.match.state }}</div>
+                            <div>{{ formatted_date }} {{ match_data.match.location }} {{ match_data.match.match_city }}, {{ match_data.match.match_state }}</div>
                             <div>{{ match_data.summary }}</div>
                         </a>
                     </div>

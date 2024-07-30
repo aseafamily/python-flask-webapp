@@ -16,3 +16,4 @@ wtforms
 flask-bcrypt
 pytz
 azure-storage-file-share
+Pillow
