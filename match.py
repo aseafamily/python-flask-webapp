@@ -8,7 +8,7 @@ from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String, desc, or_
-from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string, generate_match_summary
+from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string, generate_match_summary, generate_match_score
 from flask_login import login_required
 import math
 from sqlalchemy.orm import aliased
@@ -137,7 +137,7 @@ def match_index():
         if match.Match.team1_won:
             wins += 1
 
-        summary = generate_match_summary(match.Match, f"{match.player2_first_name} {match.player2_last_name}", f"{match.player3_first_name} {match.player3_last_name}", f"{match.player4_first_name} {match.player4_last_name}")
+        summary = generate_match_score(match.Match)
 
         match_data = {
             'match': match.Match,
@@ -157,7 +157,11 @@ def match_index():
             'diff_indicator': diff_indicator,
             'show_match_name': match.Match.match_name != last_match_name, 
             'wins': wins,
-            'summary': summary
+            'summary': summary,
+            'player1_number': format_player_number(match.Match.player1_wtn, match.Match.player1_utr, match.Match.player1_usta),
+            'player2_number': format_player_number(match.Match.player2_wtn, match.Match.player2_utr, match.Match.player2_usta),
+            'player3_number': format_player_number(match.Match.player3_wtn, match.Match.player3_utr, match.Match.player3_usta),
+            'player4_number': format_player_number(match.Match.player4_wtn, match.Match.player4_utr, match.Match.player4_usta)
         }
         results.append(match_data)
         last_match_name = match.Match.match_name

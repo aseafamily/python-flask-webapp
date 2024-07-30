@@ -1,5 +1,6 @@
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
     <style>
@@ -31,12 +32,29 @@
         .text-container
         {
             padding: 10px;
-            font:400 20px "Sofascore Sans", -apple-system, system-ui, BlinkMacSystemFont, Dubai, "Segoe UI", Tahoma, "Noto Sans Arabic UI", "Dejavu Sans", Arial, sans-serif;
+            letter-spacing: .00625em;
+            font-family: "Google Sans", Roboto, Arial, sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.5rem;
+            padding-top: 12px;
+            color: black;
         }
 
         a {
             text-decoration: none;
             background-color: transparent;
+        }
+
+        .match_item {
+            color: black;
+            display: block;
+        }
+        .match_item > *:first-child {
+            font-weight: 500;
+        }
+        .match_item > *:not(:first-child) {
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -112,10 +130,55 @@
                     <div class="img-container" id="match_images_{{ match_data.match.tennis_id }}">
                     </div>
                     {% set formatted_date = "%d/%d/%d"|format(match_data.match.date.year, match_data.match.date.month, match_data.match.date.day) %}
+                    {% set duration_minutes = match_data.match.duration %}
+                    {% set hours = duration_minutes // 60 %}
+                    {% set minutes = duration_minutes % 60 %}
+                    
                     <div class="text-container">
                         <a class="match_item" href="/match/{{ match_data.match.id }}">
-                            <div>{{ formatted_date }} {{ match_data.match.location }} {{ match_data.match.match_city }}, {{ match_data.match.match_state }}</div>
-                            <div>{{ match_data.summary }}</div>
+                            <div>{{ formatted_date }} 
+                                {% if duration_minutes > 0 %}
+                                    {% if hours > 0 %}
+                                        ({{ '{}h{}m'.format(hours, minutes) if minutes > 0 else '{}h'.format(hours) }})
+                                    {% else %}
+                                        ({{ '{}m'.format(minutes) if minutes > 0 else '0m' }})
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if match_data.match.player1_seed %}
+                                    [{{ match_data.match.player1_seed }}]
+                                {% endif %}
+                                {% if match_data.player1_number %}
+                                    ({{ match_data.player1_number }})
+                                {% endif %}
+                                <br/>
+                                {% if match_data.match.type == 'D' %}
+                                    /{{ match_data.player3_first_name }} {{ match_data.player3_last_name }}
+                                    {% if match_data.player3_number %}
+                                        ({{ match_data.player3_number }})
+                                    {% endif %}
+                                    <br/>
+                                {% endif %}
+                                {{ match_data.summary }}
+                                <br/>
+                                {% if match_data.match.player2_seed %}
+                                    [{{ match_data.match.player2_seed }}]
+                                {% endif %}
+                                {{ match_data.player2_first_name }} {{ match_data.player2_last_name }}
+                                {% if match_data.player2_number %}
+                                    ({{ match_data.player2_number }})
+                                {% endif %}
+                                {% if match_data.match.type == 'D' %}
+                                    <br/>
+                                    /{{ match_data.player4_first_name }} {{ match_data.player4_last_name }}
+                                    {% if match_data.player4_number %}
+                                        ({{ match_data.player4_number }})
+                                    {% endif %}
+                                    
+                                {% endif %}
+                            </div>
+                            <div>{{ match_data.match.location }}, {{ match_data.match.match_city }}, {{ match_data.match.match_state }}</div>
                         </a>
                     </div>
                 </div>

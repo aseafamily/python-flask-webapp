@@ -147,17 +147,7 @@ def extract_number_from_string(input_string):
     else:
         return generate_title(input_string, False)
     
-def generate_match_summary(match, player2, player3, player4):
-    # Extract player names
-    player1_name = '' # get_brief_player_name(request.form['player1'])
-    player2_name = get_brief_player_name(player2)
-    if match.type == 'D':
-        player3_name = get_brief_player_name(player3)
-        player4_name = get_brief_player_name(player4)
-        player1_name = f"/{player3_name} "
-        player2_name = f"{player2_name}/{player4_name}"
-
-    # Extract scores
+def generate_match_score(match):
     sets_summary = []
     for i in range(1, 4):  # Assuming matches have up to 3 sets
         team1_score = getattr(match, f"team1_set{i}")
@@ -174,9 +164,25 @@ def generate_match_summary(match, player2, player3, player4):
                 set_summary += f"({team2_tb})"
             sets_summary.append(set_summary)
 
+    return "; ".join(sets_summary)
+
+    
+def generate_match_summary(match, player2, player3, player4):
+    # Extract player names
+    player1_name = '' # get_brief_player_name(request.form['player1'])
+    player2_name = get_brief_player_name(player2)
+    if match.type == 'D':
+        player3_name = get_brief_player_name(player3)
+        player4_name = get_brief_player_name(player4)
+        player1_name = f"/{player3_name} "
+        player2_name = f"{player2_name}/{player4_name}"
+
+    # Extract scores
+    
+
     # Combine all details
     match_summary = f"{player1_name}"
-    match_summary += ";".join(sets_summary)
+    match_summary += generate_match_score(match)
     match_summary += f" {player2_name}"
 
     level = generate_level(match.match_level)
