@@ -35,7 +35,7 @@
             padding: 10px;
             letter-spacing: .00625em;
             font-family: "Google Sans", Roboto, Arial, sans-serif;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 500;
             line-height: 1.5rem;
             padding-top: 12px;
@@ -161,7 +161,7 @@
     color: #5f6368;
     letter-spacing: .025em;
     font-family: Roboto, Arial, sans-serif;
-    font-size: .75rem;
+    font-size: .90rem;
     font-weight: 400;
     line-height: 1rem;
 }
@@ -361,34 +361,34 @@
                             </div>
                             <div>
                                 {% if match_data.match.player1_seed %}
-                                    [{{ match_data.match.player1_seed }}]
+                                    <span class="hSRGPd-e1YmVc-hSRGPd">[{{ match_data.match.player1_seed }}]</span>
                                 {% endif %}
                                 {{ match_data.player1_first_name }} {{ match_data.player1_last_name }}
                                 {% if match_data.player1_number %}
-                                    ({{ match_data.player1_number }})
+                                    <span class="hSRGPd-e1YmVc-hSRGPd">({{ match_data.player1_number }})</span>
                                 {% endif %}
                                 <br/>
                                 {% if match_data.match.type == 'D' %}
                                     /{{ match_data.player3_first_name }} {{ match_data.player3_last_name }}
                                     {% if match_data.player3_number %}
-                                        ({{ match_data.player3_number }})
+                                        <span class="hSRGPd-e1YmVc-hSRGPd">({{ match_data.player3_number }})</span>
                                     {% endif %}
                                     <br/>
                                 {% endif %}
                                 {{ match_data.summary }}
                                 <br/>
                                 {% if match_data.match.player2_seed %}
-                                    [{{ match_data.match.player2_seed }}]
+                                    <span class="hSRGPd-e1YmVc-hSRGPd">[{{ match_data.match.player2_seed }}]</span>
                                 {% endif %}
                                 {{ match_data.player2_first_name }} {{ match_data.player2_last_name }}
                                 {% if match_data.player2_number %}
-                                    ({{ match_data.player2_number }})
+                                    <span class="hSRGPd-e1YmVc-hSRGPd">({{ match_data.player2_number }})</span>
                                 {% endif %}
                                 {% if match_data.match.type == 'D' %}
                                     <br/>
                                     /{{ match_data.player4_first_name }} {{ match_data.player4_last_name }}
                                     {% if match_data.player4_number %}
-                                        ({{ match_data.player4_number }})
+                                        <span class="hSRGPd-e1YmVc-hSRGPd">({{ match_data.player4_number }})</span>
                                     {% endif %}
                                     
                                 {% endif %}

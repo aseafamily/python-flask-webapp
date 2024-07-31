@@ -680,6 +680,51 @@
         });
     });
 
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var items = [
+            "Tier1 Group",
+            "Tier1 Camp"
+        ];
+
+        $('#details').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+
+        $('#details').autocomplete({
+            source: items, // Use the hardcoded array
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#details').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var items = [
+            "30",
+            "60",
+            "90",
+            "120",
+            "150"
+        ];
+
+        $('#duration').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+
+        $('#duration').autocomplete({
+            source: items, // Use the hardcoded array
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#duration').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         var team1_doubles= document.getElementById('team1_doubles');
         var team2_doubles = document.getElementById('team2_doubles');
