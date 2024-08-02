@@ -20,7 +20,13 @@
     <ul>
         {% for entry in stringing_history %}
         <li>
-            {{ entry.datetime }} - {{ entry.stringer }} (Cross: {{ strings[entry.cross_string_id].brand }} {{ strings[entry.cross_string_id].model }} at {{ entry.cross_tension }}, Main: {{ strings[entry.main_string_id].brand }} {{ strings[entry.main_string_id].model }} at {{ entry.main_tension }})
+            {{ entry.datetime }} - {{ entry.stringer }} 
+            (Cross: {{ strings[entry.cross_string_id].brand }} 
+            {{ strings[entry.cross_string_id].model }} 
+            at {{ entry.cross_tension }}, 
+            Main: {{ strings[entry.main_string_id].brand }} 
+            {{ strings[entry.main_string_id].model }} 
+            at {{ entry.main_tension }})
         </li>
         {% endfor %}
     </ul>

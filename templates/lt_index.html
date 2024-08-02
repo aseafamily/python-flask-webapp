@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Log Types</title>
+</head>
+<body>
+  <h1>Select Log Type</h1>
+  <ul>
+    {% for log_type, log_config in log_types.items() %}
+      <li><a href="{{ url_for('lt.log_form', log_type=log_type) }}">{{ log_config.title }}</a></li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

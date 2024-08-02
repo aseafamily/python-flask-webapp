@@ -1,0 +1,45 @@
+{
+    "log_types": {
+      "event": {
+        "title": "Event Log",
+        "fields": {
+          "event_name": {
+            "type": "string",
+            "label": "Event Name",
+            "required": true
+          },
+          "event_source": {
+            "type": "string",
+            "label": "Event Source",
+            "required": true
+          },
+          "event_details": {
+            "type": "string",
+            "label": "Event Details",
+            "required": false
+          }
+        }
+      },
+      "error": {
+        "title": "Error Log",
+        "fields": {
+          "error_message": {
+            "type": "string",
+            "label": "Error Message",
+            "required": true
+          },
+          "error_code": {
+            "type": "integer",
+            "label": "Error Code",
+            "required": true
+          },
+          "stack_trace": {
+            "type": "string",
+            "label": "Stack Trace",
+            "required": false
+          }
+        }
+      }
+    }
+  }
+  

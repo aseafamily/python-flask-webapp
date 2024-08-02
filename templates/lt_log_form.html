@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ log_type }}</title>
+</head>
+<body>
+  <h1>Log Form for {{ log_type }}</h1>
+  <form method="post" action="{{ url_for('lt.submit_log', log_type=log_type) }}">
+    {% for field_name, field_config in log_config.fields.items() %}
+      <label for="{{ field_name }}">{{ field_config.label }}</label>
+      {% if field_config.type == 'text' %}
+        <textarea id="{{ field_name }}" 
+                  name="{{ field_name }}" 
+                  placeholder="{{ field_config.placeholder }}" 
+                  class="{{ field_config.css_class }}" 
+                  {% if field_config.required %}required{% endif %}>
+        {{ field_config.default }}
+        </textarea>
+      {% else %}
+        <input type="{{ 'text' if field_config.type == 'string' else 'number' }}" 
+               id="{{ field_name }}" 
+               name="{{ field_name }}" 
+               placeholder="{{ field_config.placeholder }}" 
+               value="{{ field_config.default if field_config.default else '' }}"
+               class="{{ field_config.css_class }}" 
+               {% if field_config.required %}required{% endif %}>
+      {% endif %}
+      <br>
+    {% endfor %}
+    <button type="submit">Submit</button>
+  </form>
+
+  <h2>Log Entries</h2>
+  <ul>
+    {% for log in logs %}
+      <li>
+        {{ log | tojson }}
+        <form method="post" action="{{ url_for('lt.update_log', log_type=log_type, log_id=log.id) }}" style="display:inline;">
+          {% for field_name, field_value in log.items() %}
+            <input type="hidden" name="{{ field_name }}" value="{{ field_value }}">
+          {% endfor %}
+          <button type="submit">Update</button>
+        </form>
+        <form method="post" action="{{ url_for('lt.delete_log', log_type=log_type, log_id=log.id) }}" style="display:inline;">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
