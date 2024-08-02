@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Stringing Entry</title>
+</head>
+<body>
+    <h1>Add Stringing Entry for Racket ID {{ racket_id }}</h1>
+    <form action="{{ url_for('stringing.add_stringing', racket_id=racket_id) }}" method="post">
+        <label for="datetime">Date & Time:</label>
+        <input type="datetime-local" id="datetime" name="datetime" required><br>
+        <label for="stringer">Stringer:</label>
+        <input type="text" id="stringer" name="stringer" required><br>
+        <label for="cross_string_id">Cross String:</label>
+        <select id="cross_string_id" name="cross_string_id" required>
+            {% for string in strings %}
+            <option value="{{ string.id }}">{{ string.brand }} {{ string.model }}</option>
+            {% endfor %}
+        </select><br>
+        <label for="main_string_id">Main String:</label>
+        <select id="main_string_id" name="main_string_id" required>
+            {% for string in strings %}
+            <option value="{{ string.id }}">{{ string.brand }} {{ string.model }}</option>
+            {% endfor %}
+        </select><br>
+        <label for="string_width">String Width:</label>
+        <input type="text" id="string_width" name="string_width" required><br>
+        <label for="cross_tension">Cross Tension:</label>
+        <input type="text" id="cross_tension" name="cross_tension" required><br>
+        <label for="main_tension">Main Tension:</label>
+        <input type="text" id="main_tension" name="main_tension" required><br>
+        <label for="duration">Duration:</label>
+        <input type="text" id="duration" name="duration"><br>
+        <label for="broke_datetime">Broke Date & Time:</label>
+        <input type="datetime-local" id="broke_datetime" name="broke_datetime"><br>
+        <input type="submit" value="Add Stringing Entry">
+    </form>
+</body>
+</html>

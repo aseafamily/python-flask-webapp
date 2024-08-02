@@ -1,0 +1,77 @@
+{
+    "rackets": [
+      {
+        "id": 1,
+        "brand": "Wilson",
+        "model": "Pro Staff",
+        "string_pattern": "16x19",
+        "hardness": "65",
+        "weight": "340g",
+        "swing_weight": "320",
+        "owner": "John Doe",
+        "nickname": "Beast",
+        "bought_date": "2022-01-15",
+        "price": 249.99,
+        "picture": "path/to/picture.jpg"
+      },
+      {
+        "id": 2,
+        "brand": "Babolat",
+        "model": "Pure Drive",
+        "string_pattern": "16x19",
+        "hardness": "70",
+        "weight": "300g",
+        "swing_weight": "315",
+        "owner": "Jane Smith",
+        "nickname": "Blue Thunder",
+        "bought_date": "2023-03-20",
+        "price": 219.99,
+        "picture": "path/to/picture2.jpg"
+      }
+    ],
+    "stringing_history": [
+      {
+        "id": 1,
+        "racket_id": 1,
+        "datetime": "2023-06-01T10:00:00",
+        "stringer": "Pro Shop",
+        "cross_string_id": 1,
+        "main_string_id": 1,
+        "string_width": "1.25mm",
+        "cross_tension": "50lbs",
+        "main_tension": "50lbs",
+        "duration": "45min",
+        "broke_datetime": "2023-07-10T15:00:00"
+      },
+      {
+        "id": 2,
+        "racket_id": 1,
+        "datetime": "2023-08-01T10:00:00",
+        "stringer": "Pro Shop",
+        "cross_string_id": 2,
+        "main_string_id": 2,
+        "string_width": "1.25mm",
+        "cross_tension": "52lbs",
+        "main_tension": "52lbs",
+        "duration": "40min",
+        "broke_datetime": null
+      }
+    ],
+    "strings": [
+      {
+        "id": 1,
+        "brand": "Luxilon",
+        "model": "ALU Power",
+        "type": "Polyester",
+        "color": "Silver"
+      },
+      {
+        "id": 2,
+        "brand": "Babolat",
+        "model": "RPM Blast",
+        "type": "Polyester",
+        "color": "Black"
+      }
+    ]
+  }
+  

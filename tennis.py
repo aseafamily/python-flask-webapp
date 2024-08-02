@@ -70,6 +70,7 @@ def get_match_names(uid):
 def tennis_index():
     player_id = request.args.get('u')
     category_filter = request.args.get('category', '')
+    show_filter = request.args.get('show', '')
 
     if request.method == 'GET':
         # Initial query
@@ -81,6 +82,9 @@ def tennis_index():
 
         # Order the results by date and id in descending order
         tennis_all_query = tennis_all_query.order_by(desc(Tennis.date), desc(Tennis.id))
+
+        if not show_filter or show_filter != 'all':
+            tennis_all_query = tennis_all_query.limit(50)
 
         # Execute the query
         tennis_all = tennis_all_query.all()

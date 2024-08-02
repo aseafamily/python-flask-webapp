@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ racket.brand }} {{ racket.model }}</title>
+</head>
+<body>
+    <h1>{{ racket.brand }} {{ racket.model }}</h1>
+    <p>Owner: {{ racket.owner }}</p>
+    <p>Nickname: {{ racket.nickname }}</p>
+    <p>String Pattern: {{ racket.string_pattern }}</p>
+    <p>Hardness: {{ racket.hardness }}</p>
+    <p>Weight: {{ racket.weight }}</p>
+    <p>Swing Weight: {{ racket.swing_weight }}</p>
+    <p>Price: ${{ racket.price }}</p>
+    <p>Bought Date: {{ racket.bought_date }}</p>
+    <img src="{{ racket.picture }}" alt="Picture of {{ racket.model }}">
+
+    <h2>Stringing History</h2>
+    <ul>
+        {% for entry in stringing_history %}
+        <li>
+            {{ entry.datetime }} - {{ entry.stringer }} (Cross: {{ strings[entry.cross_string_id].brand }} {{ strings[entry.cross_string_id].model }} at {{ entry.cross_tension }}, Main: {{ strings[entry.main_string_id].brand }} {{ strings[entry.main_string_id].model }} at {{ entry.main_tension }})
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('stringing.add_stringing', racket_id=racket.id) }}">Add Stringing Entry</a>
+</body>
+</html>

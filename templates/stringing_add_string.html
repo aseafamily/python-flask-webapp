@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New String Type</title>
+    <style>
+        /* Reuse same CSS as in stringing_index.html */
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Add New String Type</h1>
+    </header>
+    <div class="container">
+        <form action="{{ url_for('stringing.add_string') }}" method="post">
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" name="brand" required><br>
+            <label for="model">Model:</label>
+            <input type="text" id="model" name="model" required><br>
+            <label for="string_width">String Width:</label>
+            <input type="text" id="string_width" name="string_width" required><br>
+            <input type="submit" value="Add String Type">
+        </form>
+    </div>
+</body>
+</html>

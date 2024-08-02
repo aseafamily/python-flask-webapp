@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Racket</title>
+</head>
+<body>
+    <h1>Add New Racket</h1>
+    <form action="{{ url_for('stringing.add_racket') }}" method="post">
+        <label for="brand">Brand:</label>
+        <input type="text" id="brand" name="brand" required><br>
+        <label for="model">Model:</label>
+        <input type="text" id="model" name="model" required><br>
+        <label for="string_pattern">String Pattern:</label>
+        <input type="text" id="string_pattern" name="string_pattern" required><br>
+        <label for="hardness">Hardness:</label>
+        <input type="text" id="hardness" name="hardness" required><br>
+        <label for="weight">Weight:</label>
+        <input type="text" id="weight" name="weight" required><br>
+        <label for="swing_weight">Swing Weight:</label>
+        <input type="text" id="swing_weight" name="swing_weight" required><br>
+        <label for="owner">Owner:</label>
+        <input type="text" id="owner" name="owner" required><br>
+        <label for="nickname">Nickname:</label>
+        <input type="text" id="nickname" name="nickname" required><br>
+        <label for="bought_date">Bought Date:</label>
+        <input type="date" id="bought_date" name="bought_date"><br>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01"><br>
+        <label for="picture">Picture:</label>
+        <input type="text" id="picture" name="picture"><br>
+        <input type="submit" value="Add Racket">
+    </form>
+</body>
+</html>
