@@ -2,51 +2,150 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ log_type }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      color: #444;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="date"], input[type="number"], textarea {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: calc(100% - 22px);
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f8f9fa;
+    }
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .action-btn svg {
+      width: 32px;
+      height: 32px;
+      fill: #007bff;
+    }
+    .action-btn svg:hover {
+      fill: #0056b3;
+    }
+  </style>
+  <script>
+    function confirmDelete(event) {
+      if (!confirm("Are you sure you want to delete this log entry?")) {
+        event.preventDefault();
+      }
+    }
+  </script>
 </head>
 <body>
-  <h1>Log Form for {{ log_type }}</h1>
-  <form method="post" action="{{ url_for('lt.submit_log', log_type=log_type) }}">
-    {% for field_name, field_config in log_config.fields.items() %}
-      <label for="{{ field_name }}">{{ field_config.label }}</label>
-      {% if field_config.type == 'text' %}
-        <textarea id="{{ field_name }}" 
-                  name="{{ field_name }}" 
-                  placeholder="{{ field_config.placeholder }}" 
-                  class="{{ field_config.css_class }}" 
-                  {% if field_config.required %}required{% endif %}>
-        {{ field_config.default }}
-        </textarea>
-      {% else %}
-        <input type="{{ 'text' if field_config.type == 'string' else 'number' }}" 
-               id="{{ field_name }}" 
-               name="{{ field_name }}" 
-               placeholder="{{ field_config.placeholder }}" 
-               value="{{ field_config.default if field_config.default else '' }}"
-               class="{{ field_config.css_class }}" 
-               {% if field_config.required %}required{% endif %}>
-      {% endif %}
-      <br>
-    {% endfor %}
-    <button type="submit">Submit</button>
-  </form>
+  <div class="container">
+    <h1>Log Form for {{ log_type }}</h1>
+    <form method="post" action="{{ url_for('lt.submit_log', log_type=log_type) }}">
+      {% for field_name, field_config in log_config.fields.items() %}
+        <label for="{{ field_name }}">{{ field_config.label }}</label>
+        {% if field_config.type == 'text' %}
+          <input type="text" id="{{ field_name }}" 
+                 name="{{ field_name }}" 
+                 placeholder="{{ field_config.placeholder }}" 
+                 class="{{ field_config.css_class }}" 
+                 {% if field_config.required %}required{% endif %}>
+        {% elif field_config.type == 'date' %}
+          <input type="date" id="{{ field_name }}" 
+                 name="{{ field_name }}" 
+                 class="{{ field_config.css_class }}" 
+                 {% if field_config.required %}required{% endif %}>
+        {% elif field_config.type == 'number' %}
+          <input type="number" id="{{ field_name }}" 
+                 name="{{ field_name }}" 
+                 placeholder="{{ field_config.placeholder }}" 
+                 class="{{ field_config.css_class }}" 
+                 {% if field_config.required %}required{% endif %}>
+        {% endif %}
+        <br>
+      {% endfor %}
+      <button type="submit">Submit</button>
+    </form>
 
-  <h2>Log Entries</h2>
-  <ul>
-    {% for log in logs %}
-      <li>
-        {{ log | tojson }}
-        <form method="post" action="{{ url_for('lt.update_log', log_type=log_type, log_id=log.id) }}" style="display:inline;">
-          {% for field_name, field_value in log.items() %}
-            <input type="hidden" name="{{ field_name }}" value="{{ field_value }}">
+    <h2>Log Entries</h2>
+    <table>
+      <thead>
+        <tr>
+          {% for field_name, field_config in log_config.fields.items() %}
+            <th>{{ field_config.label }}</th>
           {% endfor %}
-          <button type="submit">Update</button>
-        </form>
-        <form method="post" action="{{ url_for('lt.delete_log', log_type=log_type, log_id=log.id) }}" style="display:inline;">
-          <button type="submit">Delete</button>
-        </form>
-      </li>
-    {% endfor %}
-  </ul>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+          <tr>
+            {% for field_name, field_config in log_config.fields.items() %}
+              <td>{{ log[field_name] }}</td>
+            {% endfor %}
+            <td>
+              <a href="{{ url_for('lt.update_form', log_type=log_type, log_id=log.id) }}" class="action-btn" title="Update">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1L1 12l2 2L12 3l9 9 2-2L12 1zm0 4.5L4.5 12 12 19.5 19.5 12 12 5.5zm0 0L12 3z"/></svg>
+              </a>
+              <a href="{{ url_for('lt.delete_log', log_type=log_type, log_id=log.id) }}" 
+                 class="action-btn" 
+                 title="Delete" 
+                 onclick="confirmDelete(event)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 9v10H8V9h8zm0-2H8V5h8v2zm1-4h-6V1H9v2H3v2h14V3h-1zm0 4h-2V5h2v2z"/></svg>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

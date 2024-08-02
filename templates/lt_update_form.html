@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Update Log for {{ log_type }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input, button {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    input[type="date"], input[type="number"] {
+      width: calc(100% - 22px);
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Update Log Entry for {{ log_type }}</h1>
+    <form method="post" action="{{ url_for('lt.update_log', log_type=log_type, log_id=log_id) }}">
+      {% for field_name, field_config in log_config.fields.items() %}
+        <label for="{{ field_name }}">{{ field_config.label }}</label>
+        {% if field_config.type == 'text' %}
+          <input type="text" id="{{ field_name }}" 
+                 name="{{ field_name }}" 
+                 placeholder="{{ field_config.placeholder }}" 
+                 value="{{ log[field_name] }}" 
+                 class="{{ field_config.css_class }}" 
+                 {% if field_config.required %}required{% endif %}>
+        {% elif field_config.type == 'date' %}
+          <input type="date" id="{{ field_name }}" 
+                 name="{{ field_name }}" 
+                 value="{{ log[field_name] }}" 
+                 class="{{ field_config.css_class }}" 
+                 {% if field_config.required %}required{% endif %}>
+        {% elif field_config.type == 'number' %}
+          <input type="number" id="{{ field_name }}" 
+                 name="{{ field_name }}" 
+                 placeholder="{{ field_config.placeholder }}" 
+                 value="{{ log[field_name] }}" 
+                 class="{{ field_config.css_class }}" 
+                 {% if field_config.required %}required{% endif %}>
+        {% endif %}
+      {% endfor %}
+      <button type="submit">Update</button>
+    </form>
+    <a href="{{ url_for('lt.log_form', log_type=log_type) }}" class="action-btn" title="Back">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6v-4h7V10h-7V6zm-3 6l-3 3V9l3 3z"/></svg>
+    </a>
+  </div>
+</body>
+</html>

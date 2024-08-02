@@ -2,14 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Log Types</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    a {
+      text-decoration: none;
+      color: #007bff;
+      font-size: 18px;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <h1>Select Log Type</h1>
-  <ul>
-    {% for log_type, log_config in log_types.items() %}
-      <li><a href="{{ url_for('lt.log_form', log_type=log_type) }}">{{ log_config.title }}</a></li>
-    {% endfor %}
-  </ul>
+  <div class="container">
+    <h1>Select Log Type</h1>
+    <ul>
+      {% for log_type, log_config in log_types.items() %}
+        <li><a href="{{ url_for('lt.log_form', log_type=log_type) }}">{{ log_config.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
 </body>
 </html>

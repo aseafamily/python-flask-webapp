@@ -39,6 +39,39 @@
             "required": false
           }
         }
+      },
+      "haircut": {
+        "title": "Haircut Log",
+        "fields": {
+          "date": {
+            "label": "Date",
+            "type": "date",
+            "placeholder": "Select the date",
+            "css_class": "form-control",
+            "required": true
+          },
+          "shop": {
+            "label": "Shop",
+            "type": "text",
+            "placeholder": "Enter the shop name",
+            "css_class": "form-control",
+            "required": true
+          },
+          "barber": {
+            "label": "Barber",
+            "type": "text",
+            "placeholder": "Enter the barber's name",
+            "css_class": "form-control",
+            "required": true
+          },
+          "price": {
+            "label": "Price",
+            "type": "number",
+            "placeholder": "Enter the price",
+            "css_class": "form-control",
+            "required": true
+          }
+        }
       }
     }
   }
