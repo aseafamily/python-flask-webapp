@@ -16,6 +16,7 @@ from user import User, users
 from tools import tools_bp
 from stringing import stringing_bp
 from lt import lt_bp
+from reflection import reflection_bp
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -39,6 +40,7 @@ app.register_blueprint(match_bp)
 app.register_blueprint(tools_bp)
 app.register_blueprint(stringing_bp)
 app.register_blueprint(lt_bp)
+app.register_blueprint(reflection_bp)
 
 # for login
 app.config['SECRET_KEY'] = '48e7a59dca9d6c13b0e7e51b7ee6e2a5759c8e1dbb3a0f83'
