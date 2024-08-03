@@ -17,6 +17,7 @@ from tools import tools_bp
 from stringing import stringing_bp
 from lt import lt_bp
 from reflection import reflection_bp
+import json
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -103,6 +104,25 @@ def filter_none(variables):
 @app.template_filter('short_name')
 def short_name(variables):
     return generate_title(variables)
+
+@app.template_filter('display_reflection')
+def display_reflection(json_string):
+    if not json_string:
+        # Handle None or empty string input
+        return ''
+    try:
+        data = json.loads(json_string)
+    except json.JSONDecodeError:
+        # Handle invalid JSON input
+        return ''
+    
+    output = []
+    for key, value in data.items():
+        if value:  # Check if the value is not empty
+            output.append(f"{key}:<br>{value}<br>")
+    
+    # If output list is empty, return an empty string
+    return ''.join(output) if output else ''
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

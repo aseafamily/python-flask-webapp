@@ -142,14 +142,22 @@
                     <td>{{ tennis.category }}</td>
                     <td>{{ tennis.location | generate_acronym }}</td>
                     <td style="white-space: nowrap;">
-                        <a href="/tennis/update/{{tennis.id}}?u={{ u }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}" style="margin-left: 10px; margin-right: 20px;">U</a>
-                        <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')">D</a>
+                        <a href="/tennis/update/{{tennis.id}}?u={{ u }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}" style="margin-left: 10px; margin-right: 10px;">U</a>
+                        <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')" style="margin-right: 10px;">D</a>
+                        <a href="/reflection?tennis_id={{tennis.id}}&u={{ u }}">R</a>
                     </td>
                 </tr>
                 <tr style="background-color: {% if is_match %}#ffffe0{% endif %};">
                     <td></td>
                     <td colspan="4">{{ tennis.details }}</td>
                 </tr>
+                {% set formatted_reflection = tennis.reflection|display_reflection %}
+                {% if formatted_reflection %}
+                <tr style="background-color: {% if is_match %}#ffffe0{% endif %};">
+                    <td></td>
+                    <td colspan="4">{{ formatted_reflection|safe }}</td>
+                </tr>
+                {% endif %}
             {% endfor %}
         </table>
         {% endif %}
