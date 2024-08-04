@@ -19,14 +19,16 @@
             "type": "text",
             "placeholder": "Enter the shop name",
             "css_class": "form-control",
-            "required": true
+            "required": true,
+            "autocomplete": true
           },
           "barber": {
             "label": "Barber",
             "type": "text",
             "placeholder": "Enter the barber's name",
             "css_class": "form-control",
-            "required": true
+            "required": true,
+            "autocomplete": true
           },
           "price": {
             "label": "Price",
@@ -51,19 +53,21 @@
             "css_class": "form-control",
             "required": true
           },
-          "shop": {
+          "duration": {
             "label": "Duration",
             "type": "number",
             "placeholder": "Enter the duration",
             "css_class": "form-control",
-            "required": true
+            "required": true,
+            "autocomplete": true
           },
-          "barber": {
+          "location": {
             "label": "Location",
             "type": "text",
             "placeholder": "Enter the location",
             "css_class": "form-control",
-            "required": true
+            "required": true,
+            "autocomplete": true
           },
           "price": {
             "label": "Coach",

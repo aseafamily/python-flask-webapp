@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ log_type }}</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -97,23 +100,73 @@
                  name="{{ field_name }}" 
                  placeholder="{{ field_config.placeholder }}" 
                  class="{{ field_config.css_class }}" 
-                 {% if field_config.required %}required{% endif %}>
+                 {% if field_config.required %}required{% endif %}
+                 {% if field_config.get('autocomplete', False) %} data-autocomplete="true" {% endif %}>
         {% elif field_config.type == 'date' %}
           <input type="date" id="{{ field_name }}" 
                  name="{{ field_name }}" 
                  class="{{ field_config.css_class }}" 
-                 {% if field_config.required %}required{% endif %}>
+                 {% if field_config.required %}required{% endif %}
+                 {% if field_config.get('autocomplete', False) %} data-autocomplete="true" {% endif %}>
         {% elif field_config.type == 'number' %}
           <input type="number" id="{{ field_name }}" 
                  name="{{ field_name }}" 
                  placeholder="{{ field_config.placeholder }}" 
                  class="{{ field_config.css_class }}" 
-                 {% if field_config.required %}required{% endif %}>
+                 {% if field_config.required %}required{% endif %}
+                 {% if field_config.get('autocomplete', False) %} data-autocomplete="true" {% endif %}>
         {% endif %}
         <br>
       {% endfor %}
       <button type="submit">Submit</button>
     </form>
+
+    <script>
+      $(function() {
+          var logType = "{{ log_type }}";
+          var userId = "{{ request.args.get('u', '') }}"; // Pass user_id to the template if needed
+          var autocompleteFields = $('input[data-autocomplete="true"]');
+
+          // Object to store autocomplete data for each field
+          var autocompleteData = {};
+
+          // Function to fetch autocomplete data for a specific field
+          function fetchAutocompleteData(fieldName) {
+              return $.ajax({
+                  url: `/lt/autocomplete/${logType}/${fieldName}`,
+                  data: { u: userId },
+                  success: function(data) {
+                      autocompleteData[fieldName] = data;
+                  }
+              });
+          }
+
+          // Create an array of AJAX promises
+          var promises = [];
+
+          // Iterate over each autocomplete field and fetch data
+          autocompleteFields.each(function() {
+              var fieldName = $(this).attr('name');
+              promises.push(fetchAutocompleteData(fieldName));
+          });
+
+          // When all AJAX requests are done
+          $.when.apply($, promises).done(function() {
+              // Initialize autocomplete for each field with fetched data
+              autocompleteFields.each(function() {
+                  var inputField = $(this);
+                  var fieldName = inputField.attr('name');
+                  inputField.autocomplete({
+                      source: autocompleteData[fieldName],
+                      minLength: 0
+                  }).focus(function() {
+                      // Trigger search on focus to show the dropdown
+                      $(this).autocomplete("search", "");
+                  });
+              });
+          });
+      });
+  </script>
 
     <div><a href="/">Home</a></div>
     <h2>Log Entries</h2>

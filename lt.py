@@ -4,6 +4,7 @@ import os
 from azure.storage.fileshare import ShareFileClient, ShareDirectoryClient
 from flask_login import login_required
 from datetime import datetime
+from collections import Counter
 
 lt_bp = Blueprint('lt', __name__)
 
@@ -185,3 +186,14 @@ def delete_log(log_type, log_id):
         redirect_url += "?u=" + user_id
         return redirect(redirect_url)
     return "Log type not found", 404
+
+@lt_bp.route('/lt/autocomplete/<log_type>/<field_name>', methods=['GET'])
+def autocomplete(log_type, field_name):
+    user_id = request.args.get('u', '')
+    logs = read_logs(log_type, user_id)
+    
+    # Extract the values for the specified field and count the occurrences
+    field_values = [log[field_name] for log in logs if field_name in log]
+    top_values = [item for item, count in Counter(field_values).most_common(10)]
+    
+    return jsonify(top_values)
