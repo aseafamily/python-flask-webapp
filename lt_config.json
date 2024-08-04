@@ -58,8 +58,7 @@
             "type": "number",
             "placeholder": "Enter the duration",
             "css_class": "form-control",
-            "required": true,
-            "autocomplete": true
+            "required": true
           },
           "location": {
             "label": "Location",
@@ -69,12 +68,13 @@
             "required": true,
             "autocomplete": true
           },
-          "price": {
+          "coach": {
             "label": "Coach",
             "type": "text",
             "placeholder": "Enter the coach name",
             "css_class": "form-control",
-            "required": true
+            "required": true,
+            "autocomplete": true
           },
           "comments": {
             "label": "Comments",
