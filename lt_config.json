@@ -6,6 +6,23 @@
           "column": "date",
           "order": "desc"
         },
+        "stats": {
+          "total": {
+            "label": "Total: ",
+            "column": "*",
+            "function": "count"
+          },
+          "total_price": {
+            "label": "Total price: ",
+            "column": "price",
+            "function": "sum"
+          },
+          "average_interval": {
+            "label": "Average Interval (days): ",
+            "column": "date",
+            "function": "average_interval"
+          }
+        },
         "fields": {
           "date": {
             "label": "Date",
@@ -45,6 +62,23 @@
           "column": "date",
           "order": "desc"
         },
+        "stats": {
+          "total": {
+            "label": "Total: ",
+            "column": "*",
+            "function": "count"
+          },
+          "total_duration": {
+            "label": "Total duration (minutes): ",
+            "column": "duration",
+            "function": "sum"
+          },
+          "average_interval": {
+            "label": "Average Interval (days): ",
+            "column": "date",
+            "function": "average_interval"
+          }
+        },
         "fields": {
           "date": {
             "label": "Date",
@@ -54,7 +88,7 @@
             "required": true
           },
           "duration": {
-            "label": "Duration",
+            "label": "Duration (minutes)",
             "type": "number",
             "placeholder": "Enter the duration",
             "css_class": "form-control",
@@ -82,6 +116,150 @@
             "placeholder": "Enter the comments",
             "css_class": "form-control",
             "required": false
+          }
+        }
+      },
+      "racquets": {
+        "title": "Racquets Log",
+        "default_sort": {
+          "column": "date",
+          "order": "desc"
+        },
+        "stats": {
+          "total": {
+            "label": "Total: ",
+            "column": "*",
+            "function": "count"
+          },
+          "total_price": {
+            "label": "Total price (minutes): ",
+            "column": "price",
+            "function": "sum"
+          },
+          "average_interval": {
+            "label": "Average Interval (days): ",
+            "column": "date",
+            "function": "average_interval"
+          }
+        },
+        "fields": {
+          "date": {
+            "label": "Purchase date",
+            "type": "date",
+            "placeholder": "Select the date",
+            "css_class": "form-control",
+            "required": true
+          },
+          "name": {
+            "label": "Name",
+            "type": "text",
+            "placeholder": "Enter the name",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": false
+          },
+          "owner": {
+            "label": "Owner",
+            "type": "text",
+            "placeholder": "Enter the owner",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "shop": {
+            "label": "Shop",
+            "type": "text",
+            "placeholder": "Enter the shop name",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
+          "price": {
+            "label": "Price",
+            "type": "number",
+            "placeholder": "Enter the price",
+            "css_class": "form-control",
+            "required": false
+          },
+          "brand": {
+            "label": "Brand",
+            "type": "text",
+            "placeholder": "Enter the brand",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "model": {
+            "label": "Model",
+            "type": "text",
+            "placeholder": "Enter the model",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "string_pattern": {
+            "label": "String Pattern",
+            "type": "text",
+            "placeholder": "Enter the string pattern",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
+          "grip": {
+            "label": "Grip",
+            "type": "text",
+            "placeholder": "Enter the grip",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
+          "head_size": {
+            "label": "Head Size",
+            "type": "number",
+            "placeholder": "Enter the head size",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
+          "length": {
+            "label": "Length",
+            "type": "text",
+            "placeholder": "Enter the length",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
+          "weight": {
+            "label": "Unstrung Weight (g)",
+            "type": "number",
+            "placeholder": "Enter the unstrung weight",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
+          "swing_weight": {
+            "label": "Swing Weight (g)",
+            "type": "number",
+            "placeholder": "Enter the swing weight",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
+          "flex": {
+            "label": "Flex",
+            "type": "number",
+            "placeholder": "Enter the flex",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": false
+          },
+          "note": {
+            "label": "Note",
+            "type": "text",
+            "placeholder": "Enter the note",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": false
           }
         }
       }

@@ -120,8 +120,34 @@ def log_form(log_type):
             sorted_logs = sorted(logs, key=sort_key, reverse=(sort_order == 'desc'))
         else:
             sorted_logs = logs
+
+        # Calculate statistics
+        stats = {}
+        if 'stats' in log_config:
+            for stat_name, stat_config in log_config['stats'].items():
+                if stat_config['function'] == 'count':
+                    stats[stat_name] = len(sorted_logs)
+                elif stat_config['function'] == 'sum':
+                    column = stat_config['column']
+                    if column and column in log_config['fields']:
+                        # Sum values in the specified column
+                        total = sum(float(log.get(column, 0)) for log in logs if log.get(column))
+                        stats[stat_name] = total
+                elif stat_config['function'] == 'average_interval':
+                    column = stat_config['column']
+                    if column == 'date' and logs:
+                        # Extract and sort dates
+                        dates = sorted(datetime.strptime(log.get(column), '%Y-%m-%d') for log in logs if log.get(column))
+                        if len(dates) > 1:
+                            # Calculate intervals
+                            intervals = [(dates[i] - dates[i-1]).days for i in range(1, len(dates))]
+                            # Calculate average interval
+                            average_interval = int(sum(intervals) / len(intervals))
+                            stats[stat_name] = average_interval
+                        else:
+                            stats[stat_name] = 0  # Not enough data to calculate
         
-        return render_template('lt_log_form.html', log_type=log_type, log_config=log_config, logs=sorted_logs)
+        return render_template('lt_log_form.html', log_type=log_type, log_config=log_config, logs=sorted_logs, stats=stats)
     return "Log type not found", 404
 
 @lt_bp.route('/lt/<log_type>', methods=['POST'])

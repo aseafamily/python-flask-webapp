@@ -172,6 +172,14 @@
   </script>
 
     <div><a href="/">Home</a></div>
+    <!-- Stats Section -->
+    {% if stats %}
+    <div id="stats">
+        {% for stat_name, stat_value in stats.items() %}
+        <p>{{ log_config.stats[stat_name].label }} {{ stat_value }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
     <h2>Log Entries</h2>
     <table>
       <thead>
