@@ -61,8 +61,8 @@
 </head>
 <body>
   <div class="container">
-    <h1>Update Log Entry for {{ log_type }}</h1>
-    <form method="post" action="{{ url_for('lt.update_log', log_type=log_type, log_id=log_id) }}">
+    <h1>Update Log Entry for {{ user_name }}'s {{ log_type }}</h1>
+    <form method="post" action="{{ url_for('lt.update_log', log_type=log_type, log_id=log_id) }}?u={{ u }}">
       {% for field_name, field_config in log_config.fields.items() %}
         <label for="{{ field_name }}">{{ field_config.label }}</label>
         {% if field_config.type == 'text' %}
@@ -89,7 +89,7 @@
       {% endfor %}
       <button type="submit">Update</button>
     </form>
-    <a href="{{ url_for('lt.log_form', log_type=log_type) }}" class="action-btn" title="Back">
+    <a href="{{ url_for('lt.log_form', log_type=log_type) }}?u={{ u }}" class="action-btn" title="Back">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6v-4h7V10h-7V6zm-3 6l-3 3V9l3 3z"/></svg>
     </a>
   </div>

@@ -43,12 +43,13 @@
 </head>
 <body>
   <div class="container">
-    <h1>Select Log Type</h1>
+    <h1>Select Log Type for {{ user_name }}</h1>
     <ul>
       {% for log_type, log_config in log_types.items() %}
-        <li><a href="{{ url_for('lt.log_form', log_type=log_type) }}">{{ log_config.title }}</a></li>
+        <li><a href="{{ url_for('lt.log_form', log_type=log_type) }}?u={{ u }}">{{ log_config.title }}</a></li>
       {% endfor %}
     </ul>
+    <div><a href="/">Home</a></div>
   </div>
 </body>
 </html>

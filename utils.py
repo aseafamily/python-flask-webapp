@@ -10,7 +10,8 @@ import re
 user_dict = {
     '1': 'Andrew',
     '2': 'Emily',
-    '0': 'Alex'
+    '0': 'Alex',
+    '3': 'Sherri'
 }
 
 # Retry decorator with exponential backoff
