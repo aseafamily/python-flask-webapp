@@ -1,47 +1,11 @@
 {
     "log_types": {
-      "event": {
-        "title": "Event Log",
-        "fields": {
-          "event_name": {
-            "type": "string",
-            "label": "Event Name",
-            "required": true
-          },
-          "event_source": {
-            "type": "string",
-            "label": "Event Source",
-            "required": true
-          },
-          "event_details": {
-            "type": "string",
-            "label": "Event Details",
-            "required": false
-          }
-        }
-      },
-      "error": {
-        "title": "Error Log",
-        "fields": {
-          "error_message": {
-            "type": "string",
-            "label": "Error Message",
-            "required": true
-          },
-          "error_code": {
-            "type": "integer",
-            "label": "Error Code",
-            "required": true
-          },
-          "stack_trace": {
-            "type": "string",
-            "label": "Stack Trace",
-            "required": false
-          }
-        }
-      },
       "haircut": {
         "title": "Haircut Log",
+        "default_sort": {
+          "column": "date",
+          "order": "desc"
+        },
         "fields": {
           "date": {
             "label": "Date",
@@ -70,6 +34,50 @@
             "placeholder": "Enter the price",
             "css_class": "form-control",
             "required": true
+          }
+        }
+      },
+      "driving": {
+        "title": "Driving Practice Log",
+        "default_sort": {
+          "column": "date",
+          "order": "desc"
+        },
+        "fields": {
+          "date": {
+            "label": "Date",
+            "type": "date",
+            "placeholder": "Select the date",
+            "css_class": "form-control",
+            "required": true
+          },
+          "shop": {
+            "label": "Duration",
+            "type": "number",
+            "placeholder": "Enter the duration",
+            "css_class": "form-control",
+            "required": true
+          },
+          "barber": {
+            "label": "Location",
+            "type": "text",
+            "placeholder": "Enter the location",
+            "css_class": "form-control",
+            "required": true
+          },
+          "price": {
+            "label": "Coach",
+            "type": "text",
+            "placeholder": "Enter the coach name",
+            "css_class": "form-control",
+            "required": true
+          },
+          "comments": {
+            "label": "Comments",
+            "type": "text",
+            "placeholder": "Enter the comments",
+            "css_class": "form-control",
+            "required": false
           }
         }
       }

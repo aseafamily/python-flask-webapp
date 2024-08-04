@@ -3,6 +3,7 @@ import json
 import os
 from azure.storage.fileshare import ShareFileClient, ShareDirectoryClient
 from flask_login import login_required
+from datetime import datetime
 
 lt_bp = Blueprint('lt', __name__)
 
@@ -91,7 +92,35 @@ def log_form(log_type):
         user_id = request.args.get('u', '')
         log_config = config['log_types'][log_type]
         logs = read_logs(log_type, user_id)
-        return render_template('lt_log_form.html', log_type=log_type, log_config=log_config, logs=logs)
+        
+        # Get the default sort column and order from the configuration
+        sort_column = log_config.get('default_sort', {}).get('column')
+        sort_order = log_config.get('default_sort', {}).get('order', 'asc')
+        
+        if sort_column:
+            # Get the type of the sort column
+            sort_column_type = log_config['fields'][sort_column]['type']
+            
+            # Define a sorting key function based on the field type
+            def sort_key(log):
+                value = log.get(sort_column)
+                if sort_column_type == 'date':
+                    # Define the date format (update this format according to your date string format)
+                    date_format = "%Y-%m-%d"  # Example: "2023-08-04"
+                    return datetime.strptime(value, date_format) if value else datetime.min
+                elif sort_column_type == 'number':
+                    return float(value) if value else float('-inf')
+                elif sort_column_type == 'text':
+                    return value.lower() if value else ''
+                else:
+                    return value
+            
+            # Sort logs by the specified column in the specified order
+            sorted_logs = sorted(logs, key=sort_key, reverse=(sort_order == 'desc'))
+        else:
+            sorted_logs = logs
+        
+        return render_template('lt_log_form.html', log_type=log_type, log_config=log_config, logs=sorted_logs)
     return "Log type not found", 404
 
 @lt_bp.route('/lt/<log_type>', methods=['POST'])

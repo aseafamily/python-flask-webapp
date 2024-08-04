@@ -88,7 +88,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>{{user_name}}'s {{ log_type }} logging</h1>
+    <h1>{{user_name}}'s {{ log_type }} logs</h1>
     <form method="post" action="{{ url_for('lt.submit_log', log_type=log_type) }}?u={{ u }}">
       {% for field_name, field_config in log_config.fields.items() %}
         <label for="{{ field_name }}">{{ field_config.label }}</label>
