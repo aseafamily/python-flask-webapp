@@ -110,6 +110,14 @@
             "required": true,
             "autocomplete": true
           },
+          "car": {
+            "label": "Car",
+            "type": "text",
+            "placeholder": "Enter the car name",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
           "comments": {
             "label": "Comments",
             "type": "text",
@@ -367,6 +375,89 @@
             "label": "Average Interval (days): ",
             "column": "date",
             "function": "average_interval"
+          }
+        }
+      },
+      "earning": {
+        "title": "Earning Log",
+        "default_sort": {
+          "column": "date",
+          "order": "desc"
+        },
+        "stats": {
+          "total": {
+            "label": "Total: ",
+            "column": "*",
+            "function": "count"
+          },
+          "total_price": {
+            "label": "Total earning: ",
+            "column": "earning",
+            "function": "sum"
+          }
+        },
+        "fields": {
+          "date": {
+            "label": "Date",
+            "type": "date",
+            "placeholder": "Select the date",
+            "css_class": "form-control",
+            "required": true
+          },
+          "customer": {
+            "label": "Customer",
+            "type": "text",
+            "placeholder": "Enter the customer name",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "service": {
+            "label": "Service",
+            "type": "text",
+            "placeholder": "Enter the serivce provided",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "location": {
+            "label": "Location",
+            "type": "text",
+            "placeholder": "Enter the location",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "hours": {
+            "label": "Hours",
+            "type": "number",
+            "placeholder": "Enter the hours",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "hour_rate": {
+            "label": "Hour rate",
+            "type": "number",
+            "placeholder": "Enter the hour rate",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "earning": {
+            "label": "Earning",
+            "type": "number",
+            "placeholder": "Enter the earning",
+            "css_class": "form-control",
+            "required": true
+          },
+          "note": {
+            "label": "Note",
+            "type": "text",
+            "placeholder": "Enter the note",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": false
           }
         }
       }
