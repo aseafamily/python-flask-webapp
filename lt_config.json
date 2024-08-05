@@ -21,6 +21,11 @@
             "label": "Average Interval (days): ",
             "column": "date",
             "function": "average_interval"
+          },
+          "since": {
+            "label": "Since last record: ",
+            "column": "date",
+            "function": "since"
           }
         },
         "fields": {
@@ -77,6 +82,11 @@
             "label": "Average Interval (days): ",
             "column": "date",
             "function": "average_interval"
+          },
+          "since": {
+            "label": "Since last record: ",
+            "column": "date",
+            "function": "since"
           }
         },
         "fields": {
@@ -148,6 +158,11 @@
             "label": "Average Interval (days): ",
             "column": "date",
             "function": "average_interval"
+          },
+          "since": {
+            "label": "Since last record: ",
+            "column": "date",
+            "function": "since"
           }
         },
         "fields": {
@@ -375,6 +390,11 @@
             "label": "Average Interval (days): ",
             "column": "date",
             "function": "average_interval"
+          },
+          "since": {
+            "label": "Since last record: ",
+            "column": "date",
+            "function": "since"
           }
         }
       },

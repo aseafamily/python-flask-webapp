@@ -135,17 +135,28 @@ def log_form(log_type):
                         stats[stat_name] = total
                 elif stat_config['function'] == 'average_interval':
                     column = stat_config['column']
-                    if column == 'date' and logs:
-                        # Extract and sort dates
-                        dates = sorted(datetime.strptime(log.get(column), '%Y-%m-%d') for log in logs if log.get(column))
-                        if len(dates) > 1:
-                            # Calculate intervals
-                            intervals = [(dates[i] - dates[i-1]).days for i in range(1, len(dates))]
-                            # Calculate average interval
-                            average_interval = int(sum(intervals) / len(intervals))
-                            stats[stat_name] = average_interval
-                        else:
-                            stats[stat_name] = 0  # Not enough data to calculate
+                    if column in log_config['fields'] and log_config['fields'][column]['type'] == 'date':
+                        if logs:
+                            # Extract and sort dates
+                            dates = sorted(datetime.strptime(log.get(column), '%Y-%m-%d') for log in logs if log.get(column))
+                            if len(dates) > 1:
+                                # Calculate intervals
+                                intervals = [(dates[i] - dates[i-1]).days for i in range(1, len(dates))]
+                                # Calculate average interval
+                                average_interval = int(sum(intervals) / len(intervals))
+                                stats[stat_name] = average_interval
+                            else:
+                                stats[stat_name] = 0  # Not enough data to calculate
+                elif stat_config['function'] == 'since':
+                    column = stat_config['column']
+                    if column in log_config['fields'] and log_config['fields'][column]['type'] == 'date':
+                        if logs:
+                            # Extract the latest date
+                            last_record_date = max(datetime.strptime(log.get(column), '%Y-%m-%d') for log in logs if log.get(column))
+                            today = datetime.today()
+                            # Calculate days since the last record
+                            since_days = (today - last_record_date).days
+                            stats[stat_name] = since_days
         
         return render_template('lt_log_form.html', log_type=log_type, log_config=log_config, logs=sorted_logs, stats=stats)
     return "Log type not found", 404
