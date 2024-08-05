@@ -5,6 +5,7 @@ from db import db_uri
 from datetime import datetime, timedelta
 import pytz
 import re
+import json
 
 # Hardcoded dictionary mapping user IDs to names
 user_dict = {
@@ -206,3 +207,22 @@ def get_brief_player_name(player):
         formatted_name = player
 
     return formatted_name
+
+def display_reflection_impl(json_string):
+    if not json_string:
+        # Handle None or empty string input
+        return ''
+    try:
+        data = json.loads(json_string)
+    except json.JSONDecodeError:
+        # Handle invalid JSON input
+        return ''
+    
+    output = []
+    for key, value in data.items():
+        if value:  # Check if the value is not empty
+            value = value.replace("\n", "<br>")
+            output.append(f"<i>{key}:</i><br>{value}<br><br>")
+    
+    # If output list is empty, return an empty string
+    return ''.join(output) if output else ''

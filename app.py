@@ -9,7 +9,7 @@ from serve import serve_bp
 from tennis import tennis_bp
 from games import games_bp
 from match import match_bp
-from utils import user_dict, generate_title
+from utils import user_dict, generate_title, display_reflection_impl
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms import LoginForm
 from user import User, users
@@ -107,23 +107,7 @@ def short_name(variables):
 
 @app.template_filter('display_reflection')
 def display_reflection(json_string):
-    if not json_string:
-        # Handle None or empty string input
-        return ''
-    try:
-        data = json.loads(json_string)
-    except json.JSONDecodeError:
-        # Handle invalid JSON input
-        return ''
-    
-    output = []
-    for key, value in data.items():
-        if value:  # Check if the value is not empty
-            value = value.replace("\n", "<br>")
-            output.append(f"<i>{key}:</i><br>{value}<br><br>")
-    
-    # If output list is empty, return an empty string
-    return ''.join(output) if output else ''
+    return display_reflection_impl(json_string)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
