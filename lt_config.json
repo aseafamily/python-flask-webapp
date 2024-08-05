@@ -262,6 +262,113 @@
             "autocomplete": false
           }
         }
+      },
+      "stringing": {
+        "title": "Stringing Log",
+        "default_sort": {
+          "column": "date",
+          "order": "desc"
+        },
+        "fields": {
+          "date": {
+            "label": "Date",
+            "type": "date",
+            "placeholder": "Select the date",
+            "css_class": "form-control",
+            "required": true
+          },
+          "racquet": {
+            "label": "Racquet",
+            "type": "select",
+            "placeholder": "Select the racquet",
+            "css_class": "form-control",
+            "required": true,
+            "options": {
+              "sources": {
+                "type": "foreign_key",
+                "log_type": "racquets",
+                "display_field": "name (owner)",
+                "value_field": "id",
+                "limit": "10"
+              }
+            }
+          },
+          "stringer": {
+            "label": "Stringer",
+            "type": "text",
+            "placeholder": "Enter the stringer",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "main_string": {
+            "label": "Main String",
+            "type": "text",
+            "placeholder": "Enter the main string",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "main_tension": {
+            "label": "Main Tension",
+            "type": "number",
+            "placeholder": "Enter the tension",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "main_string_usage": {
+            "label": "Main string usage",
+            "type": "number",
+            "placeholder": "Enter the usage",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": false
+          },
+          "cross_string": {
+            "label": "Cross String",
+            "type": "text",
+            "placeholder": "Enter the cross string",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
+          "cross_tension": {
+            "label": "Cross Tension",
+            "type": "number",
+            "placeholder": "Enter the tension",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": true
+          },
+          "cross_string_usage": {
+            "label": "Cross string usage",
+            "type": "number",
+            "placeholder": "Enter the usage",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": false
+          },
+          "break_date": {
+            "label": "Break Date",
+            "type": "date",
+            "placeholder": "Select the break date",
+            "css_class": "form-control",
+            "required": false
+          }
+        },
+        "stats": {
+          "total": {
+            "label": "Total: ",
+            "column": "*",
+            "function": "count"
+          },
+          "average_interval": {
+            "label": "Average Interval (days): ",
+            "column": "date",
+            "function": "average_interval"
+          }
+        }
       }
     }
   }

@@ -116,9 +116,78 @@
                  name="{{ field_name }}" 
                  placeholder="{{ field_config.placeholder }}" 
                  class="{{ field_config.css_class }}" 
+                 step="0.1" 
                  {% if field_config.required %}required{% endif %}
                  {% if field_config.get('autocomplete', False) %} data-autocomplete="true" {% endif %}>
+
+        <!-- start of select -->   
+
+        {% elif field_config.type == 'select' %}
+    <select id="{{ field_name }}" name="{{ field_name }}" class="{{ field_config.css_class }}" placeholder="{{ field_config.placeholder }}">
+        <option value="">Select an option</option>
+        {% if field_config.options.sources.type == 'foreign_key' %}
+            <option value="all">Show All</option>
+            {% set foreign_key_log_type = field_config.options.sources.log_type %}
+            {% set display_field = field_config.options.sources.display_field %}
+            {% set value_field = field_config.options.sources.value_field %}
+            {% set limit = field_config.options.sources.limit %}
+            <script>
+                $(document).ready(function() {
+                    var logType = "{{ foreign_key_log_type }}";
+                    var fieldName = "{{ field_name }}";
+                    var limit = "{{ limit }}";
+                    var userId = "{{ request.args.get('u', '') }}"; // Pass user_id to the template if needed
+                    var displayField = "{{ display_field }}"; // The combined display field
+
+                    // Function to fetch options with a limit
+                    function fetchOptions(limit) {
+                        var url = `/lt/autocomplete/${logType}/[all]?u=${userId}&limit=${limit}`;
+                        $.get(url, function(data) {
+                            var select = $("#" + fieldName);
+                            select.empty();
+                            select.append('<option value="">Select an option</option>');
+                            if (data.length) {
+                                data.forEach(function(item) {
+                                    var displayText = generateDisplayText(item, displayField);
+                                    var value = displayText;
+                                    select.append('<option value="' + value + '">' + displayText + '</option>');
+                                });
+                            }
+                        });
+                    }
+
+                    // Function to generate display text based on the displayField configuration
+                    function generateDisplayText(item, displayField) {
+                        // Replace placeholders in the displayField string with actual field values
+                        return displayField.replace(/\b(\w+)\b/g, function(match) {
+                            return item[match] !== undefined ? item[match] : '';
+                        });
+                    }
+
+                    // Initial fetch with limit
+                    fetchOptions(limit);
+
+                    // Checkbox change event
+                    $('#show-all-options').change(function() {
+                        var showAll = $(this).is(':checked');
+                        var fetchLimit = showAll ? '' : limit; // No limit if "Show All" is checked
+                        fetchOptions(fetchLimit);
+                    });
+                });
+            </script>
+        {% elif field_config.options.sources.type == 'predefined' %}
+            {% for option in field_config.options.sources %}
+            <option value="{{ option.value }}" {% if log[field_name] == option.value %}selected{% endif %}>{{ option.display }}</option>
+            {% endfor %}
         {% endif %}
+    </select>
+    <input type="checkbox" id="show-all-options" style="display: inline-block; margin-right: 5px; margin-top: 5px;" />
+    <label for="show-all-options" style="display: inline-block;">Show all options</label>
+{% endif %}
+
+
+             
+        <!-- end of select -->
         <br>
       {% endfor %}
       <button type="submit">Submit</button>

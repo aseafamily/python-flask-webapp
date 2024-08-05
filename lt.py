@@ -216,10 +216,26 @@ def delete_log(log_type, log_id):
 @lt_bp.route('/lt/autocomplete/<log_type>/<field_name>', methods=['GET'])
 def autocomplete(log_type, field_name):
     user_id = request.args.get('u', '')
+    limit = request.args.get('limit', None)  # Get limit from query parameters if provided
+
+    # Read logs for the given log type and user ID
     logs = read_logs(log_type, user_id)
-    
-    # Extract the values for the specified field and count the occurrences
-    field_values = [log[field_name] for log in logs if field_name in log]
-    top_values = [item for item, count in Counter(field_values).most_common(10)]
-    
-    return jsonify(top_values)
+
+    # Get default sort configuration from lt_config.json
+    log_config = config.get('log_types', {}).get(log_type, {})
+    default_sort = log_config.get('default_sort', {})
+    sort_column = default_sort.get('column', 'date')  # Default to 'date' if not specified
+    sort_order = default_sort.get('order', 'desc')  # Default to 'desc' if not specified
+
+    if field_name == '[all]':
+        # Return raw log data
+        sorted_logs = sorted(logs, key=lambda x: x.get(sort_column, ''), reverse=(sort_order == 'desc'))
+        if limit:
+            sorted_logs = sorted_logs[:int(limit)]
+        return jsonify(sorted_logs)
+    else:
+        # Extract the values for the specified field and count the occurrences
+        field_values = [log[field_name] for log in logs if field_name in log]
+        top_values = [item for item, count in Counter(field_values).most_common(10)]
+        all_values = [{'field': field_name, 'value': item} for item in top_values]
+        return jsonify(all_values)
