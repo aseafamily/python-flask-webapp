@@ -2,44 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
     <title>Form Submission</title>
     <style>
         *{
             box-sizing: border-box;
         }
         
-        .user_reflection_box{
-            border-radius:10%;
-            width: 45%;
-            height: 30vh;
+        .user_reflection_box, .opp_reflection_box, .overall_takeaways_box{
+            width: 48%;
+            height: 25vh;
             border: 2px solid black;
-            padding: 1rem;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #6497a8;
         }
         
-        .user_reflection{
+        .user_reflection, .opp_reflection, .overall_takeaways{
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
-            width: 80%;
+            width: 95%;
             margin-top: 1rem;
             margin: auto;
-            height: 30vh;
-            
+            height: 25vh;
+        }
+
+        .overall_takeaways{
+            margin-top: 2rem;
         }
 
         label{
             text-align: center;
             display: block;
-            margin: 0.5rem;
+            margin: 0.25rem;
+            font-size: 20px;
         }
 
-        #did_well, #struggled_with{
-            width: 100%;
-            height: 90%;
+        #did_well, #struggled_with, #opp_strengths, #opp_weaknesses, #overall_takeaways{
+            width: 95%;
+            height: 85%;
             font-size: 1rem;
-            border-radius: 10%;
+            margin: auto;
+        }
+
+        textarea{
+            border: 1px solid #222527;
         }
 
         h1{
@@ -47,11 +62,57 @@
             margin-top: 1rem;
         }
 
+        body{
+            font-family:'Comfortaa', sans-serif;
+        }
+
         form {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
+
+        .user_rating{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 85%;
+        }
+
+        .user_ratings{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .radio_buttons{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding-bottom: 1rem;
+        }
+
+        .radio_buttons label{
+            margin-right: 2rem;
+        }
+
+        h2{
+            margin: 0.5rem;
+            font-size: 20px;
+        }
+
+        #submit{
+            font-family: 'Comfortaa', 'sans-serif';
+            margin: 1rem auto;
+            display: block;
+        }
+
+        .submit-container{
+            text-align: center;
+            width: 100%;
+        }
+
     </style>
 </head>
 <body>
@@ -60,16 +121,66 @@
         <div class="user_reflection">
             <div class="user_reflection_box">
                 <label for="did_well">What I Did Well</label>
-                <input type="text" id="did_well" name="did_well" required>
+                <textarea name="did_well" id="did_well" required></textarea>
             </div>
-            <br>
             <div class="user_reflection_box">
                 <label for="struggled_with">What I Struggled With</label>
-                <input type="text" id="struggled_with" name="struggled_with" required>
+                <textarea name="struggled_with" id="struggled_with" required></textarea>
             </div>
-            <br>
         </div>
-        <input type="submit" value="Submit">
+        <br>
+        <div class="user_rating">
+            <div class="user_ratings">
+                <h2>Consistency</h2>
+                <div class="radio_buttons">
+                    <label><input type="radio" name="consistency" value="1"> 1</label>
+                    <label><input type="radio" name="consistency" value="2"> 2</label>
+                    <label><input type="radio" name="consistency" value="3"> 3</label>
+                    <label><input type="radio" name="consistency" value="4"> 4</label>
+                    <label><input type="radio" name="consistency" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="user_ratings">
+                <h2>Defense</h2>
+                <div class="radio_buttons">
+                    <label><input type="radio" name="defense" value="1"> 1</label>
+                    <label><input type="radio" name="defense" value="2"> 2</label>
+                    <label><input type="radio" name="defense" value="3"> 3</label>
+                    <label><input type="radio" name="defense" value="4"> 4</label>
+                    <label><input type="radio" name="defense" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="user_ratings">
+                <h2>Attacking</h2>
+                <div class="radio_buttons">
+                    <label><input type="radio" name="attacking" value="1"> 1</label>
+                    <label><input type="radio" name="attacking" value="2"> 2</label>
+                    <label><input type="radio" name="attacking" value="3"> 3</label>
+                    <label><input type="radio" name="attacking" value="4"> 4</label>
+                    <label><input type="radio" name="attacking" value="5"> 5</label>
+                </div>
+            </div>
+        </div>
+        <div class="opp_reflection">
+            <div class="opp_reflection_box">
+                <label for="opp_strengths">Opponent Strengths</label>
+                <textarea name="opp_strengths" id="opp_strengths" required></textarea>
+            </div>
+            <div class="opp_reflection_box">
+                <label for="opp_weaknesses">Opponent Weaknesses</label>
+                <textarea name="opp_weaknesses" id="opp_weaknesses" required></textarea>
+            </div>
+        </div>
+        <div class="overall_takeaways">
+            <div class="overall_takeaways_box">
+                <label for="overall_takeaways">Overall Takeaways</label>
+                <textarea name="overall_takeaways" id="overall_takeaways" required></textarea>
+            </div>
+        </div>
+        <br>
+        <div class="submit-container">
+            <input type="submit" value="Submit" id="submit">
+        </div>
     </form>
 </body>
 </html>
