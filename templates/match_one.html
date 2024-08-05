@@ -828,6 +828,28 @@
             
             </div>
         </div>
+        <div display="flex" class="Box Flex dlyXLO jLRkRA">
+            <!--<div class="Box ictZTN"></div>-->
+            <a href="/reflection?tennis_id={{ match_data.Match.tennis_id }}&u={{ match_data.Match.player1 }}">
+            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="SvgWrapper hwgeMK">
+                <!-- Tennis Ball -->
+                <circle cx="12" cy="12" r="10" fill="#4CAF50" stroke="black" stroke-width="1"/>
+                
+                <!-- Tennis Ball Lines -->
+                <path d="M8 8 Q12 4 16 8" stroke="black" stroke-width="1" fill="none"/>
+                <path d="M8 16 Q12 20 16 16" stroke="black" stroke-width="1" fill="none"/>
+            </svg>
+            </a>
+            <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
+                <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Reflection</span>
+                <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">
+                    {% set formatted_reflection = match_data.reflection|display_reflection %}
+                    {% if formatted_reflection %}
+                    {{ formatted_reflection|safe }}
+                    {% endif %}
+                <span>
+            </div>
+        </div>
     </div>
     <!-- End Details panel-->
 

@@ -119,7 +119,7 @@ def display_reflection(json_string):
     output = []
     for key, value in data.items():
         if value:  # Check if the value is not empty
-            output.append(f"{key}:<br>{value}<br>")
+            output.append(f"{key}:<br>{value}<br><br>")
     
     # If output list is empty, return an empty string
     return ''.join(output) if output else ''

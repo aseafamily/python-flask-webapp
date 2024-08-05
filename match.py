@@ -47,11 +47,13 @@ def match_index():
         player1.first_name.label('player1_first_name'), player1.last_name.label('player1_last_name'),
         player2.first_name.label('player2_first_name'), player2.last_name.label('player2_last_name'),
         player3.first_name.label('player3_first_name'), player3.last_name.label('player3_last_name'),
-        player4.first_name.label('player4_first_name'), player4.last_name.label('player4_last_name')
+        player4.first_name.label('player4_first_name'), player4.last_name.label('player4_last_name'),
+        Tennis.reflection
     ).join(player1, Match.player1 == player1.id, isouter=True) \
     .join(player2, Match.player2 == player2.id, isouter=True) \
     .join(player3, Match.player3 == player3.id, isouter=True) \
     .join(player4, Match.player4 == player4.id, isouter=True) \
+    .join(Tennis, Match.tennis_id == Tennis.id, isouter=True) \
     .filter(
         or_(
             Match.player1 == player_id,
@@ -166,7 +168,8 @@ def match_index():
             'player1_number': format_player_number(match.Match.player1_wtn, match.Match.player1_utr, match.Match.player1_usta),
             'player2_number': format_player_number(match.Match.player2_wtn, match.Match.player2_utr, match.Match.player2_usta),
             'player3_number': format_player_number(match.Match.player3_wtn, match.Match.player3_utr, match.Match.player3_usta),
-            'player4_number': format_player_number(match.Match.player4_wtn, match.Match.player4_utr, match.Match.player4_usta)
+            'player4_number': format_player_number(match.Match.player4_wtn, match.Match.player4_utr, match.Match.player4_usta),
+            'reflection': match.reflection
         }
         results.append(match_data)
         last_match_name = match.Match.match_name
@@ -225,11 +228,13 @@ def match_one(id):
         player1.first_name.label('player1_first_name'), player1.last_name.label('player1_last_name'),
         player2.first_name.label('player2_first_name'), player2.last_name.label('player2_last_name'),
         player3.first_name.label('player3_first_name'), player3.last_name.label('player3_last_name'),
-        player4.first_name.label('player4_first_name'), player4.last_name.label('player4_last_name')
+        player4.first_name.label('player4_first_name'), player4.last_name.label('player4_last_name'),
+        Tennis.reflection
     ).join(player1, Match.player1 == player1.id, isouter=True) \
     .join(player2, Match.player2 == player2.id, isouter=True) \
     .join(player3, Match.player3 == player3.id, isouter=True) \
     .join(player4, Match.player4 == player4.id, isouter=True) \
+    .join(Tennis, Match.tennis_id == Tennis.id, isouter=True) \
     .filter(Match.id == id) \
     .first()
 
@@ -250,7 +255,8 @@ def match_one(id):
         'player1_number': format_player_number(match_query.Match.player1_wtn, match_query.Match.player1_utr, match_query.Match.player1_usta),
         'player2_number': format_player_number(match_query.Match.player2_wtn, match_query.Match.player2_utr, match_query.Match.player2_usta),
         'player3_number': format_player_number(match_query.Match.player3_wtn, match_query.Match.player3_utr, match_query.Match.player3_usta),
-        'player4_number': format_player_number(match_query.Match.player4_wtn, match_query.Match.player4_utr, match_query.Match.player4_usta)
+        'player4_number': format_player_number(match_query.Match.player4_wtn, match_query.Match.player4_utr, match_query.Match.player4_usta),
+        'reflection': match_query.reflection
     }
 
     # get scores
