@@ -107,7 +107,7 @@ def log_form(log_type):
                     if column and column in log_config['fields']:
                         # Sum values in the specified column
                         total = sum(float(log.get(column, 0)) for log in logs if log.get(column))
-                        stats[stat_name] = total
+                        stats[stat_name] = total 
                 elif stat_config['function'] == 'average_interval':
                     column = stat_config['column']
                     if column in log_config['fields'] and log_config['fields'][column]['type'] == 'date':

@@ -574,6 +574,136 @@
             "autocomplete": false
           }
         }
+      },
+      "dental": {
+        "title": "Dental Log",
+        "default_sort": {
+          "column": "date",
+          "order": "desc"
+        },
+        "stats": {
+          "total": {
+            "label": "Total: ",
+            "column": "*",
+            "function": "count"
+          },
+          "total_price": {
+            "label": "Total price: ",
+            "column": "price",
+            "function": "sum"
+          },
+          "average_interval": {
+            "label": "Average Interval (days): ",
+            "column": "date",
+            "function": "average_interval"
+          },
+          "since": {
+            "label": "Since last record: ",
+            "column": "date",
+            "function": "since"
+          }
+        },
+        "fields": {
+          "date": {
+            "label": "Date",
+            "type": "date",
+            "placeholder": "Select the date",
+            "css_class": "form-control",
+            "required": true
+          },
+          "dentist": {
+            "label": "Dentist",
+            "type": "text",
+            "placeholder": "Enter the dentist name",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "price": {
+            "label": "Price",
+            "type": "number",
+            "placeholder": "Enter the price",
+            "css_class": "form-control",
+            "required": true
+          },
+          "note": {
+            "label": "Note",
+            "type": "text",
+            "placeholder": "Enter the note",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": false
+          }
+        }
+      },
+      "medical": {
+        "title": "Medical Log",
+        "default_sort": {
+          "column": "date",
+          "order": "desc"
+        },
+        "stats": {
+          "total": {
+            "label": "Total: ",
+            "column": "*",
+            "function": "count"
+          },
+          "total_price": {
+            "label": "Total price: ",
+            "column": "price",
+            "function": "sum"
+          },
+          "average_interval": {
+            "label": "Average Interval (days): ",
+            "column": "date",
+            "function": "average_interval"
+          },
+          "since": {
+            "label": "Since last record: ",
+            "column": "date",
+            "function": "since"
+          }
+        },
+        "fields": {
+          "date": {
+            "label": "Date",
+            "type": "date",
+            "placeholder": "Select the date",
+            "css_class": "form-control",
+            "required": true
+          },
+          "clinic": {
+            "label": "Clinic",
+            "type": "text",
+            "placeholder": "Enter the clinic name",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "dentist": {
+            "label": "Doctor",
+            "type": "text",
+            "placeholder": "Enter the doctor name",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "price": {
+            "label": "Price",
+            "type": "number",
+            "placeholder": "Enter the price",
+            "css_class": "form-control",
+            "required": true
+          },
+          "note": {
+            "label": "Note",
+            "type": "text",
+            "placeholder": "Enter the note",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": false
+          }
+        }
       }
     }
   }
