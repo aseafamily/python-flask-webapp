@@ -109,6 +109,7 @@
           <input type="date" id="{{ field_name }}" 
                  name="{{ field_name }}" 
                  class="{{ field_config.css_class }}" 
+                 value="{{ today() }}" 
                  {% if field_config.required %}required{% endif %}
                  {% if field_config.get('autocomplete', False) %} data-autocomplete="true" {% endif %}>
         {% elif field_config.type == 'number' %}
@@ -119,6 +120,12 @@
                  step="0.1" 
                  {% if field_config.required %}required{% endif %}
                  {% if field_config.get('autocomplete', False) %} data-autocomplete="true" {% endif %}>
+
+        {% elif field_config.type == 'bool' %}
+          <input type="checkbox" id="{{ field_name }}" 
+            name="{{ field_name }}" 
+            class="{{ field_config.css_class }}" 
+            {% if field_config.required %}required{% endif %}>
 
         <!-- start of select -->   
 

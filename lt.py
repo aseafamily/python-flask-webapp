@@ -94,32 +94,7 @@ def log_form(log_type):
         log_config = config['log_types'][log_type]
         logs = read_logs(log_type, user_id)
         
-        # Get the default sort column and order from the configuration
-        sort_column = log_config.get('default_sort', {}).get('column')
-        sort_order = log_config.get('default_sort', {}).get('order', 'asc')
-        
-        if sort_column:
-            # Get the type of the sort column
-            sort_column_type = log_config['fields'][sort_column]['type']
-            
-            # Define a sorting key function based on the field type
-            def sort_key(log):
-                value = log.get(sort_column)
-                if sort_column_type == 'date':
-                    # Define the date format (update this format according to your date string format)
-                    date_format = "%Y-%m-%d"  # Example: "2023-08-04"
-                    return datetime.strptime(value, date_format) if value else datetime.min
-                elif sort_column_type == 'number':
-                    return float(value) if value else float('-inf')
-                elif sort_column_type == 'text':
-                    return value.lower() if value else ''
-                else:
-                    return value
-            
-            # Sort logs by the specified column in the specified order
-            sorted_logs = sorted(logs, key=sort_key, reverse=(sort_order == 'desc'))
-        else:
-            sorted_logs = logs
+        sorted_logs = sort_logs(log_config, logs)
 
         # Calculate statistics
         stats = {}
@@ -168,6 +143,15 @@ def submit_log(log_type):
         log_data = request.form.to_dict()
         logs = read_logs(log_type, user_id)
 
+        # Get the field types from the config
+        field_types = config['log_types'][log_type].get('fields', {})
+
+        # Convert form data based on field types
+        for field, value in log_data.items():
+            field_type = field_types.get(field, {}).get('type', 'text')
+            if field_type == 'bool':
+                log_data[field] = value == 'on'
+
         # Add a new ID to the log data
         new_id = max([log.get('id', 0) for log in logs], default=0) + 1
         log_data['id'] = new_id
@@ -199,6 +183,15 @@ def update_log(log_type, log_id):
 
         log_data = request.form.to_dict()
         log_data["id"] = log_id
+
+        # Get the field types from the config
+        field_types = config['log_types'][log_type].get('fields', {})
+
+        # Convert form data based on field types
+        for field, value in log_data.items():
+            field_type = field_types.get(field, {}).get('type', 'text')
+            if field_type == 'bool':
+                log_data[field] = value == 'on'
 
         logs = read_logs(log_type, user_id)
 
@@ -232,15 +225,11 @@ def autocomplete(log_type, field_name):
     # Read logs for the given log type and user ID
     logs = read_logs(log_type, user_id)
 
-    # Get default sort configuration from lt_config.json
-    log_config = config.get('log_types', {}).get(log_type, {})
-    default_sort = log_config.get('default_sort', {})
-    sort_column = default_sort.get('column', 'date')  # Default to 'date' if not specified
-    sort_order = default_sort.get('order', 'desc')  # Default to 'desc' if not specified
-
     if field_name == '[all]':
         # Return raw log data
-        sorted_logs = sorted(logs, key=lambda x: x.get(sort_column, ''), reverse=(sort_order == 'desc'))
+        # Get default sort configuration from lt_config.json
+        log_config = config.get('log_types', {}).get(log_type, {})
+        sorted_logs = sort_logs(log_config, logs)
         if limit:
             sorted_logs = sorted_logs[:int(limit)]
         return jsonify(sorted_logs)
@@ -250,3 +239,36 @@ def autocomplete(log_type, field_name):
         top_values = [item for item, count in Counter(field_values).most_common(10)]
         all_values = [{'field': field_name, 'value': item} for item in top_values]
         return jsonify(all_values)
+    
+
+def sort_logs(log_config, logs):
+    # Get the default sort column and order from the configuration
+    sort_column = log_config.get('default_sort', {}).get('column')
+    sort_order = log_config.get('default_sort', {}).get('order', 'asc')
+    
+    if sort_column:
+        # Get the type of the sort column
+        sort_column_type = log_config['fields'][sort_column]['type']
+        
+        # Define a sorting key function based on the field type
+        def sort_key(log):
+            value = log.get(sort_column)
+            if sort_column_type == 'date':
+                # Define the date format (update this format according to your date string format)
+                date_format = "%Y-%m-%d"  # Example: "2023-08-04"
+                return datetime.strptime(value, date_format) if value else datetime.min
+            elif sort_column_type == 'number':
+                return float(value) if value else float('-inf')
+            elif sort_column_type == 'text':
+                return value.lower() if value else ''
+            elif sort_column_type == 'bool':
+                return value if value else False
+            else:
+                return value
+        
+        # Sort logs by the specified column in the specified order
+        sorted_logs = sorted(logs, key=sort_key, reverse=(sort_order == 'desc'))
+    else:
+        sorted_logs = logs
+
+    return sorted_logs

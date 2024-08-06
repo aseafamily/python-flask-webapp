@@ -140,7 +140,7 @@
       "racquets": {
         "title": "Racquets Log",
         "default_sort": {
-          "column": "date",
+          "column": "is_active",
           "order": "desc"
         },
         "stats": {
@@ -283,6 +283,12 @@
             "css_class": "form-control",
             "required": false,
             "autocomplete": false
+          },
+          "is_active": {
+              "label": "Is Active",
+              "type": "bool",
+              "css_class": "form-check-input",
+              "required": false
           }
         }
       },
@@ -310,7 +316,7 @@
               "sources": {
                 "type": "foreign_key",
                 "log_type": "racquets",
-                "display_field": "name (owner)",
+                "display_field": "owner - name (id)",
                 "value_field": "id",
                 "limit": "10"
               }

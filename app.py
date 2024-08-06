@@ -56,6 +56,13 @@ def load_user(user_id):
             return user
     return None
 
+# Custom function to get today's date
+def get_today_date():
+    return datetime.today().strftime('%Y-%m-%d')
+
+# Register the custom function with Jinja2
+app.jinja_env.globals['today'] = get_today_date
+
 @app.template_filter('generate_acronym')
 def generate_acronym(location_name):
     # Check if location_name is already an acronym (less than four uppercase characters)

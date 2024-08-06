@@ -88,6 +88,12 @@
                  value="{{ log[field_name] }}" 
                  class="{{ field_config.css_class }}" 
                  {% if field_config.required %}required{% endif %}>
+        {% elif field_config.type == 'bool' %}
+            <input type="checkbox" id="{{ field_name }}" 
+                name="{{ field_name }}" 
+                class="{{ field_config.css_class }}" 
+                {% if field_config.required %}required{% endif %}
+                {% if log[field_name] %}checked{% endif %}>
         {% elif field_config.type == 'select' %}
             <input type="text" id="{{ field_name }}" 
                 name="{{ field_name }}" 
