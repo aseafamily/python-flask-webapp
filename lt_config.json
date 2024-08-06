@@ -378,12 +378,21 @@
             "required": false,
             "autocomplete": false
           },
+          "work_time": {
+            "label": "Stringing work time (minutes)",
+            "type": "number",
+            "placeholder": "Enter the time",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": false
+          },
           "break_date": {
             "label": "Break Date",
             "type": "date",
             "placeholder": "Select the break date",
             "css_class": "form-control",
-            "required": false
+            "required": false,
+            "default": "None"
           }
         },
         "stats": {
