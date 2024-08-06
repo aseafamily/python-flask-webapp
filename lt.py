@@ -125,12 +125,13 @@ def log_form(log_type):
                     column = stat_config['column']
                     if column in log_config['fields'] and log_config['fields'][column]['type'] == 'date':
                         if logs:
-                            # Extract the latest date
-                            last_record_date = max(datetime.strptime(log.get(column), '%Y-%m-%d') for log in logs if log.get(column))
-                            today = datetime.today()
-                            # Calculate days since the last record
-                            since_days = (today - last_record_date).days
-                            stats[stat_name] = since_days
+                            dates = [datetime.strptime(log.get(column), '%Y-%m-%d') for log in logs if log.get(column)]
+                            if dates:
+                                last_record_date = max(dates)
+                                since_last_record = (datetime.now() - last_record_date).days
+                                stats[stat_name] = since_last_record
+                            else:
+                                stats[stat_name] = None  # No dates to compare
         
         return render_template('lt_log_form.html', log_type=log_type, log_config=log_config, logs=sorted_logs, stats=stats)
     return "Log type not found", 404
