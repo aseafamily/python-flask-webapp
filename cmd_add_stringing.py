@@ -1,68 +1,120 @@
 import requests
-
-rac = '''
-<select id="racquet" name="racquet" class="form-control" placeholder="Select the racquet">
-   <option value="Alex - Clash 100L (1)">Alex - Clash 100L (1)</option>
-   <option value="Emily - VCore 98 Blue (2)">Emily - VCore 98 Blue (2)</option>
-   <option value="Emily - VCore 98 Black (3)">Emily - VCore 98 Black (3)</option>
-   <option value="Alex - ClashR 100 (4)">Alex - ClashR 100 (4)</option>
-   <option value="Andrew - PA 2023 White (5)">Andrew - PA 2023 White (5)</option>
-   <option value="Andrew - PA 2023 Orange (6)">Andrew - PA 2023 Orange (6)</option>
-   <option value="Andrew - PA 2023 Black (7)">Andrew - PA 2023 Black (7)</option>
-   <option value="Emily - VCore 98 7th (8)">Emily - VCore 98 7th (8)</option>
-   <option value="Andrew - PA Lite (9)">Andrew - PA Lite (9)</option>
-   <option value="Andrew - PA Rafa Lite (10)">Andrew - PA Rafa Lite (10)</option>
-   <option value="Emily - VCORE 100 6th (11)">Emily - VCORE 100 6th (11)</option>
-   <option value="Alex - PA Play (12)">Alex - PA Play (12)</option>
-   <option value="Emily - VCore 100L 6th Black (13)">Emily - VCore 100L 6th Black (13)</option>
-   <option value="Emily - VCore 100L 6th White (14)">Emily - VCore 100L 6th White (14)</option>
-   <option value="Andrew - Burn ULS (15)">Andrew - Burn ULS (15)</option>
-   <option value="Emily - Gravity Lite (16)">Emily - Gravity Lite (16)</option>
-   <option value="Emily - Graphene Instinct Lite (17)">Emily - Graphene Instinct Lite (17)</option>
-   <option value="Alex - Miss Chris (18)">Alex - Miss Chris (18)</option>
-   <option value="Alex - Speed Flex (19)">Alex - Speed Flex (19)</option>
-   <option value="Alex - Clash Tour 100 (20)">Alex - Clash Tour 100 (20)</option>
-   <option value="Alex - EZone 100 (21)">Alex - EZone 100 (21)</option>
-   <option value="Andrew - Clash 100UL (22)">Andrew - Clash 100UL (22)</option>
-   <option value="Emily - Instinct Lite White (23)">Emily - Instinct Lite White (23)</option>
-   <option value="Emily - Instinct Lite (24)">Emily - Instinct Lite (24)</option>
-   <option value="Alex - Pure Drive Play (25)">Alex - Pure Drive Play (25)</option>
-   <option value="Alex - Prince Force (26)">Alex - Prince Force (26)</option>
-   <option value="Andrew - Burn ULS 2 (27)">Andrew - Burn ULS 2 (27)</option>
-   <option value="Andrew - Burn 26S Black (28)">Andrew - Burn 26S Black (28)</option>
-   <option value="Andrew - Burn 26S Orange (29)">Andrew - Burn 26S Orange (29)</option>
-   <option value="Emily - Pure Strike 26 (30)">Emily - Pure Strike 26 (30)</option>
-   <option value="Alex - nFury Hybrid (31)">Alex - nFury Hybrid (31)</option>
-   <option value="Alex - Burn 95 (32)">Alex - Burn 95 (32)</option>
-   <option value="Andrew - Pure Aero 25 (33)">Andrew - Pure Aero 25 (33)</option>
-   <option value="Andrew - Pure Drive 23 Junior (34)">Andrew - Pure Drive 23 Junior (34)</option>
-   <option value="Emily - Pure Drive 25 Pink Junior (35)">Emily - Pure Drive 25 Pink Junior (35)</option>
-   <option value="Andrew - Instinct Junior 21 (36)">Andrew - Instinct Junior 21 (36)</option>
-   <option value="Emily - Instinct Junior 21 (37)">Emily - Instinct Junior 21 (37)</option>
-   <option value="Andrew - Speed Junior 21 (38)">Andrew - Speed Junior 21 (38)</option>
-</select>
-'''
+from datetime import datetime
+import re
 
 # Define the URL to which you want to send the POST request
 url = 'https://bluehousemall.azurewebsites.net/lt/stringing?u=0'
 
-# Define the form data as a dictionary
-form_data = {
-    'field1': 'value1',
-    'field2': 'value2',
-    'field3': 'value3'
-    # Add more fields as required
-}
+# Given input blocks separated by empty lines
+input_data = '''
+10/22/2018 (1)
+Solinco Hyper G 17 @55LB
+'''
 
-# Send the POST request
-response = requests.post(url, data=form_data)
+# Split the input into blocks by empty lines
+blocks = [block.strip() for block in input_data.strip().split('\n\n')]
 
-# Check the response status code
-if response.status_code == 200:
-    print('POST request was successful')
-    print('Response content:')
-    print(response.text)
-else:
-    print(f'Failed to send POST request. Status code: {response.status_code}')
-    print('Response content:')
-    print(response.text)
+def parse_block(lines):
+    # Initialize variables
+    date = ''
+    main_string = ''
+    main_tension = ''
+    main_string_usage = ''
+    cross_string = ''
+    cross_tension = ''
+    cross_string_usage = ''
+    break_date = ''
+
+    # Split the block into lines
+    lines = lines.split('\n')
+
+    # Parse date and additional info from the first line
+    if len(lines) > 0:
+        date_str, *rest = lines[0].split(' ')
+        date = datetime.strptime(date_str, '%m/%d/%Y').strftime('%Y-%m-%d')
+        date_year = date.split('-')[0]
+
+    # Handle different cases based on the number of lines
+    if len(lines) > 1:
+        # Second line may contain main string and tension
+        if '@' in lines[1]:
+            main_string, main_tension_usage = lines[1].split('@')
+            main_string = main_string.strip()
+            main_tension_usage = main_tension_usage.strip()
+
+            # Extract main tension and usage
+            main_tension_match = re.match(r'(\d+)LB', main_tension_usage)
+            if main_tension_match:
+                main_tension = main_tension_match.group(1)
+
+            usage_match = re.search(r'\(([\d.]+)\)', main_tension_usage)
+            if usage_match:
+                usage_value = usage_match.group(1)
+                if re.match(r'^\d+(\.\d+)?$', usage_value):
+                    main_string_usage = usage_value
+
+    # Third line may contain cross string and tension if present
+    if len(lines) > 2:
+        if '@' in lines[2]:
+            cross_string, cross_tension_usage = lines[2].split('@')
+            cross_string = cross_string.strip()
+            cross_tension_usage = cross_tension_usage.strip()
+
+            # Extract cross tension and usage
+            cross_tension_match = re.match(r'(\d+)LB', cross_tension_usage)
+            if cross_tension_match:
+                cross_tension = cross_tension_match.group(1)
+
+            usage_match = re.search(r'\(([\d.]+)\)', cross_tension_usage)
+            if usage_match:
+                usage_value = usage_match.group(1)
+                if re.match(r'^\d+(\.\d+)?$', usage_value):
+                    cross_string_usage = usage_value
+
+    # Fourth line may contain break date if present
+    if len(lines) > 3:
+        break_match = re.match(r'(\d{1,2}/\d{1,2}/\d{4}) broke (\d+)', lines[3])
+        if break_match:
+            break_date = break_match.group(1)
+            if len(break_date.split('/')) == 2:
+                    break_date = f"{break_date}/{date_year}"
+
+    # Print the parsed values for debugging
+    print(f"date: {date}")
+    print(f"main_string: {main_string}")
+    print(f"main_tension: {main_tension}")
+    print(f"main_string_usage: {main_string_usage}")
+    print(f"cross_string: {cross_string}")
+    print(f"cross_tension: {cross_tension}")
+    print(f"cross_string_usage: {cross_string_usage}")
+    print(f"break_date: {break_date}")
+
+    return {
+        'date': date,
+        'racquet': 'Alex - Burn 95 (32)',  # Assuming static for example
+        'stringer': 'Alex',  # Assuming static for example
+        'main_string': main_string,
+        'main_tension': main_tension,
+        'main_string_usage': main_string_usage,
+        'cross_string': cross_string,
+        'cross_tension': cross_tension,
+        'cross_string_usage': cross_string_usage,
+        'break_date': break_date
+    }
+
+# Process each block and send POST requests
+for block in blocks:
+    form_data = parse_block(block)
+
+    # Send the POST request
+    response = requests.post(url, data=form_data)
+
+    # Check the response status code
+    if response.status_code == 200:
+        print('POST request was successful')
+        #print('Response content:')
+        #print(response.text)
+    else:
+        print(f'Failed to send POST request. Status code: {response.status_code}')
+        print('Response content:')
+        print(response.text)

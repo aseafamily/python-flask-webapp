@@ -87,6 +87,7 @@ def index():
     return render_template('lt_index.html', log_types=log_types)
 
 @lt_bp.route('/lt/<log_type>', methods=['GET'])
+@login_required
 def log_form(log_type):
     if log_type in config['log_types']:
         user_id = request.args.get('u', '')
