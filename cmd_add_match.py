@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from db import db, db_uri
-from tennis import get_or_create_player, generate_match_summary
+from bp_tennis import get_or_create_player, generate_match_summary
 from datetime import datetime, timedelta
 from db_tennis import Tennis
 from db_match import Match

@@ -4,20 +4,21 @@ from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from sqlalchemy import cast, String
 from db import db, db_uri
-from todo import todo_bp
-from serve import serve_bp
-from tennis import tennis_bp
-from games import games_bp
-from match import match_bp
+from bp_todo import todo_bp
+from bp_serve import serve_bp
+from bp_tennis import tennis_bp
+from bp_games import games_bp
+from bp_match import match_bp
 from utils import user_dict, generate_title, display_reflection_impl
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms import LoginForm
 from user import User, users
-from tools import tools_bp
-from stringing import stringing_bp
-from lt import lt_bp
-from reflection import reflection_bp
+from bp_tools import tools_bp
+from bp_stringing import stringing_bp
+from bp_lt import lt_bp
+from bp_reflection import reflection_bp
 import json
+from bp_test import test_bp
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -42,6 +43,7 @@ app.register_blueprint(tools_bp)
 app.register_blueprint(stringing_bp)
 app.register_blueprint(lt_bp)
 app.register_blueprint(reflection_bp)
+app.register_blueprint(test_bp)
 
 # for login
 app.config['SECRET_KEY'] = '48e7a59dca9d6c13b0e7e51b7ee6e2a5759c8e1dbb3a0f83'
