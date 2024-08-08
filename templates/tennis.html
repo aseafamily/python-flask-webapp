@@ -5,7 +5,7 @@
     <h4 style="text-align: center">You haven't practiced tennis yet. Do it now!</h4>
     {% else %}
     {% set days_since_last_serve = (now.date() - tennis_all[0].date.date()).days %}
-    <h4 style="text-align: center; color: {% if days_since_last_serve < 3 %}green{% elif days_since_last_serve < 6 %}black{% else %}red{% endif %};">
+    <h4 style="padding-top: 5px; text-align: center; color: {% if days_since_last_serve < 3 %}green{% elif days_since_last_serve < 6 %}black{% else %}red{% endif %};">
         <p>It has been {{ days_since_last_serve }} days since your last practice.</p>
         {% if days_since_last_serve < 3 %}
         <p>Good job! You have worked hard!</p>
@@ -36,7 +36,7 @@
 
 {% block bottom_part %}
     <div class="content" style="margin-top: 30px;">
-        <div>
+        <div style="padding: 10px;">
             {% if tennis_all|length >= 1 %}
             <p>Total Practice: {{ tennis_analysis.total_records }}</p>
             <p>Practice per week: {{ "{:.1f}".format(tennis_analysis.average_records_per_week) }}</p>
@@ -114,7 +114,7 @@
                 }
             })
         </script>
-        <div id="filter-section" style="margin-bottom: 20px;">
+        <div id="filter-section" style="margin-bottom: 20px; padding: 10px;">
             <input type="text" id="filter-input" placeholder="Enter category">
             <button onclick="setFilter()">Filter</button>
         </div>
@@ -125,6 +125,7 @@
                 fill: #007bff;
             }
         </style>
+        <div style="padding: 0px;">
         <table>
             <tr>
                 <th>Date</th>
@@ -179,5 +180,6 @@
             {% endfor %}
         </table>
         {% endif %}
+        </div>
     </div>
 {% endblock %}

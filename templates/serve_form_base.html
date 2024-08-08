@@ -226,6 +226,27 @@
             }
         });
     });
+
+    $(document).ready(function() {
+        // Hardcoded array of locations
+        var items = [
+            "Alex",
+            "Sherri"
+        ];
+
+        $('#comment').on('focus', function() {
+            $(this).autocomplete('search', '');
+        });
+
+        $('#comment').autocomplete({
+            source: items, // Use the hardcoded array
+            minLength: 0, // Minimum characters before triggering autocomplete
+            select: function(event, ui) {
+                $('#comment').val(ui.item.value); // Update input value when an option is selected
+                return false; // Prevent default behavior of input field
+            }
+        });
+    });
 </script>
 
 <script>

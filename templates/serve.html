@@ -5,7 +5,7 @@
     <h4 style="text-align: center">You haven't practiced serves yet. Do it now!</h4>
     {% else %}
     {% set days_since_last_serve = (now.date() - serves[0].date.date()).days %}
-    <h4 style="text-align: center; color: {% if days_since_last_serve < 3 %}green{% elif days_since_last_serve < 6 %}black{% else %}red{% endif %};">
+    <h4 style="padding-top: 5px; text-align: center; color: {% if days_since_last_serve < 3 %}green{% elif days_since_last_serve < 6 %}black{% else %}red{% endif %};">
         <p>It has been {{ days_since_last_serve }} days since your last practice.</p>
         {% if days_since_last_serve < 3 %}
         <p>Good job! You have worked hard!</p>
@@ -49,15 +49,17 @@
 {% block form_aces %}{% endblock %}
 
 {% block bottom_part %}
-    <div class="content" style="margin-top: 30px;">
-        {% if serves|length >= 1 %}
-        <p>Total Serves: {{ serve_analysis.total_serves }}</p>
-        <p>Serves per week: {{ "{:.0f}".format(serve_analysis.average_serves_per_week) }}</p>
-        <p>Total Practice: {{ serve_analysis.total_records }}</p>
-        <p>Practice per week: {{ "{:.1f}".format(serve_analysis.average_records_per_week) }}</p>
-        <p>Total Duration (minutes): {{ serve_analysis.total_duration }}</p>
-        <p>Duration per week (minutes): {{ "{:.0f}".format(serve_analysis.average_duration_per_week) }}</p>
-        <p>Started: {{ serve_analysis.time_since_first_entry.days }} days ago</p>
+    <div class="content" style="margin-top: 20px;">
+        <div style="padding: 10px;">
+            {% if serves|length >= 1 %}
+            <p>Total Serves: {{ serve_analysis.total_serves }}</p>
+            <p>Serves per week: {{ "{:.0f}".format(serve_analysis.average_serves_per_week) }}</p>
+            <p>Total Practice: {{ serve_analysis.total_records }}</p>
+            <p>Practice per week: {{ "{:.1f}".format(serve_analysis.average_records_per_week) }}</p>
+            <p>Total Duration (minutes): {{ serve_analysis.total_duration }}</p>
+            <p>Duration per week (minutes): {{ "{:.0f}".format(serve_analysis.average_duration_per_week) }}</p>
+            <p>Started: {{ serve_analysis.time_since_first_entry.days }} days ago</p>
+        </div>
 
         <h3 style="margin-left: 10px; margin-top: 20px; margin-bottom: 20px;text-align: center">
             <a href="/serve/diagram?u={{ u }}">Diagram</a>
