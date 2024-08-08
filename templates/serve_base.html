@@ -6,6 +6,142 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/serve.css') }}">
     {% block head %}{% endblock %}
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .content {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        @media (max-width: 768px) {
+            .content {
+                max-width: 400px;
+            }
+        }
+        .content p {
+            font-size: 1.1em;
+        }
+        .form {
+            margin-top: 20px;
+        }
+        .form form {
+            width: 100%;
+        }
+        .form .table {
+            width: 100%;
+        }
+        .form table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .form table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            font-size: 1em;
+        }
+        .form table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .form table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .form input[type="text"], .form input[type="date"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        .form input[type="text"], .form input[type="date"] {
+            border-color: #007bff;
+        }
+        .iphone-button {
+            appearance: none;
+            background-color: #007bff;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            outline: none;
+            padding: 15px 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            text-align: center;
+            width: 100%;
+        }
+        .iphone-button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .stats, .links, .filter-section {
+            margin-top: 20px;
+        }
+        .stats p, .filter-section p {
+            font-size: 1em;
+            margin: 5px 0;
+        }
+        .links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+        .links a:hover {
+            color: #0056b3;
+        }
+        .filter-section input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-right: 10px;
+            transition: border-color 0.3s;
+        }
+        .filter-section input:focus {
+            border-color: #007bff;
+        }
+        .filter-section button {
+            appearance: none;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            padding: 10px 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .filter-section button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+    </style
 </head>
 <body>
     <h1 style="text-align: center">{{ user_name }}'s Serve Practice</h1>

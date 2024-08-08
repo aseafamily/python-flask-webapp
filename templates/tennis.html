@@ -118,6 +118,13 @@
             <input type="text" id="filter-input" placeholder="Enter category">
             <button onclick="setFilter()">Filter</button>
         </div>
+        <style>
+            .action-btn svg {
+                width: 24px;
+                height: 24px;
+                fill: #007bff;
+            }
+        </style>
         <table>
             <tr>
                 <th>Date</th>
@@ -142,9 +149,20 @@
                     <td>{{ tennis.category }}</td>
                     <td>{{ tennis.location | generate_acronym }}</td>
                     <td style="white-space: nowrap;">
-                        <a href="/tennis/update/{{tennis.id}}?u={{ u }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}" style="margin-left: 10px; margin-right: 10px;">U</a>
-                        <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')" style="margin-right: 10px;">D</a>
-                        <a href="/reflection?tennis_id={{tennis.id}}&next={{ request.url }}">R</a>
+                        <a href="/tennis/update/{{tennis.id}}?u={{ u }}{% if request.args.get('category') %}&category={{ request.args.get('category') }}{% endif %}" class="action-btn" style="margin-left: 0px; margin-right: 0px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1L1 12l2 2L12 3l9 9 2-2L12 1zm0 4.5L4.5 12 12 19.5 19.5 12 12 5.5zm0 0L12 3z"/></svg>
+                        </a>
+                        <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')" style="margin-right: 0px;" class="action-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 9v10H8V9h8zm0-2H8V5h8v2zm1-4h-6V1H9v2H3v2h14V3h-1zm0 4h-2V5h2v2z"/></svg>
+                        </a>
+                        <a href="/reflection?tennis_id={{tennis.id}}&next={{ request.url }}" class="action-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="none" stroke="#007bff"></rect>
+                                <line x1="3" y1="9" x2="21" y2="9" stroke="#007bff" stroke-opacity="0.8"></line>
+                                <line x1="3" y1="15" x2="21" y2="15" stroke="#007bff" stroke-opacity="0.8"></line>
+                                <line x1="9" y1="3" x2="9" y2="21" stroke="#007bff" stroke-opacity="0.8"></line>
+                              </svg>
+                        </a>
                     </td>
                 </tr>
                 <tr style="background-color: {% if is_match %}#ffffe0{% endif %};">

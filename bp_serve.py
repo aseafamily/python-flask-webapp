@@ -92,6 +92,7 @@ def serve_index():
         second_serve_in_ad = request.form['second_serve_in_ad']
         second_serve_out_ad = request.form['second_serve_out_ad']
         second_serve_in_percent_ad = request.form['second_serve_in_percent_ad']
+        aces = request.form['aces']
 
         # Create an instance of Serve class
         serve_instance = Serve(
@@ -123,7 +124,8 @@ def serve_index():
             second_serve_in_ad=second_serve_in_ad,
             second_serve_out_ad=second_serve_out_ad,
             first_serve_in_percent_ad=first_serve_in_percent_ad,
-            second_serve_in_percent_ad=second_serve_in_percent_ad
+            second_serve_in_percent_ad=second_serve_in_percent_ad,
+            aces=aces
         )
 
         serve_instance.first_serve_in = None if serve_instance.first_serve_in == '' else int(serve_instance.first_serve_in)
@@ -150,6 +152,7 @@ def serve_index():
         serve_instance.second_serve_in_percent_ad = None if serve_instance.second_serve_in_percent_ad == '' else int(serve_instance.second_serve_in_percent_ad)
         serve_instance.total_first_serve =  None if serve_instance.total_first_serve == '' else int(serve_instance.total_first_serve)
         serve_instance.total_second_serve =  None if serve_instance.total_second_serve == '' else int(serve_instance.total_second_serve)
+        serve_instance.aces =  None if serve_instance.aces == '' else int(serve_instance.aces)
 
         # Add the instance to the database
         db.session.add(serve_instance)
@@ -202,6 +205,7 @@ def serve_update(id):
         serve.second_serve_in_ad = convert_none_string_to_none(request.form['second_serve_in_ad'])
         serve.second_serve_out_ad = convert_none_string_to_none(request.form['second_serve_out_ad'])
         serve.second_serve_in_percent_ad = convert_none_string_to_none(request.form['second_serve_in_percent_ad'])
+        serve.aces = convert_none_string_to_none(request.form['aces'])
 
         try:
             db.session.commit()

@@ -16,7 +16,7 @@
             <table>
                 <tr style="background-color: lightgrey;">
                     <td>Date:</td>
-                    <td><input type="text" name="date" id="date" value="{% block form_date %}{% endblock %}"></td>
+                    <td><input type="date" name="date" id="date" value="{% block form_date %}{% endblock %}"></td>
                 </tr>
                 <tr>
                     <td class="user_input" style="color: green;">First In:</td>
@@ -173,6 +173,10 @@
                 <tr>
                     <td class="user_input">Total:</td>
                     <td><input type="text" name="total_serve" id="total_serve" value="{% block form_total_serve %}{% endblock %}" inputmode="decimal"></td>
+                </tr>
+                <tr>
+                    <td class="user_input">Aces:</td>
+                    <td><input type="text" name="aces" id="aces" value="{% block form_aces %}{% endblock %}" inputmode="decimal"></td>
                 </tr>
                 <tr>
                     <td class="user_input">Duration in minutes:</td>

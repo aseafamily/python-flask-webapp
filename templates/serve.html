@@ -46,6 +46,7 @@
 {% block form_second_serve_in_ad %}{% endblock %}
 {% block form_second_serve_out_ad %}{% endblock %}
 {% block form_second_serve_in_percent_ad %}{% endblock %}
+{% block form_aces %}{% endblock %}
 
 {% block bottom_part %}
     <div class="content" style="margin-top: 30px;">
@@ -71,13 +72,21 @@
                 }
             }
         </script>
+        <style>
+            .action-btn svg {
+                width: 24px;
+                height: 24px;
+                fill: #007bff;
+            }
+        </style>
         <table>
             <tr>
                 <th>Date</th>
-                <th>Serves</th>
+                <th>S</th>
                 <th>%</th>
-                <th>Location</th>
-                <th>Actions</th>
+                <th>A</th>
+                <th>Loc</th>
+                <th>Act</th>
             </tr>
             {% for serve in serves %}
                 <tr>
@@ -87,13 +96,20 @@
                     {% elif weekday_abbr in ['Tue', 'Thu', 'Sat', 'Sun'] %}
                         {% set weekday_abbr = weekday_abbr[:2] %}
                     {% endif %}
-                    <td>{{ serve.date.date() }} {{ weekday_abbr }}</td>
+                    {% set date_obj = serve.date.date() %}
+                    {% set formatted_date = "%02d/%d/%d"|format(date_obj.year % 100, date_obj.month, date_obj.day) %}
+                    <td>{{ formatted_date }} {{ weekday_abbr }}</td>
                     <td>{{ serve.total_serve }}</td>
                     <td>{{ serve.total_serve_percent }}</td>
+                    <td>{{ serve.aces if serve.aces is not none else '' }}</td>
                     <td>{{ serve.location }}</td>
                     <td>
-                        <a href="/serve/update/{{serve.id}}?u={{ u }}" style="margin-left: 10px; margin-right: 20px;">U</a>
-                        <a href="#" onclick="confirmDelete('{{ serve.id }}', '{{ u }}')">D</a>
+                        <a href="/serve/update/{{serve.id}}?u={{ u }}" style="margin-left: 0px; margin-right: 0px;" class="action-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1L1 12l2 2L12 3l9 9 2-2L12 1zm0 4.5L4.5 12 12 19.5 19.5 12 12 5.5zm0 0L12 3z"/></svg>
+                        </a>
+                        <a href="#" onclick="confirmDelete('{{ serve.id }}', '{{ u }}')" class="action-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 9v10H8V9h8zm0-2H8V5h8v2zm1-4h-6V1H9v2H3v2h14V3h-1zm0 4h-2V5h2v2z"/></svg>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

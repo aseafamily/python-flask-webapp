@@ -32,6 +32,7 @@ class Serve(db.Model):
     second_serve_out_ad = db.Column(db.Integer)
     first_serve_in_percent_ad = db.Column(db.Integer)
     second_serve_in_percent_ad = db.Column(db.Integer)
+    aces = db.Column(db.Integer)
 
     def __repr__(self):
         return '<Serve %r>' % self.id
