@@ -30,13 +30,31 @@
             margin-bottom: 20px;
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
         }
         .reflection-item:last-child {
             border-bottom: none;
         }
+        .reflection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
         .reflection-date {
             font-size: 1.2em;
             font-weight: bold;
+        }
+        .links {
+            font-size: 0.9em;
+        }
+        .links a {
+            color: #007BFF;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .links a:hover {
+            text-decoration: underline;
         }
         .reflection-details {
             margin-top: 5px;
@@ -58,17 +76,34 @@
         .reflection-details a:hover {
             text-decoration: underline;
         }
+        .back-link {
+            display: block;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="/" class="back-link">Back to Home</a>
         <h1>{{ user_name }}'s Tennis Reflections</h1>
         {% for reflection, reflection_html, match_id in reflections %}
         <div class="reflection-item">
-            <div class="reflection-date">{{ reflection.date.strftime('%Y-%m-%d') }}</div>
+            <div class="reflection-header">
+                <div class="reflection-date">{{ reflection.date.strftime('%Y-%m-%d') }}</div>
+                <div class="links">
+                    <a href="/reflection/update/{{ reflection.id }}">Update</a>
+                    <a href="/tennis/reflection/delete/{{ reflection.id }}?u={{ u }}">Delete</a>
+                </div>
+            </div>
             <div class="reflection-details">
                 Location: {{ reflection.location }}<br>
-                Duration: {{ reflection.duration }} hours<br>
+                Duration: {{ reflection.duration | int }} minutes<br>
                 Category: 
                 {% if match_id %}
                     <a href="/match/{{ match_id }}">{{ reflection.category }}</a>

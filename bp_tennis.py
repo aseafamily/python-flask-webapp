@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, flash
 from flask import Flask, render_template, url_for, request, redirect, send_file, jsonify, abort
 from db import db
 from db_serve import Serve, ServeAnalysis, ServeStatus
@@ -747,7 +747,14 @@ def reflection_list():
     player_id = request.args.get('u', type=int)
     
     # Query reflections for the player where reflection is not empty
-    reflections = Tennis.query.filter_by(player=player_id).filter(Tennis.reflection.isnot(None)).all()
+    reflections = (
+        Tennis.query
+        .filter_by(player=player_id)
+        .filter(Tennis.reflection.isnot(None))
+        .filter(Tennis.reflection != '')
+        .order_by(desc(Tennis.date))
+        .all()
+    )
     
     # Prepare a list to store reflection data and match IDs
     reflection_data = []
@@ -772,16 +779,61 @@ def reflection_list():
     
     return render_template('reflection_list.html', reflections=reflection_data)
 
+@tennis_bp.route('/tennis/reflection/delete/<int:id>', methods=['GET'])
+def delete_reflection(id):
+    # Find the tennis reflection by ID
+    reflection = Tennis.query.get(id)
+    player_id = request.args.get('u')
+    
+    if reflection:
+        # Clear the reflection field
+        reflection.reflection = ''
+        
+        # Commit the changes to the database
+        db.session.commit()
+        
+        # Flash a success message
+        flash('Reflection deleted successfully.', 'success')
+    else:
+        # Flash an error message if not found
+        flash('Reflection not found.', 'error')
+    
+    # Redirect to the reflections page (or wherever appropriate)
+    return redirect(f"/tennis/reflections?u={player_id}")
+
 def json_to_markdown(data):
-    """Convert a JSON dictionary to a Markdown format string with each key-value pair on a separate line."""
+    """Convert a JSON dictionary to a Markdown format string with each key-value pair on a separate line.
+       If the value contains line breaks (\r\n or \n), split it into a list of lines."""
     markdown_lines = []
+    
     for key, value in data.items():
         key = key.replace('_', ' ')
-        if isinstance(value, list):
+        
+        if isinstance(value, str):
+            # Handle line breaks in value
+            value_lines = value.replace('\r\n', '\n').split('\n')
+            if len(value_lines) > 1:
+                markdown_lines.append(f"**{key.capitalize()}**:")
+                for line in value_lines:
+                    line = line.strip()
+                    if line:  # Avoid adding empty lines
+                        markdown_lines.append(f"- {line}")
+            else:
+                markdown_lines.append(f"**{key.capitalize()}**: {value}")
+        
+        elif isinstance(value, list):
             markdown_lines.append(f"**{key.capitalize()}**:")
             for item in value:
-                markdown_lines.append(f"- {item}")
+                item = str(item).strip()  # Ensure item is a string and remove leading/trailing whitespace
+                if item:  # Avoid adding empty items
+                    markdown_lines.append(f"- {item}")
+        
         else:
             markdown_lines.append(f"**{key.capitalize()}**: {value}")
-        markdown_lines.append("")  # Add an empty line for separation
-    return "\n".join(markdown_lines)
+
+        # Add an extra newline after each section for better separation
+        markdown_lines.append("")  
+    
+    # Join all lines with \n for standard Markdown line endings
+    markdown_string = "\n".join(markdown_lines)
+    return markdown_string
