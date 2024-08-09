@@ -109,7 +109,7 @@
           <input type="date" id="{{ field_name }}" 
                  name="{{ field_name }}" 
                  class="{{ field_config.css_class }}" 
-                 {% if field_config.default != "None" %}value="{{ field_config.default | default(today()) }}"{% endif %}
+                 {% if field_config.default != "None" %}value="" data-set-today="true" {% endif %}
                  {% if field_config.required %}required{% endif %}
                  {% if field_config.get('autocomplete', False) %} data-autocomplete="true" {% endif %}>
         {% elif field_config.type == 'number' %}
@@ -197,6 +197,21 @@
         <!-- end of select -->
         <br>
       {% endfor %}
+
+      <script>
+        // Calculate today's date in YYYY-MM-DD format
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const todayDate = `${year}-${month}-${day}`;
+        
+        // Select all date input fields with the custom attribute and set their value
+        document.querySelectorAll('input[type="date"][data-set-today="true"]').forEach(input => {
+            input.value = todayDate;
+        });
+    </script>
+    
       <button type="submit">Submit</button>
     </form>
 
