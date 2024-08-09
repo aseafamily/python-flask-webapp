@@ -159,6 +159,29 @@ def favicon():
 def test_mansonry():
     return render_template("test-masonry-js.html")
 
+@app.template_filter('format_date')
+def format_date(value):
+    if isinstance(value, datetime):
+        date_obj = value
+    elif isinstance(value, str):
+        try:
+            date_obj = datetime.strptime(value, '%Y-%m-%d')  # Adjust format as needed
+        except ValueError:
+            return "Invalid date"
+    else:
+        return "N/A"
+
+    # Format weekday abbreviation
+    weekday_abbr = date_obj.strftime('%a')
+    if weekday_abbr in ['Mon', 'Wed', 'Fri']:
+        weekday_abbr = weekday_abbr[:1]
+    elif weekday_abbr in ['Tue', 'Thu', 'Sat', 'Sun']:
+        weekday_abbr = weekday_abbr[:2]
+
+    # Format date
+    formatted_date = "%d/%d/%02d" % (date_obj.month, date_obj.day, date_obj.year % 100)
+    return f"{formatted_date} {weekday_abbr}"
+
 if __name__ == "__main__":
     app.debug = True
     app.run(debug=True)

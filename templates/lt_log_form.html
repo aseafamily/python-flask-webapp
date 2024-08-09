@@ -270,7 +270,13 @@
         {% for log in logs %}
           <tr>
             {% for field_name, field_config in log_config.fields.items() %}
-              <td>{{ log[field_name] }}</td>
+            <td>
+              {% if field_config.type == 'date' %}
+                  {{ log[field_name] | format_date }}
+              {% else %}
+                  {{ log[field_name] }}
+              {% endif %}
+            </td>
             {% endfor %}
             <td>
               <a href="{{ url_for('lt.update_form', log_type=log_type, log_id=log.id) }}?u={{ u }}" class="action-btn" title="Update">
