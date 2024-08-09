@@ -15,6 +15,8 @@ from sqlalchemy.orm import aliased
 import re
 import os
 from azure.storage.fileshare import ShareFileClient, ShareServiceClient
+import json
+import markdown2
 
 tennis_bp = Blueprint('tennis', __name__)
 
@@ -739,3 +741,47 @@ def tennis_upload(id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+
+@tennis_bp.route('/tennis/reflections')
+def reflection_list():
+    player_id = request.args.get('u', type=int)
+    
+    # Query reflections for the player where reflection is not empty
+    reflections = Tennis.query.filter_by(player=player_id).filter(Tennis.reflection.isnot(None)).all()
+    
+    # Prepare a list to store reflection data and match IDs
+    reflection_data = []
+    
+    for reflection in reflections:
+        # Check if the reflection is a JSON string
+        try:
+            reflection_dict = json.loads(reflection.reflection)
+            # Convert JSON to Markdown
+            markdown_text = json_to_markdown(reflection_dict)
+            # Convert Markdown to HTML
+            reflection_html = markdown2.markdown(markdown_text)
+        except (json.JSONDecodeError, TypeError):
+            # If not JSON, use the reflection as-is
+            reflection_html = markdown2.markdown(reflection.reflection)
+
+        # Check if there is a corresponding match
+        match = Match.query.filter_by(tennis_id=reflection.id).first()
+        match_id = match.id if match else None
+
+        reflection_data.append((reflection, reflection_html, match_id))
+    
+    return render_template('reflection_list.html', reflections=reflection_data)
+
+def json_to_markdown(data):
+    """Convert a JSON dictionary to a Markdown format string with each key-value pair on a separate line."""
+    markdown_lines = []
+    for key, value in data.items():
+        key = key.replace('_', ' ')
+        if isinstance(value, list):
+            markdown_lines.append(f"**{key.capitalize()}**:")
+            for item in value:
+                markdown_lines.append(f"- {item}")
+        else:
+            markdown_lines.append(f"**{key.capitalize()}**: {value}")
+        markdown_lines.append("")  # Add an empty line for separation
+    return "\n".join(markdown_lines)

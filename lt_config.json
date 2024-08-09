@@ -74,9 +74,13 @@
             "function": "count"
           },
           "total_duration": {
-            "label": "Total duration (minutes): ",
+            "label": "Total duration (hours): ",
             "column": "duration",
-            "function": "sum"
+            "function": "sum",
+            "transform": {
+              "operation": "divide",
+              "value": 60
+            }
           },
           "average_interval": {
             "label": "Average Interval (days): ",

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Reflections</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .reflection-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .reflection-item:last-child {
+            border-bottom: none;
+        }
+        .reflection-date {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .reflection-details {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .reflection-text {
+            margin-top: 10px;
+        }
+        .reflection-meta {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 10px;
+        }
+        .reflection-details a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .reflection-details a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ user_name }}'s Tennis Reflections</h1>
+        {% for reflection, reflection_html, match_id in reflections %}
+        <div class="reflection-item">
+            <div class="reflection-date">{{ reflection.date.strftime('%Y-%m-%d') }}</div>
+            <div class="reflection-details">
+                Location: {{ reflection.location }}<br>
+                Duration: {{ reflection.duration }} hours<br>
+                Category: 
+                {% if match_id %}
+                    <a href="/match/{{ match_id }}">{{ reflection.category }}</a>
+                {% else %}
+                    {{ reflection.category }}
+                {% endif %}
+            </div>
+            <div class="reflection-meta">
+                Details: {{ reflection.details }}
+            </div>
+            <div class="reflection-text">{{ reflection_html | safe }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

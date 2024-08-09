@@ -107,6 +107,22 @@ def log_form(log_type):
                     if column and column in log_config['fields']:
                         # Sum values in the specified column
                         total = sum(float(log.get(column, 0)) for log in logs if log.get(column))
+
+                        # Apply transformation if specified
+                        transform = stat_config.get('transform')
+                        if transform:
+                            operation = transform.get('operation')
+                            value = transform.get('value')
+                            if operation == 'divide' and value:
+                                total /= value
+                            elif operation == 'add' and value:
+                                total += value
+                            elif operation == 'subtract' and value:
+                                total -= value
+                            elif operation == 'multiply' and value:
+                                total *= value
+
+                        total = round(total, 2)
                         stats[stat_name] = total 
                 elif stat_config['function'] == 'average_interval':
                     column = stat_config['column']
