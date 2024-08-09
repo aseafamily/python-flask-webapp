@@ -82,6 +82,11 @@
               "value": 60
             }
           },
+          "total_distance": {
+            "label": "Total distance (miles): ",
+            "column": "distance",
+            "function": "sum"
+          },
           "average_interval": {
             "label": "Average Interval (days): ",
             "column": "date",
@@ -105,6 +110,13 @@
             "label": "Duration (minutes)",
             "type": "number",
             "placeholder": "Enter the duration",
+            "css_class": "form-control",
+            "required": true
+          },
+          "distance": {
+            "label": "Distance (miles)",
+            "type": "number",
+            "placeholder": "Enter the distance",
             "css_class": "form-control",
             "required": true
           },
