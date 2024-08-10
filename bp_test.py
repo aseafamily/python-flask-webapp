@@ -14,3 +14,7 @@ def markdown_form():
         html_content = markdown2.markdown(content)
         return render_template('test_display_markdown.html', content=html_content)
     return render_template('test_markdown.html', initial_content=initial_content)
+
+@test_bp.route('/test/tennis_match_control', methods=['GET', 'POST'])
+def tennis_match_control():
+    return render_template('test_tennis_match_control.html')

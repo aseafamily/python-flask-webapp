@@ -1,0 +1,50 @@
+<html>
+    <head>
+<title>{{ user_name }}'s Tennis Log</title>
+<!-- Include jQuery and jQuery UI -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- Include the tennis match control script -->
+<script src="{{ url_for('static', filename='js/control_tennis_match.js') }}"></script>
+
+</head>
+<body>
+
+<div class="content">
+    <!-- Your existing form structure -->
+    <form id="tennis-log-form" action="/test/tennis_match_control" method="POST">
+        <!-- Other form fields -->
+        <input type="date" name="date" id="date" value="{{ form_date }}">
+        <input type="text" name="location" id="location" value="{{ form_location }}">
+        
+        <!-- Tennis match controls -->
+        <div id="tennis-match-container-1"></div>
+        <div id="tennis-match-container-2"></div>
+        
+        <!-- More form fields if needed -->
+        <textarea name="comments" id="comments">{{ form_comments }}</textarea>
+        
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#tennis-match-container-1').tennisMatch({
+        playerApiEndpoint: "/",
+        submitEndpoint: "/",
+        formSelector: '#tennis-log-form',
+        id: 'match1'
+    });
+    
+    $('#tennis-match-container-2').tennisMatch({
+        playerApiEndpoint: "/",
+        submitEndpoint: "/",
+        formSelector: '#tennis-log-form',
+        id: 'match2'
+    });
+});
+</script>
+</body>
+</html>
