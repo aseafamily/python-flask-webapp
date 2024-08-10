@@ -4,22 +4,33 @@ import json
 from db_tennis import save_reflection
 from urllib.parse import urlparse, parse_qs
 from utils import display_reflection_impl
+import markdown2
 
 reflection_bp = Blueprint('reflection', __name__)
 
 @reflection_bp.route('/reflection', methods=['GET', 'POST'])
 def form():
+    category = request.args.get('category')
+    is_new = request.args.get('is_new', 'False').lower() == 'true' 
+
+    initial_content = ''
+
+    if is_new:
+        if category == 'Match':
+            initial_content = '### Did Well:\n- \n- \n- \n\n### Struggled With:\n- \n- \n- \n\n### Opponent Strengths:\n- \n- \n- \n\n### Opponent Weaknesses:\n- \n- \n- \n\n\n### Overall Takeaways:\n- \n- \n- \n\n'
+        elif category == 'Lesson':
+            initial_content = '### Forehand:\n- \n- \n\n### Backhand:\n- \n- \n\n### Movement:\n- \n- \n\n### Net Play:\n- \n- \n\n### Serve:\n- \n- \n\n### Other:\n- \n- \n\n'
+        elif category == 'Practice':
+            initial_content = '### Improved On: \n- \n- \n- \n\n### Need to Work On: \n- \n- \n- \n\n### Overall Takeaways: \n- \n- \n- \n\n'
+
     if request.method == 'POST':
-        did_well = request.form['did_well']
-        struggled_with = request.form['struggled_with']
+        content = request.form['content']
         consistency = request.form['consistency']
         defense = request.form['defense']
         attacking = request.form['attacking']
-        opp_strengths = request.form['opp_strengths']
-        opp_weaknesses = request.form['opp_weaknesses']
-        overall_takeaways = request.form['overall_takeaways']
-
+        intensity = request.form['intensity']
         
+
         tennis_id = ''
         next = ''
         referer = request.headers.get('Referer')
@@ -29,39 +40,46 @@ def form():
             query_params = parse_qs(parsed_url.query)
             tennis_id = query_params.get('tennis_id', [''])[0]
             next = query_params.get('next', [''])[0]
-        
-        return redirect(url_for('reflection.result', did_well=did_well, struggled_with=struggled_with, consistency=consistency, defense=defense, attacking=attacking, opp_strengths=opp_strengths, opp_weaknesses=opp_weaknesses, overall_takeaways=overall_takeaways, tennis_id=tennis_id, next=next))
-    return render_template('reflection_form.html')
+        return redirect(url_for('reflection.result', consistency=consistency, defense=defense, attacking=attacking, intensity=intensity, content=content, tennis_id=tennis_id, next=next))
+    
+    return render_template('reflection_form.html', initial_content=initial_content)
 
 @reflection_bp.route('/reflection/result')
 def result():
-    did_well = request.args.get('did_well')
-    struggled_with = request.args.get('struggled_with')
     tennis_id = request.args.get('tennis_id')
     consistency = request.args.get('consistency')
     defense = request.args.get('defense')
     attacking = request.args.get('attacking')
-    opp_strengths = request.args.get('opp_strengths')
-    opp_weaknesses = request.args.get('opp_weaknesses')
-    overall_takeaways = request.args.get('overall_takeaways')
+    intensity = request.args.get('intensity')
+    content = request.args.get('content')
+    
     data = {
-        "did_well": did_well,
-        "struggled_with": struggled_with,
         "consistency": consistency,
         "defense": defense,
         "attacking": attacking,
-        "opp_strengths": opp_strengths,
-        "opp_weaknesses": opp_weaknesses,
-        "overall_takeaways": overall_takeaways
+        "intensity": intensity,
+        "content": content,
     }
     json_string = json.dumps(data)
+
     if tennis_id:
         save_reflection(tennis_id, json_string)
         next = request.args.get('next')
         return redirect(next)
     else:
-        output = display_reflection_impl(json_string)
-        return output
+        ratings_html = f"""
+        <h3>Player Ratings</h3>
+        <ul>
+            <li><strong>Consistency:</strong> {consistency}</li>
+            <li><strong>Defense:</strong> {defense}</li>
+            <li><strong>Attacking:</strong> {attacking}</li>
+            <li><strong>Intensity:</strong> {intensity}</li>
+        </ul>
+        """
+        #output = display_reflection_impl(json_string)
+        html_content = markdown2.markdown(content)
+        full_html_content = html_content + ratings_html
+        return full_html_content
 
 @reflection_bp.route('/reflection/emily')
 def emily_test():
