@@ -6,84 +6,66 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <title>Form Submission</title>
     <style>
         *{
             box-sizing: border-box;
+            font-family: Comfortaa, sans-serif;
         }
-        
-        .user_reflection_box, .opp_reflection_box, .overall_takeaways_box{
-            width: 48%;
-            height: 25vh;
-            border: 2px solid black;
-            padding: 0.5rem;
+
+         body{
+            margin: 0;
+            padding: 0;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #6497a8;
-        }
-        
-        .user_reflection, .opp_reflection, .overall_takeaways{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-            align-items: center;
-            width: 95%;
-            margin-top: 1rem;
-            margin: auto;
-            height: 25vh;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+         }
+
+        .markdown_editor{
+            width: 90%;
+            max-width: 1000px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
         }
 
-        .overall_takeaways{
-            margin-top: 2rem;
-        }
-
-        label{
+        h1 {
             text-align: center;
-            display: block;
-            margin: 0.25rem;
-            font-size: 20px;
+            margin-bottom: 20px;
         }
-
-        #did_well, #struggled_with, #opp_strengths, #opp_weaknesses, #overall_takeaways{
-            width: 95%;
-            height: 85%;
-            font-size: 1rem;
-            margin: auto;
-        }
-
-        textarea{
-            border: 1px solid #222527;
-        }
-
-        h1{
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        body{
-            font-family:'Comfortaa', sans-serif;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        textarea {
             width: 100%;
+            height: 400px;
+            font-size: 16px;
         }
 
-        .user_rating{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 85%;
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
 
         .user_ratings{
+            width: 85%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin: auto;
         }
 
         .radio_buttons{
@@ -94,42 +76,20 @@
         }
 
         .radio_buttons label{
-            margin-right: 2rem;
+            margin-right: 1.25rem;
         }
 
         h2{
             margin: 0.5rem;
             font-size: 20px;
         }
-
-        #submit{
-            font-family: 'Comfortaa', 'sans-serif';
-            margin: 1rem auto;
-            display: block;
-        }
-
-        .submit-container{
-            text-align: center;
-            width: 100%;
-        }
-
     </style>
 </head>
 <body>
-    <h1>Submit Your Reflection</h1>
-    <form method="post" action="/reflection">
-        <div class="user_reflection">
-            <div class="user_reflection_box">
-                <label for="did_well">What I Did Well</label>
-                <textarea name="did_well" id="did_well"></textarea>
-            </div>
-            <div class="user_reflection_box">
-                <label for="struggled_with">What I Struggled With</label>
-                <textarea name="struggled_with" id="struggled_with"></textarea>
-            </div>
-        </div>
-        <br>
-        <div class="user_rating">
+    <div class="markdown_editor">
+        <h1>Write Your Reflection</h1>
+        <form action="/reflection" method="post">
+            <textarea name="content" id="editor">{{ initial_content }}</textarea>
             <div class="user_ratings">
                 <h2>Consistency</h2>
                 <div class="radio_buttons">
@@ -160,27 +120,22 @@
                     <label><input type="radio" name="attacking" value="5"> 5</label>
                 </div>
             </div>
-        </div>
-        <div class="opp_reflection">
-            <div class="opp_reflection_box">
-                <label for="opp_strengths">Opponent Strengths</label>
-                <textarea name="opp_strengths" id="opp_strengths"></textarea>
+            <div class="user_ratings">
+                <h2>Intensity</h2>
+                <div class="radio_buttons">
+                    <label><input type="radio" name="intensity" value="1"> 1</label>
+                    <label><input type="radio" name="intensity" value="2"> 2</label>
+                    <label><input type="radio" name="intensity" value="3"> 3</label>
+                    <label><input type="radio" name="intensity" value="4"> 4</label>
+                    <label><input type="radio" name="intensity" value="5"> 5</label>
+                </div>
             </div>
-            <div class="opp_reflection_box">
-                <label for="opp_weaknesses">Opponent Weaknesses</label>
-                <textarea name="opp_weaknesses" id="opp_weaknesses"></textarea>
-            </div>
-        </div>
-        <div class="overall_takeaways">
-            <div class="overall_takeaways_box">
-                <label for="overall_takeaways">Overall Takeaways</label>
-                <textarea name="overall_takeaways" id="overall_takeaways"></textarea>
-            </div>
-        </div>
-        <br>
-        <div class="submit-container">
-            <input type="submit" value="Submit" id="submit">
-        </div>
-    </form>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE({ element: document.getElementById("editor") });
+    </script>
 </body>
 </html>
