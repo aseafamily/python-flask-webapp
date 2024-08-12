@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import pytz
 import re
 import json
+import markdown2
 
 # Hardcoded dictionary mapping user IDs to names
 user_dict = {
@@ -221,8 +222,23 @@ def display_reflection_impl(json_string):
     output = []
     for key, value in data.items():
         if value:  # Check if the value is not empty
-            value = value.replace("\n", "<br>")
-            output.append(f"<i>{key}:</i><br>{value}<br><br>")
+            if key == "content":
+                # Clean up markdown content by removing standalone hyphens
+                cleaned_content = "\n".join(line for line in value.splitlines() if line.strip() != "-")
+                # Convert markdown to HTML
+                html_content = markdown2.markdown(cleaned_content)
+                output.append(html_content)
+            else:
+                try:
+                    # Attempt to convert the value to an integer
+                    numeric_value = int(value)
+                    # Convert number to emoji stars
+                    stars = '⭐' * numeric_value
+                    output.append(f"<i>{key}:</i> {stars}<br>")
+                except ValueError:
+                    # If value is not a number, handle it as a regular string
+                    value = value.replace("\n", "<br>")
+                    output.append(f"<i>{key}:</i><br>{value}<br>")
     
     # If output list is empty, return an empty string
     return ''.join(output) if output else ''

@@ -760,22 +760,11 @@ def reflection_list():
     reflection_data = []
     
     for reflection in reflections:
-        # Check if the reflection is a JSON string
-        try:
-            reflection_dict = json.loads(reflection.reflection)
-            # Convert JSON to Markdown
-            markdown_text = json_to_markdown(reflection_dict)
-            # Convert Markdown to HTML
-            reflection_html = markdown2.markdown(markdown_text)
-        except (json.JSONDecodeError, TypeError):
-            # If not JSON, use the reflection as-is
-            reflection_html = markdown2.markdown(reflection.reflection)
-
         # Check if there is a corresponding match
         match = Match.query.filter_by(tennis_id=reflection.id).first()
         match_id = match.id if match else None
 
-        reflection_data.append((reflection, reflection_html, match_id))
+        reflection_data.append((reflection, match_id))
     
     return render_template('reflection_list.html', reflections=reflection_data)
 

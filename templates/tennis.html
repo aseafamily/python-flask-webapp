@@ -124,6 +124,68 @@
                 height: 24px;
                 fill: #007bff;
             }
+            .reflection-text {
+    font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;  /* Base font size for readability */
+    line-height: 1.6;  /* Increased line height for readability */
+    color: #333;  /* Dark gray text for good contrast */
+    max-width: 800px;
+    padding: 20px;
+    margin: 0;  /* Removed margin */
+    border-radius: 8px;  /* Rounded corners for a modern look */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+}
+
+.reflection-text i {
+    font-weight: 600;
+    color: #007bff;  /* Highlight color for labels */
+}
+
+.reflection-text p {
+    margin: 0;
+    padding: 6px 0;  /* Slight padding for readability */
+}
+
+.reflection-text h2 {
+    color: #222;  /* Darker color for section headings */
+    font-weight: 700;
+    margin-bottom: 12px;  /* Spacing below headings */
+    font-size: 20px;  /* Slightly larger font size for main headings */
+}
+
+.reflection-text h3 {
+    color: #444;  /* More visible color for subheadings */
+    font-weight: 400;  /* Normal weight for better readability */
+    font-style: italic;  /* Italicized for distinction */
+    margin-bottom: 8px;  /* Spacing below subheadings */
+    font-size: 16px;  /* Slightly smaller font size for subheadings */
+}
+
+.reflection-text .content-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;  /* Rounded corners for the box */
+    padding: 15px;
+    background-color: #fff;  /* White background for contrast */
+    margin-bottom: 16px;  /* Space below content boxes */
+}
+
+.reflection-text ul {
+    list-style-type: disc;  /* Standard bullet points */
+    padding-left: 20px;  /* Indentation for list items */
+    margin: 0;
+}
+
+.reflection-text ul li {
+    margin-bottom: 6px;  /* Space between list items */
+    color: #333;  /* Consistent text color for list items */
+}
+
+@media (max-width: 600px) {
+    .reflection-text {
+        font-size: 14px;  /* Adjust font size for smaller screens */
+        padding: 10px;
+    }
+}
         </style>
         <div style="padding: 0px;">
         <table>
@@ -156,7 +218,8 @@
                         <a href="#" onclick="confirmDelete('{{ tennis.id }}', '{{ u }}')" style="margin-right: 0px;" class="action-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 9v10H8V9h8zm0-2H8V5h8v2zm1-4h-6V1H9v2H3v2h14V3h-1zm0 4h-2V5h2v2z"/></svg>
                         </a>
-                        <a href="/reflection?tennis_id={{tennis.id}}&category={{ tennis.category }}&is_new=true&next={{ request.url }}" class="action-btn">
+                        {% set formatted_reflection = tennis.reflection|display_reflection %}
+                        <a href="/reflection?tennis_id={{tennis.id}}&category={{ tennis.category }}{% if not formatted_reflection %}&is_new=true{% endif %}&next={{ request.url }}" class="action-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="none" stroke="#007bff"></rect>
                                 <line x1="3" y1="9" x2="21" y2="9" stroke="#007bff" stroke-opacity="0.8"></line>
@@ -170,11 +233,10 @@
                     <td></td>
                     <td colspan="4">{{ tennis.details }}</td>
                 </tr>
-                {% set formatted_reflection = tennis.reflection|display_reflection %}
                 {% if formatted_reflection %}
                 <tr style="background-color: {% if is_match %}#ffffe0{% endif %};">
                     <td></td>
-                    <td colspan="4">{{ formatted_reflection|safe }}</td>
+                    <td colspan="4"><div class="reflection-text">{{ formatted_reflection|safe }}</div></td>
                 </tr>
                 {% endif %}
             {% endfor %}

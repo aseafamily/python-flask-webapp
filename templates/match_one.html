@@ -840,9 +840,75 @@
                 <path d="M8 16 Q12 20 16 16" stroke="black" stroke-width="1" fill="none"/>
             </svg>
             </a>
+            <style>
+                 .reflection-text {
+    font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;  /* Base font size for readability */
+    line-height: 1.6;  /* Increased line height for readability */
+    color: #333;  /* Dark gray text for good contrast */
+    max-width: 800px;
+    padding: 20px;
+    background-color: #f9f9f9;  /* Light background for a clean appearance */
+    margin: 0;  /* Removed margin */
+    border-radius: 8px;  /* Rounded corners for a modern look */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+}
+
+.reflection-text i {
+    font-weight: 600;
+    color: #007bff;  /* Highlight color for labels */
+}
+
+.reflection-text p {
+    margin: 0;
+    padding: 6px 0;  /* Slight padding for readability */
+}
+
+.reflection-text h2 {
+    color: #222;  /* Darker color for section headings */
+    font-weight: 700;
+    margin-bottom: 12px;  /* Spacing below headings */
+    font-size: 20px;  /* Slightly larger font size for main headings */
+}
+
+.reflection-text h3 {
+    color: #444;  /* More visible color for subheadings */
+    font-weight: 400;  /* Normal weight for better readability */
+    font-style: italic;  /* Italicized for distinction */
+    margin-bottom: 8px;  /* Spacing below subheadings */
+    font-size: 16px;  /* Slightly smaller font size for subheadings */
+}
+
+.reflection-text .content-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;  /* Rounded corners for the box */
+    padding: 15px;
+    background-color: #fff;  /* White background for contrast */
+    margin-bottom: 16px;  /* Space below content boxes */
+}
+
+.reflection-text ul {
+    list-style-type: disc;  /* Standard bullet points */
+    padding-left: 20px;  /* Indentation for list items */
+    margin: 0;
+}
+
+.reflection-text ul li {
+    margin-bottom: 6px;  /* Space between list items */
+    color: #333;  /* Consistent text color for list items */
+}
+
+@media (max-width: 600px) {
+    .reflection-text {
+        font-size: 14px;  /* Adjust font size for smaller screens */
+        padding: 10px;
+    }
+}
+
+            </style>
             <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
                 <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Reflection</span>
-                <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg">
+                <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg reflection-text">
                     {% set formatted_reflection = match_data.reflection|display_reflection %}
                     {% if formatted_reflection %}
                     {{ formatted_reflection|safe }}
