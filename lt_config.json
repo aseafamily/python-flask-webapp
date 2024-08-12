@@ -729,6 +729,175 @@
             "autocomplete": false
           }
         }
+      },
+      "good strokes": {
+        "title": "Good strokes Log",
+        "default_sort": {
+          "column": "date",
+          "order": "desc"
+        },
+        "stats": {
+          "total": {
+            "label": "Total: ",
+            "column": "*",
+            "function": "count"
+          },
+          "average_interval": {
+            "label": "Average Interval (days): ",
+            "column": "date",
+            "function": "average_interval"
+          },
+          "since": {
+            "label": "Since last record: ",
+            "column": "date",
+            "function": "since"
+          },
+          "total_forehand": {
+            "label": "Total forehand: ",
+            "column": "forehand",
+            "function": "sum"
+          },
+          "total_forehand_return": {
+            "label": "Total forehand return: ",
+            "column": "forehand_return",
+            "function": "sum"
+          },
+          "total_backhand": {
+            "label": "Total backhand: ",
+            "column": "backhand",
+            "function": "sum"
+          },
+          "total_backhand_slice": {
+            "label": "Total backhand slice: ",
+            "column": "backhand_slice",
+            "function": "sum"
+          },
+          "total_backhand_return": {
+            "label": "Total forehand: ",
+            "column": "backhand_return",
+            "function": "sum"
+          },
+          "total_forehand_volley": {
+            "label": "Total forehand volley: ",
+            "column": "forehand_volley",
+            "function": "sum"
+          },
+          "total_backhand_volley": {
+            "label": "Total backhand volley: ",
+            "column": "backhand_volley",
+            "function": "sum"
+          },
+          "total_overhead": {
+            "label": "Total overhead: ",
+            "column": "overhead",
+            "function": "sum"
+          },
+          "total_drop_shot": {
+            "label": "Total drop shot: ",
+            "column": "drop_shot",
+            "function": "sum"
+          },
+          "total_swing_volley": {
+            "label": "Total swing volley: ",
+            "column": "swing_volley",
+            "function": "sum"
+          }
+        },
+        "fields": {
+          "date": {
+            "label": "Date",
+            "type": "date",
+            "placeholder": "Select the date",
+            "css_class": "form-control",
+            "required": true
+          },
+          "location": {
+            "label": "Location",
+            "type": "text",
+            "placeholder": "Enter the location name",
+            "css_class": "form-control",
+            "required": true,
+            "autocomplete": true
+          },
+          "forehand": {
+            "label": "Forehand",
+            "type": "number",
+            "placeholder": "Enter the forehand count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "forehand_return": {
+            "label": "Forehand Return",
+            "type": "number",
+            "placeholder": "Enter the forehand return count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "backhand": {
+            "label": "Backhand",
+            "type": "number",
+            "placeholder": "Enter the backhand count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "backhand_slice": {
+            "label": "Backhand Slice",
+            "type": "number",
+            "placeholder": "Enter the backhand slice count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "backhand_return": {
+            "label": "Backhand return",
+            "type": "number",
+            "placeholder": "Enter the backhand return count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "forehand_volley": {
+            "label": "Forehand volley",
+            "type": "number",
+            "placeholder": "Enter the forehand volley count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "backhand_volley": {
+            "label": "Backhand volley",
+            "type": "number",
+            "placeholder": "Enter the backhand volley count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "overhead": {
+            "label": "Overhead",
+            "type": "number",
+            "placeholder": "Enter the overhead count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "drop_shot": {
+            "label": "Drop shot",
+            "type": "number",
+            "placeholder": "Enter the drop shot count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "swing_volley": {
+            "label": "Swing volley",
+            "type": "number",
+            "placeholder": "Enter the swing volley count",
+            "css_class": "form-control",
+            "required": false
+          },
+          "note": {
+            "label": "Note",
+            "type": "text",
+            "placeholder": "Enter the note",
+            "css_class": "form-control",
+            "required": false,
+            "autocomplete": false
+          }
+        }
       }
     }
   }
