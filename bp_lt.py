@@ -122,7 +122,15 @@ def log_form(log_type):
                             elif operation == 'multiply' and value:
                                 total *= value
 
-                        total = round(total, 2)
+                        # Round to 2 decimal places first
+                        rounded_total = round(total, 2)
+
+                        # Check if the rounded value is a whole number
+                        if rounded_total == int(rounded_total):
+                            total = int(rounded_total)  # Convert to integer
+                        else:
+                            total = rounded_total
+
                         stats[stat_name] = total 
                 elif stat_config['function'] == 'average_interval':
                     column = stat_config['column']
