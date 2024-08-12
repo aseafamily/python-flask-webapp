@@ -1,5 +1,8 @@
 # Local process
 
+0. Install ODBC Drive 17
+https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16
+
 1. py -m venv .venv
    
 .venv\scripts\activate
