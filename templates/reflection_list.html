@@ -167,7 +167,7 @@
             <div class="reflection-header">
                 <div class="reflection-date">{{ reflection.date.strftime('%Y-%m-%d') }}</div>
                 <div class="links">
-                    <a href="/reflection/update/{{ reflection.id }}">Update</a>
+                    <a href="/reflection?tennis_id={{ reflection.id }}&category={{ reflection.category }}&next={{ request.url }}">Update</a>
                     <a href="/tennis/reflection/delete/{{ reflection.id }}?u={{ u }}">Delete</a>
                 </div>
             </div>

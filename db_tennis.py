@@ -24,3 +24,7 @@ def save_reflection(tennis_id, reflect):
     tennis = Tennis.query.get_or_404(tennis_id)
     tennis.reflection = reflect
     db.session.commit()
+
+def get_reflection(tennis_id):
+    tennis = Tennis.query.get_or_404(tennis_id)
+    return tennis.reflection

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-    <title>Form Submission</title>
+    <title>Reflection</title>
     <style>
         *{
             box-sizing: border-box;
@@ -87,47 +87,51 @@
 </head>
 <body>
     <div class="markdown_editor">
-        <h1>Write Your Reflection</h1>
+        <h1>Write Your Reflection for {{ category }} ({{tennis_id }})</h1>
         <form action="/reflection" method="post">
             <textarea name="content" id="editor">{{ initial_content }}</textarea>
             <div class="user_ratings">
                 <h2>Consistency</h2>
                 <div class="radio_buttons">
-                    <label><input type="radio" name="consistency" value="1"> 1</label>
-                    <label><input type="radio" name="consistency" value="2"> 2</label>
-                    <label><input type="radio" name="consistency" value="3"> 3</label>
-                    <label><input type="radio" name="consistency" value="4"> 4</label>
-                    <label><input type="radio" name="consistency" value="5"> 5</label>
+                    {% for value in range(1, 6) %}
+                        <label>
+                            <input type="radio" name="consistency" value="{{ value }}" {% if value|string == consistency %}checked{% endif %}>
+                            {{ value }}
+                        </label>
+                    {% endfor %}
                 </div>
             </div>
             <div class="user_ratings">
                 <h2>Defense</h2>
                 <div class="radio_buttons">
-                    <label><input type="radio" name="defense" value="1"> 1</label>
-                    <label><input type="radio" name="defense" value="2"> 2</label>
-                    <label><input type="radio" name="defense" value="3"> 3</label>
-                    <label><input type="radio" name="defense" value="4"> 4</label>
-                    <label><input type="radio" name="defense" value="5"> 5</label>
+                    {% for value in range(1, 6) %}
+                        <label>
+                            <input type="radio" name="defense" value="{{ value }}" {% if value|string == defense %}checked{% endif %}>
+                            {{ value }}
+                        </label>
+                    {% endfor %}
                 </div>
             </div>
             <div class="user_ratings">
                 <h2>Attacking</h2>
                 <div class="radio_buttons">
-                    <label><input type="radio" name="attacking" value="1"> 1</label>
-                    <label><input type="radio" name="attacking" value="2"> 2</label>
-                    <label><input type="radio" name="attacking" value="3"> 3</label>
-                    <label><input type="radio" name="attacking" value="4"> 4</label>
-                    <label><input type="radio" name="attacking" value="5"> 5</label>
+                    {% for value in range(1, 6) %}
+                        <label>
+                            <input type="radio" name="attacking" value="{{ value }}" {% if value|string == attacking %}checked{% endif %}>
+                            {{ value }}
+                        </label>
+                    {% endfor %}
                 </div>
             </div>
             <div class="user_ratings">
                 <h2>Intensity</h2>
                 <div class="radio_buttons">
-                    <label><input type="radio" name="intensity" value="1"> 1</label>
-                    <label><input type="radio" name="intensity" value="2"> 2</label>
-                    <label><input type="radio" name="intensity" value="3"> 3</label>
-                    <label><input type="radio" name="intensity" value="4"> 4</label>
-                    <label><input type="radio" name="intensity" value="5"> 5</label>
+                    {% for value in range(1, 6) %}
+                        <label>
+                            <input type="radio" name="intensity" value="{{ value }}" {% if value|string == intensity %}checked{% endif %}>
+                            {{ value }}
+                        </label>
+                    {% endfor %}
                 </div>
             </div>
             <button type="submit">Submit</button>
