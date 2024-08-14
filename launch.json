@@ -1,22 +1,20 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "Python: Flask",
-        "type": "python",
-        "request": "launch",
-        "module": "flask",
-        "env": {
-          "FLASK_APP": "app.py",   // Change to your main Flask file
-          "FLASK_ENV": "development"
-        },
-        "args": [
-          "run",
-          "--no-debugger",
-          "--no-reload"
-        ],
-        "jinja": true
-      }
-    ]
-  }
-  
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Flask",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.py",
+      "env": {
+        "FLASK_APP": "app.py",
+        "FLASK_ENV": "development"
+      },
+      "args": [
+        "run"
+      ],
+      "jinja": true,
+      "console": "integratedTerminal"
+    }
+  ]
+}

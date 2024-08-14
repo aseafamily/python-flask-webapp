@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Log Type</title>
+    <link rel="stylesheet" href="path/to/bootstrap.css"> <!-- Optional: for better styling -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Add New Log Type</h1>
+    <form id="log-form">
+        <label for="log_type">Log Type Key:</label>
+        <input type="text" id="log_type" name="log_type" required>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="default_sort_column">Default Sort Column:</label>
+        <input type="text" id="default_sort_column" name="default_sort_column">
+
+        <label for="default_sort_order">Default Sort Order:</label>
+        <select id="default_sort_order" name="default_sort_order">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+
+        <div id="fields-container"></div>
+
+        <h3>Stats</h3>
+        <div id="stats-container"></div>
+
+        <button type="button" id="add-field">Add Field</button>
+        <button type="button" id="add-stat">Add Stat</button>
+        <button type="button" id="submit-form">Submit</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            let fieldCounter = 1;
+            let statCounter = 1;
+
+            $('#add-field').click(function () {
+                fieldCounter++;
+                $('#fields-container').append(`
+                    <div class="form-group">
+                        <label for="field_${fieldCounter}_label">Field ${fieldCounter} Label:</label>
+                        <input type="text" id="field_${fieldCounter}_label" name="field_${fieldCounter}_label" class="form-control" placeholder="Label">
+                        <label for="field_${fieldCounter}_type">Field ${fieldCounter} Type:</label>
+                        <select id="field_${fieldCounter}_type" name="field_${fieldCounter}_type" class="form-control">
+                            <option value="text">Text</option>
+                            <option value="number">Number</option>
+                            <option value="date">Date</option>
+                        </select>
+                    </div>
+                `);
+            });
+
+            $('#add-stat').click(function () {
+                statCounter++;
+                $('#stats-container').append(`
+                    <div class="form-group">
+                        <label for="stat_${statCounter}_key">Stat ${statCounter} Key:</label>
+                        <input type="text" id="stat_${statCounter}_key" name="stat_${statCounter}_key" class="form-control" placeholder="Key">
+                        <label for="stat_${statCounter}_label">Stat ${statCounter} Label:</label>
+                        <input type="text" id="stat_${statCounter}_label" name="stat_${statCounter}_label" class="form-control" placeholder="Label">
+                        <label for="stat_${statCounter}_column">Stat ${statCounter} Column:</label>
+                        <input type="text" id="stat_${statCounter}_column" name="stat_${statCounter}_column" class="form-control" placeholder="Column">
+                        <label for="stat_${statCounter}_function">Stat ${statCounter} Function:</label>
+                        <input type="text" id="stat_${statCounter}_function" name="stat_${statCounter}_function" class="form-control" placeholder="Function">
+                    </div>
+                `);
+            });
+
+            $('#submit-form').click(function (event) {
+                event.preventDefault();
+                
+                let formData = {
+                    logType: $('#log_type').val(),
+                    title: $('#title').val(),
+                    defaultSort: {
+                        column: $('#default_sort_column').val(),
+                        order: $('#default_sort_order').val()
+                    },
+                    stats: {},
+                    fields: []
+                };
+
+                $('#fields-container .form-group').each(function () {
+                    let label = $(this).find('input[name$="_label"]').val();
+                    let type = $(this).find('select[name$="_type"]').val();
+                    formData.fields.push({ label, type });
+                });
+
+                $('#stats-container .form-group').each(function () {
+                    let key = $(this).find('input[name$="_key"]').val();
+                    let label = $(this).find('input[name$="_label"]').val();
+                    let column = $(this).find('input[name$="_column"]').val();
+                    let func = $(this).find('input[name$="_function"]').val();
+                    formData.stats[key] = { label, column, function: func };
+                });
+
+                $.ajax({
+                    url: '/lt/add_log_type',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        console.log('Success:', response);
+                        // Handle success
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                        // Handle error
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

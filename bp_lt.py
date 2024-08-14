@@ -1,16 +1,49 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 import json
 import os
-from azure.storage.fileshare import ShareFileClient, ShareDirectoryClient
+from azure.storage.fileshare import ShareFileClient
 from flask_login import login_required
 from datetime import datetime
 from collections import Counter
 
 lt_bp = Blueprint('lt', __name__)
 
-# Load configuration file
-with open('lt_config.json', 'r') as f:
-    config = json.load(f)
+def load_config():
+    """Load and return the configuration from the file."""
+    #with open('lt_config.json', 'r') as f:
+    #    return json.load(f)
+    """Load and return the configuration from Azure Blob Storage."""
+    connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    file_share_name = "bhmfiles"
+    directory_name = "logs"
+    filename = "lt_config.json"
+
+    file_path = f"{directory_name}/{filename}"
+
+    file_client = ShareFileClient.from_connection_string(
+        connection_string, file_share_name, file_path)
+
+    # Download the blob data
+    download = file_client.download_file()
+    downloaded_bytes = download.readall()
+    file_content = downloaded_bytes.decode('utf-8')
+
+    # Parse and return the JSON data
+    return json.loads(file_content)
+
+def save_config(config):
+    """Save the updated configuration to the file."""
+    connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    file_share_name = "bhmfiles"
+    directory_name = "logs"
+    filename = "lt_config.json"
+
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+    container_client = blob_service_client.get_container_client(file_share_name)
+    blob_client = container_client.get_blob_client(directory_name + '/' + filename)
+
+    blob_client.upload_blob(json.dumps(config), overwrite=True)
+
 
 def read_logs(log_type, user_id):
     connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
@@ -83,12 +116,14 @@ def write_local_logs(log_type, logs, user_id):
 @lt_bp.route('/lt')
 @login_required
 def index():
+    config = load_config()
     log_types = config['log_types']
     return render_template('lt_index.html', log_types=log_types)
 
 @lt_bp.route('/lt/<log_type>', methods=['GET'])
 @login_required
 def log_form(log_type):
+    config = load_config()
     if log_type in config['log_types']:
         user_id = request.args.get('u', '')
         log_config = config['log_types'][log_type]
@@ -163,6 +198,7 @@ def log_form(log_type):
 
 @lt_bp.route('/lt/<log_type>', methods=['POST'])
 def submit_log(log_type):
+    config = load_config()
     if log_type in config['log_types']:
         user_id = request.args.get('u', '')
         log_data = request.form.to_dict()
@@ -190,6 +226,7 @@ def submit_log(log_type):
 
 @lt_bp.route('/lt/update/<log_type>/<int:log_id>', methods=['GET'])
 def update_form(log_type, log_id):
+    config = load_config()
     if log_type in config['log_types']:
         log_config = config['log_types'][log_type]
         user_id = request.args.get('u', '')
@@ -203,6 +240,7 @@ def update_form(log_type, log_id):
 
 @lt_bp.route('/lt/update/<log_type>/<int:log_id>', methods=['POST'])
 def update_log(log_type, log_id):
+    config = load_config()
     if log_type in config['log_types']:
         user_id = request.args.get('u', '')
 
@@ -230,6 +268,7 @@ def update_log(log_type, log_id):
 
 @lt_bp.route('/lt/<log_type>/delete/<int:log_id>', methods=['GET'])
 def delete_log(log_type, log_id):
+    config = load_config()
     if log_type in config['log_types']:
         user_id = request.args.get('u', '')
         logs = read_logs(log_type, user_id)
@@ -264,7 +303,33 @@ def autocomplete(log_type, field_name):
         top_values = [item for item, count in Counter(field_values).most_common(10)]
         all_values = [{'field': field_name, 'value': item} for item in top_values]
         return jsonify(all_values)
-    
+
+@lt_bp.route('/lt/add_log_type', methods=['GET', 'POST'])
+def add_log_type():
+    if request.method == 'POST':
+        data = request.get_json()
+        if data:
+            try:
+                log_type_key = data['logType']
+                config = load_config()
+                log_types = config.get('log_types', {})
+                log_types[log_type_key] = {
+                    'title': data['title'],
+                    'default_sort': data['defaultSort'],
+                    'stats': data['stats'],
+                    'fields': data['fields']
+                }
+                # Save updated config
+                save_config(config)
+                return redirect("/lt")  # Redirect to /lt after success
+            except KeyError as e:
+                return jsonify({"status": "error", "message": f"Missing key: {str(e)}"}), 400
+        return jsonify({"status": "error", "message": "Invalid data"}), 400
+    else:
+        # GET request - render the form template
+        return render_template('lt_add_log_type.html')
+
+
 
 def sort_logs(log_config, logs):
     # Get the default sort column and order from the configuration

@@ -178,7 +178,7 @@ def format_date(value):
     elif weekday_abbr in ['Tue', 'Thu', 'Sat', 'Sun']:
         weekday_abbr = weekday_abbr[:2]
 
-    # Format date
+    # Format date  
     formatted_date = "%d/%d/%02d" % (date_obj.month, date_obj.day, date_obj.year % 100)
     return f"{formatted_date} {weekday_abbr}"
 

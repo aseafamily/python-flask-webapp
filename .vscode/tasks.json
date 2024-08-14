@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Flask App",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "-m",
+        "flask",
+        "run"
+      ],
+      "env": {
+        "FLASK_APP": "app.py",
+        "FLASK_ENV": "development"
+      },
+      "problemMatcher": [],
+      "detail": "Run Flask app"
+    }
+  ]
+}
