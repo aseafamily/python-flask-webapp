@@ -830,7 +830,8 @@
         </div>
         <div display="flex" class="Box Flex dlyXLO jLRkRA">
             <!--<div class="Box ictZTN"></div>-->
-            <a href="/reflection?tennis_id={{ match_data.Match.tennis_id }}&next={{ request.url }}">
+            {% set formatted_reflection = match_data.reflection|display_reflection %}
+            <a href="/reflection?tennis_id={{ match_data.Match.tennis_id }}&next={{ request.url }}{% if not formatted_reflection %}&is_new=true{% endif %}&category=Match">
             <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="SvgWrapper hwgeMK">
                 <!-- Tennis Ball -->
                 <circle cx="12" cy="12" r="10" fill="#4CAF50" stroke="black" stroke-width="1"/>
@@ -909,7 +910,6 @@
             <div display="flex" direction="column" class="Box Flex bttEbg crsNnE">
                 <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Reflection</span>
                 <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg reflection-text">
-                    {% set formatted_reflection = match_data.reflection|display_reflection %}
                     {% if formatted_reflection %}
                     {{ formatted_reflection|safe }}
                     {% endif %}

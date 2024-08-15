@@ -4,113 +4,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Log Type</title>
-    <link rel="stylesheet" href="path/to/bootstrap.css"> <!-- Optional: for better styling -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Add New Log Type</h1>
-    <form id="log-form">
-        <label for="log_type">Log Type Key:</label>
-        <input type="text" id="log_type" name="log_type" required>
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
+    <div class="container">
+        <h1 class="text-center">Add Log Type</h1>
+        <form id="logTypeForm">
+            <div class="mb-3">
+                <label for="logType" class="form-label">Log Type</label>
+                <input type="text" class="form-control" id="logType" name="logType" placeholder="Enter log type">
+            </div>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+            </div>
+            <div class="mb-3">
+                <label for="defaultSortColumn" class="form-label">Default Sort Column</label>
+                <select id="defaultSortColumn" name="defaultSort[column]" class="form-select">
+                    <!-- Options will be dynamically populated based on fields -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="defaultSortOrder" class="form-label">Default Sort Order</label>
+                <select id="defaultSortOrder" name="defaultSort[order]" class="form-select">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <h3>Fields</h3>
+                <div id="fieldsContainer"></div>
+                <button type="button" id="addField" class="btn btn-secondary mt-2">Add Field</button>
+            </div>
+            <div class="mb-3">
+                <h3>Stats</h3>
+                <div id="statsContainer"></div>
+                <button type="button" id="addStat" class="btn btn-secondary mt-2">Add Stat</button>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Log Type</button>
+        </form>
+    </div>
 
-        <label for="default_sort_column">Default Sort Column:</label>
-        <input type="text" id="default_sort_column" name="default_sort_column">
-
-        <label for="default_sort_order">Default Sort Order:</label>
-        <select id="default_sort_order" name="default_sort_order">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
-
-        <div id="fields-container"></div>
-
-        <h3>Stats</h3>
-        <div id="stats-container"></div>
-
-        <button type="button" id="add-field">Add Field</button>
-        <button type="button" id="add-stat">Add Stat</button>
-        <button type="button" id="submit-form">Submit</button>
-    </form>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            let fieldCounter = 1;
-            let statCounter = 1;
+        $(document).ready(function() {
+            let fieldCounter = 0;
+            let statCounter = 0;
+            const fieldTypes = ['text', 'number', 'date'];
 
-            $('#add-field').click(function () {
-                fieldCounter++;
-                $('#fields-container').append(`
-                    <div class="form-group">
-                        <label for="field_${fieldCounter}_label">Field ${fieldCounter} Label:</label>
-                        <input type="text" id="field_${fieldCounter}_label" name="field_${fieldCounter}_label" class="form-control" placeholder="Label">
-                        <label for="field_${fieldCounter}_type">Field ${fieldCounter} Type:</label>
-                        <select id="field_${fieldCounter}_type" name="field_${fieldCounter}_type" class="form-control">
-                            <option value="text">Text</option>
-                            <option value="number">Number</option>
-                            <option value="date">Date</option>
-                        </select>
-                    </div>
-                `);
-            });
-
-            $('#add-stat').click(function () {
-                statCounter++;
-                $('#stats-container').append(`
-                    <div class="form-group">
-                        <label for="stat_${statCounter}_key">Stat ${statCounter} Key:</label>
-                        <input type="text" id="stat_${statCounter}_key" name="stat_${statCounter}_key" class="form-control" placeholder="Key">
-                        <label for="stat_${statCounter}_label">Stat ${statCounter} Label:</label>
-                        <input type="text" id="stat_${statCounter}_label" name="stat_${statCounter}_label" class="form-control" placeholder="Label">
-                        <label for="stat_${statCounter}_column">Stat ${statCounter} Column:</label>
-                        <input type="text" id="stat_${statCounter}_column" name="stat_${statCounter}_column" class="form-control" placeholder="Column">
-                        <label for="stat_${statCounter}_function">Stat ${statCounter} Function:</label>
-                        <input type="text" id="stat_${statCounter}_function" name="stat_${statCounter}_function" class="form-control" placeholder="Function">
-                    </div>
-                `);
-            });
-
-            $('#submit-form').click(function (event) {
-                event.preventDefault();
+            function updateSortColumnOptions() {
+                const fieldOptions = $('#fieldsContainer .field-name').map(function() {
+                    return $(this).val().toLowerCase();
+                }).get();
+                $('#defaultSortColumn').empty();
+                fieldOptions.forEach(option => {
+                    if (option.trim() !== '') {
+                        $('#defaultSortColumn').append(new Option(option, option));
+                    }
+                });
                 
-                let formData = {
-                    logType: $('#log_type').val(),
-                    title: $('#title').val(),
-                    defaultSort: {
-                        column: $('#default_sort_column').val(),
-                        order: $('#default_sort_order').val()
-                    },
-                    stats: {},
-                    fields: []
-                };
-
-                $('#fields-container .form-group').each(function () {
-                    let label = $(this).find('input[name$="_label"]').val();
-                    let type = $(this).find('select[name$="_type"]').val();
-                    formData.fields.push({ label, type });
+                // Update stats column options
+                $('.stat-column').each(function() {
+                    const statColumn = $(this);
+                    statColumn.empty();
+                    fieldOptions.forEach(option => {
+                        statColumn.append(new Option(option, option));
+                    });
                 });
+            }
 
-                $('#stats-container .form-group').each(function () {
-                    let key = $(this).find('input[name$="_key"]').val();
-                    let label = $(this).find('input[name$="_label"]').val();
-                    let column = $(this).find('input[name$="_column"]').val();
-                    let func = $(this).find('input[name$="_function"]').val();
-                    formData.stats[key] = { label, column, function: func };
+            $('#addField').click(function() {
+                fieldCounter++;
+                const fieldHtml = `
+                    <div class="mb-3 field-group">
+                        <label for="fieldName${fieldCounter}" class="form-label">Field Name</label>
+                        <input type="text" class="form-control field-name" id="fieldName${fieldCounter}" name="fields[field${fieldCounter}][name]" placeholder="Enter name">
+                        <label for="fieldLabel${fieldCounter}" class="form-label">Field Label</label>
+                        <input type="text" class="form-control field-label" id="fieldLabel${fieldCounter}" name="fields[field${fieldCounter}][label]" placeholder="Enter label">
+                        <label for="fieldType${fieldCounter}" class="form-label">Field Type</label>
+                        <select id="fieldType${fieldCounter}" name="fields[field${fieldCounter}][type]" class="form-select">
+                            ${fieldTypes.map(type => `<option value="${type}">${type}</option>`).join('')}
+                        </select>
+                        <label for="fieldPlaceholder${fieldCounter}" class="form-label">Placeholder</label>
+                        <input type="text" class="form-control" id="fieldPlaceholder${fieldCounter}" name="fields[field${fieldCounter}][placeholder]" placeholder="Enter placeholder">
+                        <label for="fieldCssClass${fieldCounter}" class="form-label">CSS Class</label>
+                        <input type="text" class="form-control" id="fieldCssClass${fieldCounter}" name="fields[field${fieldCounter}][css_class]" value="form-control">
+                        <label for="fieldRequired${fieldCounter}" class="form-label">Required</label>
+                        <input type="checkbox" id="fieldRequired${fieldCounter}" name="fields[field${fieldCounter}][required]">
+                        <label for="fieldAutocomplete${fieldCounter}" class="form-label">Autocomplete</label>
+                        <input type="checkbox" id="fieldAutocomplete${fieldCounter}" name="fields[field${fieldCounter}][autocomplete]">
+                    </div>`;
+                $('#fieldsContainer').append(fieldHtml);
+
+                // Automatically set the placeholder based on the label
+                $(`#fieldName${fieldCounter}`).on('input', function() {
+                    const fieldName = $(this).val().toLowerCase();
+                    const fieldLabel = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+                    $(`#fieldLabel${fieldCounter}`).val(`${fieldLabel}:`);
+                    $(`#fieldPlaceholder${fieldCounter}`).val(`Enter the ${fieldName}`);
+                    
+                    // Update the sort column options
+                    updateSortColumnOptions();
                 });
+            });
 
+            $('#addStat').click(function() {
+                statCounter++;
+                const statHtml = `
+                    <div class="mb-3 stat-group">
+                        <label for="statName${statCounter}" class="form-label">Stat Name</label>
+                        <input type="text" class="form-control" id="statName${statCounter}" name="stats[stat${statCounter}][name]" placeholder="Enter stat name">
+                        <label for="statLabel${statCounter}" class="form-label">Stat Label</label>
+                        <input type="text" class="form-control" id="statLabel${statCounter}" name="stats[stat${statCounter}][label]" placeholder="Enter stat label">
+                        <label for="statColumn${statCounter}" class="form-label">Stat Column</label>
+                        <select id="statColumn${statCounter}" name="stats[stat${statCounter}][column]" class="form-select stat-column">
+                            <!-- Options will be dynamically populated based on fields -->
+                        </select>
+                        <label for="statFunction${statCounter}" class="form-label">Function</label>
+                        <select id="statFunction${statCounter}" name="stats[stat${statCounter}][function]" class="form-select">
+                            <option value="sum">Sum</option>
+                            <option value="average">Average</option>
+                            <option value="count">Count</option>
+                            <option value="since">Since</option>
+                        </select>
+                    </div>`;
+                $('#statsContainer').append(statHtml);
+
+                // Update the stat column options
+                updateSortColumnOptions();
+            });
+
+            $('#logTypeForm').submit(function(event) {
+                event.preventDefault();
+                const formData = $(this).serializeArray();
+                const formJson = {};
+                $.each(formData, function() {
+                    const keys = this.name.match(/[^\[\]]+/g);
+                    let temp = formJson;
+                    for (let i = 0; i < keys.length - 1; i++) {
+                        temp[keys[i]] = temp[keys[i]] || {};
+                        temp = temp[keys[i]];
+                    }
+                    temp[keys[keys.length - 1]] = this.value || this.value === 'on';
+                });
                 $.ajax({
                     url: '/lt/add_log_type',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify(formData),
-                    success: function (response) {
-                        console.log('Success:', response);
-                        // Handle success
-                    },
-                    error: function (error) {
-                        console.error('Error:', error);
-                        // Handle error
+                    data: JSON.stringify(formJson),
+                    success: function(response) {
+                        alert(response.message);
+                        if (response.status === 'success') {
+                            window.location.href = '/';
+                        }
                     }
                 });
             });

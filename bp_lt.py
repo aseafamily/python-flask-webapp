@@ -38,11 +38,25 @@ def save_config(config):
     directory_name = "logs"
     filename = "lt_config.json"
 
-    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-    container_client = blob_service_client.get_container_client(file_share_name)
-    blob_client = container_client.get_blob_client(directory_name + '/' + filename)
+    file_path = f"{directory_name}/{filename}"
 
-    blob_client.upload_blob(json.dumps(config), overwrite=True)
+    # Create a ShareFileClient to interact with the file
+    file_client = ShareFileClient.from_connection_string(
+        connection_string, file_share_name, file_path)
+
+    # Convert config to JSON string
+    config_json = json.dumps(config)
+    config_bytes = config_json.encode('utf-8')
+    file_size = len(config_bytes)
+
+    try:
+        # Create or overwrite the file with the necessary size
+        file_client.create_file(size=file_size)
+        
+        # Upload the config content to the file
+        file_client.upload_range(data=config_bytes, offset=0, length=file_size)
+    except Exception as e:
+        print(f"An error occurred while saving the config: {e}")
 
 
 def read_logs(log_type, user_id):
@@ -317,19 +331,39 @@ def add_log_type():
                     'title': data['title'],
                     'default_sort': data['defaultSort'],
                     'stats': data['stats'],
-                    'fields': data['fields']
+                    'fields': {
+                        field_data['name']: {
+                            **{k: v for k, v in field_data.items() if k != 'name'},
+                            'required': field_data.get('required') == 'on',
+                            'autocomplete': field_data.get('autocomplete') == 'on'
+                        } for field_key, field_data in data['fields'].items()
+                    }
                 }
                 # Save updated config
                 save_config(config)
-                return redirect("/lt")  # Redirect to /lt after success
-            except KeyError as e:
-                return jsonify({"status": "error", "message": f"Missing key: {str(e)}"}), 400
+                return jsonify({"status": "success", "message": "Log type added successfully"}), 200
+            except Exception as e:
+                return jsonify({"status": "error", "message": f"Error: {str(e)}"}), 400
         return jsonify({"status": "error", "message": "Invalid data"}), 400
     else:
         # GET request - render the form template
         return render_template('lt_add_log_type.html')
 
+@lt_bp.route('/lt/delete_log_type/<log_type>', methods=['POST'])
+@login_required
+def delete_log_type(log_type):
+    try:
+        config = load_config()
+        log_types = config.get('log_types', {})
 
+        if log_type in log_types:
+            del log_types[log_type]
+            save_config(config)
+            return jsonify({"success": True, "message": f"Log type '{log_type}' deleted successfully"}), 200
+        else:
+            return jsonify({"success": False, "message": "Log type not found"}), 404
+    except Exception as e:
+        return jsonify({"success": False, "message": f"An error occurred: {str(e)}"}), 500
 
 def sort_logs(log_config, logs):
     # Get the default sort column and order from the configuration
