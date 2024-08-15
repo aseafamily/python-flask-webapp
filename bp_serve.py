@@ -290,7 +290,7 @@ def get_good_strokes_status(player_id):
     # Calculate days since last record
     if sorted_logs:
         last_date = datetime.strptime(sorted_logs[0]['date'], '%Y-%m-%d')
-        since = (datetime.now() - last_date).days
+        since = (datetime.utcnow() - timedelta(hours=8) - last_date).days
     else:
         since = None
 
