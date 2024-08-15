@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Single Player Pong</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+        }
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            overflow: hidden;
+            touch-action: none;
+        }
+        #paddle {
+            position: absolute;
+            bottom: 20px;
+            width: 100px;
+            height: 10px;
+            background-color: #fff;
+        }
+        #ball {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #fff;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="paddle"></div>
+        <div id="ball"></div>
+        <div id="score">Score: 0</div>
+    </div>
+
+    <script>
+        const gameContainer = document.getElementById('gameContainer');
+        const paddle = document.getElementById('paddle');
+        const ball = document.getElementById('ball');
+        const scoreElement = document.getElementById('score');
+
+        let paddleX = window.innerWidth / 2 - 50;
+        let ballX = window.innerWidth / 2 - 5;
+        let ballY = 100;
+        let ballSpeedX = 2;
+        let ballSpeedY = 2;
+        let score = 0;
+
+        function updateGame() {
+            // Update paddle position
+            paddle.style.left = `${paddleX}px`;
+
+            // Update ball position
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+            ball.style.left = `${ballX}px`;
+            ball.style.top = `${ballY}px`;
+
+            // Ball collision with walls
+            if (ballX <= 0 || ballX >= window.innerWidth - 10) {
+                ballSpeedX = -ballSpeedX;
+            }
+
+            // Ball collision with ceiling
+            if (ballY <= 0) {
+                ballSpeedY = -ballSpeedY;
+            }
+
+            // Ball collision with paddle
+            if (ballY >= window.innerHeight - 30 && 
+                ballX + 10 >= paddleX && 
+                ballX <= paddleX + 100) {
+                ballSpeedY = -ballSpeedY;
+                score++;
+                scoreElement.textContent = `Score: ${score}`;
+            }
+
+            // Game over condition
+            if (ballY >= window.innerHeight) {
+                alert(`Game Over! Your score: ${score}`);
+                resetGame();
+            }
+
+            requestAnimationFrame(updateGame);
+        }
+
+        function resetGame() {
+            paddleX = window.innerWidth / 2 - 50;
+            ballX = window.innerWidth / 2 - 5;
+            ballY = 100;
+            ballSpeedX = 2;
+            ballSpeedY = 2;
+            score = 0;
+            scoreElement.textContent = `Score: ${score}`;
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const gameRect = gameContainer.getBoundingClientRect();
+            paddleX = touch.clientX - gameRect.left - 50;
+
+            // Keep paddle within game boundaries
+            if (paddleX < 0) paddleX = 0;
+            if (paddleX > window.innerWidth - 100) paddleX = window.innerWidth - 100;
+        }
+
+        gameContainer.addEventListener('touchmove', handleTouch);
+        gameContainer.addEventListener('touchstart', handleTouch);
+
+        // Adjust game elements on window resize
+        window.addEventListener('resize', () => {
+            resetGame();
+        });
+
+        updateGame();
+    </script>
+</body>
+</html>

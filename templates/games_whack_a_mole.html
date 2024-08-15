@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Whack-a-Mole</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            touch-action: manipulation;
+        }
+        #game-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .hole {
+            width: 100%;
+            padding-bottom: 100%;
+            background-color: #8B4513;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+        .mole {
+            width: 100%;
+            height: 100%;
+            background-color: #654321;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 100%;
+            transition: bottom 0.1s;
+        }
+        .mole.up {
+            bottom: 0;
+        }
+        #score {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #start-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="score">Score: 0</div>
+        <div id="game-board"></div>
+        <button id="start-button">Start Game</button>
+    </div>
+
+    <script>
+        const gameBoard = document.getElementById('game-board');
+        const scoreDisplay = document.getElementById('score');
+        const startButton = document.getElementById('start-button');
+        let score = 0;
+        let gameInterval;
+        let gameActive = false;
+
+        function createBoard() {
+            for (let i = 0; i < 9; i++) {
+                const hole = document.createElement('div');
+                hole.classList.add('hole');
+                const mole = document.createElement('div');
+                mole.classList.add('mole');
+                hole.appendChild(mole);
+                gameBoard.appendChild(hole);
+            }
+        }
+
+        function randomTime(min, max) {
+            return Math.round(Math.random() * (max - min) + min);
+        }
+
+        function randomHole() {
+            const holes = document.querySelectorAll('.hole');
+            const idx = Math.floor(Math.random() * holes.length);
+            return holes[idx];
+        }
+
+        function peep() {
+            const time = randomTime(500, 1000);
+            const hole = randomHole();
+            hole.querySelector('.mole').classList.add('up');
+            setTimeout(() => {
+                hole.querySelector('.mole').classList.remove('up');
+                if (gameActive) peep();
+            }, time);
+        }
+
+        function startGame() {
+            if (gameActive) return;
+            gameActive = true;
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+            startButton.textContent = 'Stop Game';
+            peep();
+        }
+
+        function stopGame() {
+            gameActive = false;
+            startButton.textContent = 'Start Game';
+        }
+
+        function whack(e) {
+            if (!e.isTrusted) return; // Cheater!
+            if (!gameActive) return;
+            if (e.target.classList.contains('up')) {
+                e.target.classList.remove('up');
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+            }
+        }
+
+        createBoard();
+
+        gameBoard.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            whack(e);
+        });
+
+        startButton.addEventListener('click', () => {
+            if (gameActive) {
+                stopGame();
+            } else {
+                startGame();
+            }
+        });
+    </script>
+</body>
+</html>

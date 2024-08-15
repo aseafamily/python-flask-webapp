@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Guess the Number</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #game-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 300px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+        }
+        #message {
+            margin: 20px 0;
+            font-weight: bold;
+            min-height: 20px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #new-game {
+            background-color: #008CBA;
+        }
+        #attempts {
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Guess the Number</h1>
+        <p>I'm thinking of a number between 1 and 100.</p>
+        <div id="message"></div>
+        <input type="tel" id="guess" min="1" max="100" placeholder="Enter your guess" inputmode="numeric" pattern="[0-9]*">
+        <button id="submit-guess">Guess</button>
+        <button id="new-game">New Game</button>
+        <div id="attempts">Attempts: 0</div>
+    </div>
+
+    <script>
+        const message = document.getElementById('message');
+        const guessInput = document.getElementById('guess');
+        const submitButton = document.getElementById('submit-guess');
+        const newGameButton = document.getElementById('new-game');
+        const attemptsDisplay = document.getElementById('attempts');
+
+        let secretNumber;
+        let attempts;
+
+        function startNewGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            message.textContent = '';
+            guessInput.value = '';
+            attemptsDisplay.textContent = 'Attempts: 0';
+            submitButton.disabled = false;
+            guessInput.focus();
+        }
+
+        function checkGuess() {
+            const userGuess = parseInt(guessInput.value);
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                message.textContent = 'Please enter a valid number between 1 and 100.';
+                return;
+            }
+
+            attempts++;
+            attemptsDisplay.textContent = `Attempts: ${attempts}`;
+
+            if (userGuess === secretNumber) {
+                message.textContent = `Congratulations! You guessed the number in ${attempts} attempts!`;
+                submitButton.disabled = true;
+            } else if (userGuess < secretNumber) {
+                message.textContent = 'Too low! Try a higher number.';
+            } else {
+                message.textContent = 'Too high! Try a lower number.';
+            }
+
+            guessInput.value = '';
+            guessInput.focus();
+        }
+
+        submitButton.addEventListener('click', checkGuess);
+        newGameButton.addEventListener('click', startNewGame);
+
+        guessInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                checkGuess();
+            }
+        });
+
+        startNewGame();
+    </script>
+</body>
+</html>
