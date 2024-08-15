@@ -90,6 +90,7 @@
         <h1>Write Your Reflection for {{ category }} ({{tennis_id }})</h1>
         <form action="/reflection" method="post">
             <textarea name="content" id="editor">{{ initial_content }}</textarea>
+            {% if category in ['Match', 'Play', 'Group'] %}
             <div class="user_ratings">
                 <h2>Consistency</h2>
                 <div class="radio_buttons">
@@ -134,6 +135,7 @@
                     {% endfor %}
                 </div>
             </div>
+            {% endif %}
             <button type="submit">Submit</button>
         </form>
     </div>

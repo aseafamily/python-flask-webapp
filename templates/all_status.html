@@ -84,6 +84,32 @@
         <td>{{ status2.records_this_week }}/{{ status2.serve_this_week }}</td>
         <td>{{ status2.serve_percentage_this_week }}</td>
     </tr>
+    
+    <tr>
+        <th>Name</th>
+        <th>FH</th>
+        <th>BH</th>
+        <th>Last</th>
+        <th>Volley</th>
+        <th>Others</th>
+    </tr>
+    <tr>
+        <td>{{ stroke1.player_name }}</td>
+        <td>{{ stroke1.total_forehand }}</td>
+        <td>{{ stroke1.total_backhand }}</td>
+        <td style="color: {% if stroke1.since < 3 %}green{% elif stroke1.since < 6 %}white{% else %}red{% endif %};">{{ stroke1.since }}</td>
+        <td>{{ stroke1.total_volley }}</td>
+        <td>{{ stroke1.others }}</td>
+    </tr>
+    <tr>
+        <td>{{ stroke2.player_name }}</td>
+        <td>{{ stroke2.total_forehand }}</td>
+        <td>{{ stroke2.total_backhand }}</td>
+        <td style="color: {% if stroke2.since < 3 %}green{% elif stroke2.since < 6 %}white{% else %}red{% endif %};">{{ stroke2.since }}</td>
+        <td>{{ stroke2.total_volley }}</td>
+        <td>{{ stroke2.others }}</td>
+    </tr>
+
     <tr>
         <th>Name</th>
         <th>Total hr</th>

@@ -9,6 +9,7 @@ from sqlalchemy import cast, String
 from utils import test_connection, user_dict, get_week_range, get_client_time, convert_none_string_to_none
 from flask_login import login_required
 import math
+from bp_lt import read_logs
 
 serve_bp = Blueprint('serve', __name__)
 
@@ -264,6 +265,44 @@ def serve_analysis():
     # Pass the instance to the template
     return render_template('serve_analysis.html', serve_analysis=serve_analysis)
 
+def safe_int(value, default=0):
+    try:
+        return int(value) if value != '' else default
+    except ValueError:
+        return default
+
+def get_good_strokes_status(player_id):
+    logs = read_logs('good strokes', player_id)
+
+    if not logs:
+        return None
+
+    player_name = user_dict.get(str(player_id), '')
+
+    # Sort logs by date in descending order
+    sorted_logs = sorted(logs, key=lambda x: datetime.strptime(x['date'], '%Y-%m-%d'), reverse=True)
+
+    total_forehand = sum(safe_int(log.get('forehand', 0)) + safe_int(log.get('forehand_return', 0)) for log in logs)
+    total_backhand = sum(safe_int(log.get('backhand', 0)) + safe_int(log.get('backhand_return', 0)) + safe_int(log.get('backhand_slice', 0)) for log in logs)
+    total_volley = sum(safe_int(log.get('forehand_volley', 0)) + safe_int(log.get('backhand_volley', 0)) + safe_int(log.get('swing_volley', 0)) for log in logs)
+    others = sum(safe_int(log.get('overhead', 0)) + safe_int(log.get('drop_shot', 0)) for log in logs)
+
+    # Calculate days since last record
+    if sorted_logs:
+        last_date = datetime.strptime(sorted_logs[0]['date'], '%Y-%m-%d')
+        since = (datetime.now() - last_date).days
+    else:
+        since = None
+
+    return {
+        'player_name': player_name,
+        'total_forehand': total_forehand,
+        'total_backhand': total_backhand,
+        'total_volley': total_volley,
+        'others': others,
+        'since': since
+    }
+
 #@app.route('/all_status')
 @serve_bp.route('/serve/status')
 def all_status():
@@ -275,7 +314,15 @@ def all_status():
     log0 = get_tennis_status(0)
     log1 = get_tennis_status(1)
     log2 = get_tennis_status(2)
-    return render_template('all_status.html', status1=status1, status2=status2, log0=log0, log1=log1, log2=log2)
+    
+    # Get good strokes status for players 1 and 2
+    stroke1 = get_good_strokes_status(1)
+    stroke2 = get_good_strokes_status(2)
+
+    return render_template('all_status.html', 
+                           status1=status1, status2=status2, 
+                           log0=log0, log1=log1, log2=log2,
+                           stroke1=stroke1, stroke2=stroke2)
 
 #@app.route('/serve/status')
 #def serve_status():

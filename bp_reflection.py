@@ -22,6 +22,9 @@ def form():
     intensity = 0
     initial_content = ''
 
+    rating_categories = ['Match', 'Play', 'Group']
+    show_ratings = category in rating_categories
+
     if is_new:
         if category == 'Match' or category == 'Play':
             initial_content = '''
@@ -84,19 +87,25 @@ def form():
         if tennis_id:
             reflection = get_reflection(tennis_id)
             data = json.loads(reflection)
-            consistency = data.get('consistency')
-            defense = data.get('defense')
-            attacking = data.get('attacking')
-            intensity = data.get('intensity')
+            if show_ratings:
+                consistency = data.get('consistency', 0)
+                defense = data.get('defense', 0)
+                attacking = data.get('attacking', 0)
+                intensity = data.get('intensity', 0)
             initial_content = data.get('content')
 
     if request.method == 'POST':
         content = request.form['content']
-        consistency = request.form['consistency']
-        defense = request.form['defense']
-        attacking = request.form['attacking']
-        intensity = request.form['intensity']
-        
+        data = {
+            "content": content,
+        }
+        if show_ratings:
+            data.update({
+                "consistency": request.form['consistency'],
+                "defense": request.form['defense'],
+                "attacking": request.form['attacking'],
+                "intensity": request.form['intensity'],
+            })
 
         tennis_id = ''
         next = ''
@@ -107,13 +116,14 @@ def form():
             query_params = parse_qs(parsed_url.query)
             tennis_id = query_params.get('tennis_id', [''])[0]
             next = query_params.get('next', [''])[0]
-        return redirect(url_for('reflection.result', consistency=consistency, defense=defense, attacking=attacking, intensity=intensity, content=content, tennis_id=tennis_id, next=next))
+        return redirect(url_for('reflection.result', consistency=consistency, defense=defense, attacking=attacking, intensity=intensity, content=content, tennis_id=tennis_id, next=next, category=category))
     
-    return render_template('reflection_form.html', initial_content=initial_content, category=category, tennis_id=tennis_id, consistency=consistency, defense=defense, attacking=attacking, intensity=intensity)
+    return render_template('reflection_form.html', initial_content=initial_content, category=category, tennis_id=tennis_id, consistency=consistency, defense=defense, attacking=attacking, intensity=intensity, show_ratings=show_ratings)
 
 @reflection_bp.route('/reflection/result')
 def result():
     tennis_id = request.args.get('tennis_id')
+    category = request.args.get('category')
     consistency = request.args.get('consistency')
     defense = request.args.get('defense')
     attacking = request.args.get('attacking')
@@ -121,12 +131,15 @@ def result():
     content = request.args.get('content')
     
     data = {
-        "consistency": consistency,
-        "defense": defense,
-        "attacking": attacking,
-        "intensity": intensity,
         "content": content,
     }
+    if category in ['Match', 'Play', 'Group']:
+        data.update({
+            "consistency": consistency,
+            "defense": defense,
+            "attacking": attacking,
+            "intensity": intensity,
+        })
     json_string = json.dumps(data)
 
     if tennis_id:
