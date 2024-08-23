@@ -208,7 +208,7 @@
                                         <label><input type="radio" name="match_serve" value="team2_serve" {% block team2_serve %}{% endblock %}> Team 2</label>
                                     </td>
                                 </tr>
-                                <tr class="match-only-fields">
+                                <tr>
                                     <td>Match name:</td>
                                     <td><input type="text" name="match_name" id="match_name" class="match-input" value="{% block match_name %}{% endblock %}"></td>
                                 </tr>
@@ -402,32 +402,39 @@
     });
 
     $(document).ready(function() {
-        $('#match_name').on('focus', function() {
-            $(this).autocomplete('search', '');
-        });
         $('#match_name').autocomplete({
             source: function(request, response) {
+                var category = $('#category').val();
+                var isPlay = (category.toLowerCase() === 'play');
+                
                 $.ajax({
                     url: '/match_name/{{ u }}',
                     dataType: 'json',
                     data: {
-                        term: request.term
+                        term: request.term,
+                        is_play: isPlay
                     },
                     success: function(data) {
                         response(data);
                     }
                 });
             },
-            minLength: 0, // Minimum characters before triggering autocomplete
+            minLength: 0,
             select: function(event, ui) {
-                $('#match_name').val(ui.item.value); // Update input value when an option is selected
-                return false; // Prevent default behavior of input field
+                $('#match_name').val(ui.item.value);
+                return false;
             }
         });
+
         $('#match_name').on('focus', function() {
             if ($('#match_name').val() === '') {
-                $(this).autocomplete('search', ''); // Trigger search on focus
+                $(this).autocomplete('search', '');
             }
+        });
+
+        // Trigger autocomplete update when category changes
+        $('#category').on('change', function() {
+            $('#match_name').autocomplete('search', $('#match_name').val());
         });
     });
 
@@ -757,6 +764,43 @@
         matchTypeRadios.forEach(function(radio) {
             radio.addEventListener('change', toggleMatchType);
         });
+    });
+
+    $(document).ready(function() {
+        function setupPlayerAutocomplete(playerNumber) {
+            $(`#player${playerNumber}`).autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: '/player/s',
+                        dataType: 'json',
+                        data: {
+                            term: request.term,
+                            u: '{{ u }}'
+                        },
+                        success: function(data) {
+                            response($.map(data, function(item) {
+                                return {
+                                    label: item.name,
+                                    value: item.name,
+                                    id: item.id
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    $(`#player${playerNumber}`).val(ui.item.value);
+                    $(`#player${playerNumber}_id`).val(ui.item.id);
+                    return false;
+                }
+            });
+        }
+
+        // Setup autocomplete for all four player fields
+        for (let i = 1; i <= 4; i++) {
+            setupPlayerAutocomplete(i);
+        }
     });
 </script>
 

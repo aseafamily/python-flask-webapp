@@ -19,6 +19,7 @@ from bp_lt import lt_bp
 from bp_reflection import reflection_bp
 import json
 from bp_test import test_bp
+from bp_player import player_bp
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -44,6 +45,7 @@ app.register_blueprint(stringing_bp)
 app.register_blueprint(lt_bp)
 app.register_blueprint(reflection_bp)
 app.register_blueprint(test_bp)
+app.register_blueprint(player_bp)
 
 # for login
 app.config['SECRET_KEY'] = '48e7a59dca9d6c13b0e7e51b7ee6e2a5759c8e1dbb3a0f83'

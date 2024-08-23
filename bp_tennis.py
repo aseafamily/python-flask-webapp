@@ -43,7 +43,9 @@ def get_cities(search):
 @tennis_bp.route('/match_name/<uid>', methods=['GET'])
 def get_match_names(uid):
     session = db.session
-    
+    term = request.args.get('term', '')
+    is_play = request.args.get('is_play', '').lower() == 'true'
+
     # Subquery to get the distinct match names with the latest id
     subquery = (
         session.query(
@@ -51,11 +53,19 @@ def get_match_names(uid):
             func.max(Match.id).label('max_id')
         )
         .filter(Match.player1 == uid)
-        .group_by(Match.match_name)
-        .subquery()
     )
 
-    # Main query to get the last 5 unique match names based on match.id desc
+    # Apply is_play filter
+    if is_play:
+        subquery = subquery.filter(Match.is_play == True)
+
+    # Apply search term filter if provided
+    if term:
+        subquery = subquery.filter(Match.match_name.ilike(f'%{term}%'))
+
+    subquery = subquery.group_by(Match.match_name).subquery()
+
+    # Main query to get the unique match names based on match.id desc
     unique_match_names = (
         session.query(Match.match_name)
         .join(subquery, Match.id == subquery.c.max_id)
@@ -64,7 +74,7 @@ def get_match_names(uid):
         .all()
     )
 
-    names_list = [loc[0] for loc in unique_match_names]
+    names_list = [name[0] for name in unique_match_names if name[0]]
     return jsonify(names_list)
 
 @tennis_bp.route('/tennis', methods=['POST', 'GET'])
