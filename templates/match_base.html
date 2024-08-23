@@ -120,7 +120,9 @@
 <body>
 
     <div class="container">
-        <div style="background-color: #374df5; display: flex; justify-content: space-between;padding: 5px;">
+        {% set is_play = request.args.get('is_play', '').lower() == 'true' %}
+
+        <div style="background-color: {% if is_play %}#4CAF50{% else %}#374df5{% endif %}; display: flex; justify-content: space-between;padding: 5px;">
             <div class="player_profile">
                 <div class="player_row">
                     <div class="player_name">
