@@ -26,7 +26,7 @@
 {% endblock %}
 
 {% if match %}
-    {% block match_player1 %}{{player1_name if player1_name is not none else ''}}{% endblock %}
+    {% block match_player1 %}{% if player1_name is not none %}{{player1_name}}{% else %}{{user_name}}{% endif %}{% endblock %}
     {% block match_player2 %}{{player2_name if player2_name is not none else ''}}{% endblock %}
     {% block match_player3 %}{{player3_name if player3_name is not none else ''}}{% endblock %}
     {% block match_player4 %}{{player4_name if player4_name is not none else ''}}{% endblock %}
