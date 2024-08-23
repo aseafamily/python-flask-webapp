@@ -5,6 +5,7 @@ class Match(db.Model):
     __tablename__ = 'match'
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    is_play = db.Column(db.Boolean, nullable=False, default=False)
     duration = db.Column(db.Integer, nullable=True)
     location = db.Column(db.Integer, nullable=True)
     date = db.Column(db.Date, nullable=True)

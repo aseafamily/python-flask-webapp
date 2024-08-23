@@ -189,8 +189,9 @@ def tennis_index():
         details = request.form['details']
         player = player_id
 
-        if category == 'Match':
+        if category in ['Match', 'Play']:
             try:
+                is_play = (category == 'Play')
                 match_type = request.form['match_type']
                 is_singles = match_type == 'singles'
                 player1_id = get_or_create_player(request.form['player1'], db.session, request.form['player1_id'])
@@ -217,6 +218,7 @@ def tennis_index():
 
                 # Add a new match using the player1_id
                 new_match = Match(
+                    is_play=is_play,
                     duration=duration,
                     location=location,
                     date=date,
@@ -240,16 +242,6 @@ def tennis_index():
                     team1_won=True if request.form['match_outcome'] == 'team1_won' else False,
                     team1_serve=True if request.form['match_serve'] == 'team1_serve' else False,
                     match_name=request.form['match_name'],
-                    match_level=request.form['match_level'],
-                    match_link=request.form['match_link'],
-                    match_event=request.form['match_event'],
-                    match_draw=request.form['match_draw'],
-                    match_round=request.form['match_round'],
-                    match_city=request.form['match_city'],
-                    match_state=request.form['match_state'],
-                    is_indoor=True if request.form['court_type'] == 'indoor' else False,
-                    comments=request.form['match_comments'],
-                    scores=request.form['match_scores'],
                     tennis_id=tennis_instance.id,
                     player1_wtn = get_integer_from_form100('player1_wtn'),
                     player1_utr = get_integer_from_form100('player1_utr'),
@@ -266,8 +258,16 @@ def tennis_index():
                     player4_wtn = get_integer_from_form100('player4_wtn'),
                     player4_utr = get_integer_from_form100('player4_utr'),
                     player4_usta = get_integer_from_form100('player4_usta'),
-                    player4_seed = get_integer_from_form('player4_seed')
+                    player4_seed = get_integer_from_form('player4_seed'),
+                    match_level=request.form['match_level'],
+                    match_link=request.form['match_link'],
+                    match_event=request.form['match_event'],
+                    match_draw=request.form['match_draw'],
+                    match_round=request.form['match_round'],
+                    match_city=request.form['match_city'],
+                    match_state=request.form['match_state']
                 )
+
                 db.session.add(new_match)
                 tennis_instance.details = generate_match_summary(new_match, request.form['player2'], request.form['player3'], request.form['player4'])
                 db.session.commit()
@@ -422,7 +422,8 @@ def tennis_update(id):
         tennis.category = request.form['category']
         tennis.details = request.form['details']
 
-        if tennis.category == 'Match':
+        if tennis.category in ['Match', 'Play']:
+            is_play = (tennis.category == 'Play')
             match_type = request.form['match_type']
             is_singles = match_type == 'singles'
             player1_id = get_or_create_player(request.form['player1'], db.session, request.form['player1_id'])
@@ -438,6 +439,7 @@ def tennis_update(id):
             if not match:
                 # Create a new match
                 match = Match(
+                    is_play=is_play,
                     duration=duration,
                     location=location,
                     date=date,
@@ -491,40 +493,41 @@ def tennis_update(id):
                 )
                 db.session.add(match)
             else:
-                # Update the match
-                match.duration=duration
-                match.location=location
-                match.date=date
-                match.type='S' if is_singles else 'D'
-                match.player1=player1_id
-                match.player2=player2_id
-                match.player3=None if is_singles else player3_id
-                match.player4=None if is_singles else player4_id
-                match.team1_set1=get_integer_from_form('team1_set1')
-                match.team1_set1_tb=get_integer_from_form('team1_set1_tb')
-                match.team2_set1=get_integer_from_form('team2_set1')
-                match.team2_set1_tb=get_integer_from_form('team2_set1_tb')
-                match.team1_set2=get_integer_from_form('team1_set2')
-                match.team1_set2_tb=get_integer_from_form('team1_set2_tb')
-                match.team2_set2=get_integer_from_form('team2_set2')
-                match.team2_set2_tb=get_integer_from_form('team2_set2_tb')
-                match.team1_set3=get_integer_from_form('team1_set3')
-                match.team1_set3_tb=get_integer_from_form('team1_set3_tb')
-                match.team2_set3=get_integer_from_form('team2_set3')
-                match.team2_set3_tb=get_integer_from_form('team2_set3_tb')
-                match.team1_won=True if request.form['match_outcome'] == 'team1_won' else False
-                match.team1_serve=True if request.form['match_serve'] == 'team1_serve' else False
-                match.match_name=request.form['match_name']
-                match.match_level=request.form['match_level']
-                match.match_link=request.form['match_link']
-                match.match_event=request.form['match_event']
-                match.match_draw=request.form['match_draw']
-                match.match_round=request.form['match_round']
-                match.match_city=request.form['match_city']
-                match.match_state=request.form['match_state']
-                match.is_indoor=True if request.form['court_type'] == 'indoor' else False
-                match.comments=request.form['match_comments']
-                match.scores=request.form['match_scores']
+                # Update the existing match
+                match.is_play = is_play
+                match.duration = duration
+                match.location = location
+                match.date = date
+                match.type = 'S' if is_singles else 'D'
+                match.player1 = player1_id
+                match.player2 = player2_id
+                match.player3 = None if is_singles else player3_id
+                match.player4 = None if is_singles else player4_id
+                match.team1_set1 = get_integer_from_form('team1_set1')
+                match.team1_set1_tb = get_integer_from_form('team1_set1_tb')
+                match.team2_set1 = get_integer_from_form('team2_set1')
+                match.team2_set1_tb = get_integer_from_form('team2_set1_tb')
+                match.team1_set2 = get_integer_from_form('team1_set2')
+                match.team1_set2_tb = get_integer_from_form('team1_set2_tb')
+                match.team2_set2 = get_integer_from_form('team2_set2')
+                match.team2_set2_tb = get_integer_from_form('team2_set2_tb')
+                match.team1_set3 = get_integer_from_form('team1_set3')
+                match.team1_set3_tb = get_integer_from_form('team1_set3_tb')
+                match.team2_set3 = get_integer_from_form('team2_set3')
+                match.team2_set3_tb = get_integer_from_form('team2_set3_tb')
+                match.team1_won = True if request.form['match_outcome'] == 'team1_won' else False
+                match.team1_serve = True if request.form['match_serve'] == 'team1_serve' else False
+                match.match_name = request.form['match_name']
+                match.match_level = request.form['match_level']
+                match.match_link = request.form['match_link']
+                match.match_event = request.form['match_event']
+                match.match_draw = request.form['match_draw']
+                match.match_round = request.form['match_round']
+                match.match_city = request.form['match_city']
+                match.match_state = request.form['match_state']
+                match.is_indoor = True if request.form['court_type'] == 'indoor' else False
+                match.comments = request.form['match_comments']
+                match.scores = request.form['match_scores']
                 match.player1_wtn = get_integer_from_form100('player1_wtn')
                 match.player1_utr = get_integer_from_form100('player1_utr')
                 match.player1_usta = get_integer_from_form100('player1_usta')
@@ -567,7 +570,7 @@ def tennis_update(id):
         player3 = aliased(Player)
         player4 = aliased(Player)
 
-        if tennis.category == 'Match':
+        if tennis.category in ['Match', 'Play']:
             match_query = db.session.query(
                 Match,
                 player1.first_name.label('player1_first_name'), player1.last_name.label('player1_last_name'),

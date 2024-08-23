@@ -465,6 +465,7 @@
                         <div style="color: darkgreen;word-wrap: break-word; margin-top: 5px;" class="reflection-text">{{ formatted_reflection|safe }}</div>
                         {% endif %}
                     </div>
+                    {% if not match_data.match.is_play %}
                     <div class="IZ65Hb-hSRGPd-e1YmVc-FCjw3e">
                         <div class="hSRGPd-e1YmVc">
                             <div class="hSRGPd-e1YmVc-HiaYvf" style="background-image: url(&quot;/match/logo/{{ match_data.tournament_logo }}&quot;);">
@@ -483,6 +484,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
             <script>

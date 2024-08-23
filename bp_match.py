@@ -7,7 +7,7 @@ from db_match import Match
 from db_player import Player
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract
-from sqlalchemy import cast, String, desc, or_
+from sqlalchemy import cast, String, desc, or_, and_
 from utils import test_connection, user_dict, get_week_range, get_client_time, get_match_round_abbreviation, generate_title, extract_number_from_string, generate_match_summary, generate_match_score
 from flask_login import login_required
 import math
@@ -36,6 +36,7 @@ def match_index():
     query_type = request.args.get('type')
     query_year = request.args.get('year')
     query_view = request.args.get('view')
+    is_play = request.args.get('is_play', 'false').lower() == 'true'
 
     player1 = aliased(Player)
     player2 = aliased(Player)
@@ -55,11 +56,14 @@ def match_index():
     .join(player4, Match.player4 == player4.id, isouter=True) \
     .join(Tennis, Match.tennis_id == Tennis.id, isouter=True) \
     .filter(
-        or_(
-            Match.player1 == player_id,
-            Match.player2 == player_id,
-            Match.player3 == player_id,
-            Match.player4 == player_id
+        and_(
+            or_(
+                Match.player1 == player_id,
+                Match.player2 == player_id,
+                Match.player3 == player_id,
+                Match.player4 == player_id
+            ),
+            Match.is_play == is_play
         )
     ) \
     .order_by(desc(Match.date), desc(Match.id)) \
@@ -162,7 +166,7 @@ def match_index():
             'tournament_logo': tournament_logo,
             'event_name': event_name,
             'diff_indicator': diff_indicator,
-            'show_match_name': match.Match.match_name != last_match_name, 
+            'show_match_name': not match.Match.is_play and match.Match.match_name != last_match_name, 
             'wins': wins,
             'summary': summary,
             'player1_number': format_player_number(match.Match.player1_wtn, match.Match.player1_utr, match.Match.player1_usta),

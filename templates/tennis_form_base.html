@@ -208,35 +208,35 @@
                                         <label><input type="radio" name="match_serve" value="team2_serve" {% block team2_serve %}{% endblock %}> Team 2</label>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="match-only-fields">
                                     <td>Match name:</td>
                                     <td><input type="text" name="match_name" id="match_name" class="match-input" value="{% block match_name %}{% endblock %}"></td>
                                 </tr>
-                                <tr>
+                                <tr class="match-only-fields">
                                     <td>Match level:</td>
                                     <td><input type="text" name="match_level" id="match_level" class="match-input" value="{% block match_level %}{% endblock %}"></td>
                                 </tr>
-                                <tr>
+                                <tr class="match-only-fields">
                                     <td>Match link:</td>
                                     <td><input type="text" name="match_link" id="match_link" class="match-input" value="{% block match_link %}{% endblock %}"></td>
                                 </tr>
-                                <tr>
+                                <tr class="match-only-fields">
                                     <td>Match event:</td>
                                     <td><input type="text" name="match_event" id="match_event" class="match-input" value="{% block match_event %}{% endblock %}"></td>
                                 </tr>
-                                <tr>
+                                <tr class="match-only-fields">
                                     <td>Match draw:</td>
                                     <td><input type="text" name="match_draw" id="match_draw" class="match-input" value="{% block match_draw %}{% endblock %}"></td>
                                 </tr>
-                                <tr>
+                                <tr class="match-only-fields">
                                     <td>Match round:</td>
                                     <td><input type="text" name="match_round" id="match_round" class="match-input" value="{% block match_round %}{% endblock %}"></td>
                                 </tr>
-                                <tr>
+                                <tr class="match-only-fields">
                                     <td>Match city:</td>
                                     <td><input type="text" name="match_city" id="match_city" class="match-input" value="{% block match_city %}{% endblock %}"></td>
                                 </tr>
-                                <tr>
+                                <tr class="match-only-fields">
                                     <td>Match state:</td>
                                     <td><input type="text" name="match_state" id="match_state" class="match-input" value="{% block match_state %}{% endblock %}"></td>
                                 </tr>
@@ -287,9 +287,14 @@
 <script>
     function toggleMatchDetails(selectedValue) {
         var matchDetailsRow = document.getElementById('match-details-row');
+        var matchOnlyFields = document.querySelectorAll('.match-only-fields');
 
         if (selectedValue?.toLowerCase() === 'match') {
             matchDetailsRow.style.display = 'table-row';
+            matchOnlyFields.forEach(field => field.style.display = 'table-row');
+        } else if (selectedValue?.toLowerCase() === 'play') {
+            matchDetailsRow.style.display = 'table-row';
+            matchOnlyFields.forEach(field => field.style.display = 'none');
         } else {
             matchDetailsRow.style.display = 'none';
         }
