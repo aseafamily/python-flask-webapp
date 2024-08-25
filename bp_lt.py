@@ -306,6 +306,7 @@ def autocomplete(log_type, field_name):
     if field_name == '[all]':
         # Return raw log data
         # Get default sort configuration from lt_config.json
+        config = load_config()
         log_config = config.get('log_types', {}).get(log_type, {})
         sorted_logs = sort_logs(log_config, logs)
         if limit:
