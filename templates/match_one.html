@@ -793,7 +793,9 @@
                 <span color="onSurface.nLv3" letter-spacing="-0.2px" class="Text dDJgpy">Note</span>
                 <span color="onSurface.nLv1" letter-spacing="-0.2px" overflow="hidden" class="Text bkqxZg" id="note"><span>
                 {% macro newline_to_br(text) %}
-                    {{ text.replace('\n', '<br>') | safe }}
+                    {% if text is not none %}
+                        {{ text.replace('\n', '<br>') | safe }}
+                    {% endif %}
                 {% endmacro %}
                 <script>
                     const noteText = `{{ newline_to_br(match_data.Match.comments) }}`;
