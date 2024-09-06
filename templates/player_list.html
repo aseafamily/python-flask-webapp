@@ -76,7 +76,12 @@
                     <span> - {{ player.gender }}</span>
                     {% endif %}
                     {% if player.birthday %}
-                        <span> - {{ (today.year - player.birthday.year) }}y</span>
+                        {% set birth_date = player.birthday %}
+                        {% set age = today.year - birth_date.year %}
+                        {% if (today.month, today.day) < (birth_date.month, birth_date.day) %}
+                            {% set age = age - 1 %}
+                        {% endif %}
+                        <span> - {{ age }}y</span>
                     {% endif %}
                     {% if player.city %}
                         <span> - {{ player.city }}, {{ player.state }}</span>
