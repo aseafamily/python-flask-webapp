@@ -19,6 +19,10 @@ class Player(db.Model):
     utr_date = db.Column(db.Date, nullable=True)
     wtn_date = db.Column(db.Date, nullable=True)
     usta_date = db.Column(db.Date, nullable=True)
+    city = db.Column(db.String(255), nullable=True)      # City field
+    state = db.Column(db.String(255), nullable=True)     # State field
+    country = db.Column(db.String(255), nullable=True)   # Country field
+    note = db.Column(db.String(1000), nullable=True)  
 
     def __repr__(self):
         return '<Player %r>' % self.id

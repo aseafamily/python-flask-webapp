@@ -1,0 +1,153 @@
+<!-- player_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ player.first_name }} {{ player.last_name }} - Player Details</title>
+    <style>
+        /* Mobile-friendly styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .player-info {
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .edit-input {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+        .back-link {
+            display: block;
+            margin-bottom: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: blue;
+        }
+        .save-button {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ player.first_name }} {{ player.last_name }}</h1>
+    
+    <a href="/" class="back-link">Home</a>
+    <a href="{{ url_for('player.player_list') }}" class="back-link">Player List</a>
+    <a href="/match?u={{ player.id }}&year=all" class="back-link">Matches</a>
+    <a href="/match?u={{ player.id }}&is_play=true&year=all" class="back-link">Match Plays</a>
+
+    <div class="player-info">
+        <form id="player-form" method="POST" action="/player/{{ player.id }}">
+            <p><strong>ID:</strong> {{ player.id }}</p>
+            <p>
+                <strong>First Name:</strong>
+                <input type="text" name="first_name" class="edit-input" value="{{ player.first_name }}">
+            </p>
+            <p>
+                <strong>Last Name:</strong>
+                <input type="text" name="last_name" class="edit-input" value="{{ player.last_name }}">
+            </p>
+            <p>
+                <strong>Gender:</strong>
+                <select name="gender" class="edit-input">
+                    <option value="M" {% if player.gender == 'M' %}selected{% endif %}>M</option>
+                    <option value="F" {% if player.gender == 'F' %}selected{% endif %}>F</option>
+                </select>
+            </p>
+            <p>
+                <strong>Birthday:</strong>
+                <input type="date" name="birthday" class="edit-input" value="{{ player.birthday }}">
+            </p>
+            <p>
+                <strong>Year of Graduation:</strong>
+                <input type="number" name="year_graduation" class="edit-input" value="{{ player.year_graduation }}">
+            </p>
+            <p>
+                <strong>UTR Profile:</strong>
+                <input type="text" name="utr_profile" class="edit-input" value="{{ player.utr_profile }}">
+            </p>
+            <p>
+                <strong>USTA Profile:</strong>
+                <input type="text" name="usta_profile" class="edit-input" value="{{ player.usta_profile }}">
+            </p>
+            <p>
+                <strong>USTA ID:</strong>
+                <input type="number" name="usta_id" class="edit-input" value="{{ player.usta_id }}">
+            </p>
+            <p>
+                <strong>UTR:</strong>
+                <input type="number" name="utr" class="edit-input" value="{{ player.utr }}">
+            </p>
+            <p>
+                <strong>UTR Date:</strong>
+                <input type="date" name="utr_date" class="edit-input" value="{{ player.utr_date }}">
+            </p>
+            <p>
+                <strong>WTN:</strong>
+                <input type="number" name="wtn" class="edit-input" value="{{ player.wtn }}">
+            </p>
+            <p>
+                <strong>WTN Date:</strong>
+                <input type="date" name="wtn_date" class="edit-input" value="{{ player.wtn_date }}">
+            </p>
+            <p>
+                <strong>USTA:</strong>
+                <input type="number" name="usta" class="edit-input" value="{{ player.usta }}">
+            </p>
+            <p>
+                <strong>USTA Date:</strong>
+                <input type="date" name="usta_date" class="edit-input" value="{{ player.usta_date }}">
+            </p>
+            <p>
+                <strong>City:</strong>
+                <input type="text" name="city" class="edit-input" value="{{ player.city }}">
+            </p>
+            <p>
+                <strong>State:</strong>
+                <input type="text" name="state" class="edit-input" value="{{ player.state }}">
+            </p>
+            <p>
+                <strong>Country:</strong>
+                <input type="text" name="country" class="edit-input" value="{{ player.country }}">
+            </p>
+            <p>
+                <strong>Note:</strong>
+                <textarea name="note" class="edit-input">{{ player.note }}</textarea>
+            </p>
+            <button type="submit" id="save-button" class="save-button">Save</button>
+        </form>
+
+        <!-- Delete button -->
+        <form method="POST" action="{{ url_for('player.delete_player', player_id=player.id) }}" onsubmit="return confirm('Are you sure you want to delete this player?');">
+            <button type="submit" class="delete-button">Delete Player</button>
+        </form>
+    </div>
+</body>
+</html>

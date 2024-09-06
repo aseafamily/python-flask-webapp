@@ -1,0 +1,92 @@
+<!-- player_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player List</title>
+    <link rel="stylesheet" href="path/to/your/styles.css"> <!-- Link to your existing CSS -->
+    <style>
+        /* Mobile-friendly styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .letter-links {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .letter-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: blue;
+        }
+        .search-box {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            display: block;
+            margin-bottom: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <h1>Player List</h1>
+
+    <a href="/" class="back-link">Home</a>
+    
+    <div class="search-box">
+        <form method="GET" action="/player">
+            <input type="text" name="search" placeholder="Search players..." value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="letter-links">
+        {% for letter in grouped_players.keys() %}
+            <a href="#{{ letter }}">{{ letter }}</a>
+        {% endfor %}
+    </div>
+
+    {% for letter, players in grouped_players.items() %}
+        <h2 id="{{ letter }}">{{ letter }}</h2>
+        <ul>
+            {% for player in players %}
+                <li>
+                    <a href="/player/{{ player.id }}">{{ player.first_name }} {{ player.last_name }}</a>
+                    {% if player.gender %}
+                    <span> - {{ player.gender }}</span>
+                    {% endif %}
+                    {% if player.birthday %}
+                        <span> - {{ (today.year - player.birthday.year) }}y</span>
+                    {% endif %}
+                    {% if player.city %}
+                        <span> - {{ player.city }}, {{ player.state }}</span>
+                    {% endif %}
+                    {% if player.country and player.country not in ['US', 'USA'] %}
+                        <span>, {{ player.country }}</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>
