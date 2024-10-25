@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, abort
 import json
 import os
 from azure.storage.fileshare import ShareFileClient
@@ -397,3 +397,46 @@ def sort_logs(log_config, logs):
         sorted_logs = logs
 
     return sorted_logs
+
+@lt_bp.route('/lt/update_log_type', methods=['GET', 'POST'])
+@login_required
+def update_log_type():
+    if request.method == 'POST':
+        data = request.get_json()
+        log_type_key = data.get('logType')
+        
+        if log_type_key:
+            config = load_config()
+            log_types = config.get('log_types', {})
+            
+            if log_type_key in log_types:
+                log_types[log_type_key].update({
+                    'title': data['title'],
+                    'default_sort': data['defaultSort'],
+                    'stats': data['stats'],
+                    'fields': {
+                        field_data['key']: {
+                            **{k: v for k, v in field_data.items() if k != 'key'},
+                            'required': field_data.get('required') == 'on',
+                            'autocomplete': field_data.get('autocomplete') == 'on'
+                        } for field_key, field_data in data['fields'].items()
+                    }
+                })
+                # Save updated config
+                save_config(config)
+                # Redirect to the GET request to show the updated log type
+                return redirect(url_for('lt.update_log_type', logType=log_type_key))
+
+            # If log type is not found, raise an error
+            abort(404, description="Log type not found")
+
+    # Handle GET request
+    log_type_key = request.args.get('logType')
+    config = load_config()
+    log_types = config.get('log_types', {})
+    
+    if log_type_key in log_types:
+        log_type_data = log_types[log_type_key]
+        return render_template('lt_edit_log_type.html', log_type=log_type_key, log_type_data=log_type_data)
+    
+    abort(404, description="Log type not found")
