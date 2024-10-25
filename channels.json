@@ -9,22 +9,6 @@
         "last_number": 5
       },
       {
-        "channel_title": "BBCNews",
-        "channel_id": "UC16niRr50-MSBwiO3YDb3RA",
-        "min_minutes": 1,
-        "max_minutes": 10,
-        "last_hours": 24,
-        "last_number": 2
-      },
-      {
-        "channel_title": "bbcnewschinese",
-        "channel_id": "UCb3TZ4SD_Ys3j4z0-8o6auA",
-        "min_minutes": 1,
-        "max_minutes": 10,
-        "last_hours": 24,
-        "last_number": 5
-      },
-      {
         "channel_title": "bnpparibasopen",
         "channel_id": "UCeq1dcadnB4dekHvVWeCPSw",
         "min_minutes": 1,
