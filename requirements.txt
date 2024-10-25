@@ -18,3 +18,4 @@ pytz
 azure-storage-file-share
 Pillow
 markdown2
+google-api-python-client
