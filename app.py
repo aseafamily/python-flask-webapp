@@ -20,9 +20,11 @@ from bp_reflection import reflection_bp
 import json
 from bp_test import test_bp
 from bp_player import player_bp
-
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

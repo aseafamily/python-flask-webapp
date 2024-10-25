@@ -57,7 +57,7 @@ def parse_duration(duration):
     return total_seconds
 
 def get_last_five_regular_videos(channel_id, min_minutes=0, max_minutes=float('inf'), last_hours=0, last_number=5):
-    youtube = build('youtube', 'v3', developerKey="AIzaSyAU3SYYMw9ayggliC0fW7mNP2kjn6il9tc")
+    youtube = build('youtube', 'v3', developerKey="AIzaSyBK-dnlZDveYyXoddWCxcWygFMalPsmH_0")
     time_threshold = datetime.utcnow() - timedelta(hours=last_hours)
 
     request = youtube.search().list(
