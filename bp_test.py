@@ -6,13 +6,24 @@ import re
 import random
 from datetime import datetime, timedelta
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 test_bp = Blueprint('test', __name__)
 
-key_magilkaTv = "AIzaSyAU3SYYMw9ayggliC0fW7mNP2kjn6il9tc"
-key_liveframe = "AIzaSyBK-dnlZDveYyXoddWCxcWygFMalPsmH_0"
-key_myproject = "AIzaSyCqJZrA4X0UJIqWXR1E_h3e48K2i3pvCuw"
-current_key = key_myproject
+# List of YouTube Data API keys
+API_KEYS = [
+    'AIzaSyCqJZrA4X0UJIqWXR1E_h3e48K2i3pvCuw',
+    'AIzaSyBK-dnlZDveYyXoddWCxcWygFMalPsmH_0',
+    'AIzaSyAU3SYYMw9ayggliC0fW7mNP2kjn6il9tc'
+]
+current_api_key_index = 0
+
+def get_current_api_key():
+    return API_KEYS[current_api_key_index]
+
+def rotate_api_key():
+    global current_api_key_index
+    current_api_key_index = (current_api_key_index + 1) % len(API_KEYS)
 
 @test_bp.route('/test/markdown', methods=['GET', 'POST'])
 def markdown_form():
@@ -27,7 +38,6 @@ def markdown_form():
 @test_bp.route('/test/tennis_match_control', methods=['GET', 'POST'])
 def tennis_match_control():
     return render_template('test_tennis_match_control.html')
-
 
 @test_bp.route('/api/youtube', methods=['GET'])
 def youtube_api():
@@ -89,15 +99,26 @@ def format_duration(total_seconds):
     return "PT" + "".join(duration_parts)
 
 def get_video_details(video_ids):
-    youtube = build('youtube', 'v3', developerKey=current_key)
+    global current_api_key_index
+    youtube = build('youtube', 'v3', developerKey=get_current_api_key())
     video_details_request = youtube.videos().list(
         part='contentDetails,snippet',
         id=','.join(video_ids)
     )
-    return video_details_request.execute()
+    try:
+        return video_details_request.execute()
+    except HttpError as e:
+        if e.resp.status == 403:  # Quota exceeded
+            rotate_api_key()  # Rotate to the next API key
+            if current_api_key_index == 0:  # If we have cycled through all keys
+                raise Exception("All API keys have been exhausted. Please try again later.")
+            return get_video_details(video_ids)  # Retry with the new key
+        else:
+            raise  # Raise other errors
 
 def get_last_five_regular_videos(channel_id, min_minutes=0, max_minutes=float('inf'), last_hours=0, last_number=5):
-    youtube = build('youtube', 'v3', developerKey=current_key)
+    global current_api_key_index
+    youtube = build('youtube', 'v3', developerKey=get_current_api_key())
     time_threshold = datetime.utcnow() - timedelta(hours=last_hours)
 
     # Request to retrieve the latest videos from the channel
@@ -109,7 +130,17 @@ def get_last_five_regular_videos(channel_id, min_minutes=0, max_minutes=float('i
         type='video'
     )
     
-    response = request.execute()
+    try:
+        response = request.execute()
+    except HttpError as e:
+        if e.resp.status == 403:  # Quota exceeded
+            rotate_api_key()  # Rotate to the next API key
+            if current_api_key_index == 0:  # If we have cycled through all keys
+                raise Exception("All API keys have been exhausted. Please try again later.")
+            return get_last_five_regular_videos(channel_id, min_minutes, max_minutes, last_hours, last_number)  # Retry with the new key
+        else:
+            raise  # Raise other errors
+
     video_ids = [item['id']['videoId'] for item in response['items'] if item['id']['kind'] == 'youtube#video']
     
     # Get details (including duration) of each video in a single request
