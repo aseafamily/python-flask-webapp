@@ -3,7 +3,7 @@
       {
         "channel_title": "australianopen",
         "channel_id": "UCeTKJSW1NTAkf27nNmjWt5A",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -11,7 +11,7 @@
       {
         "channel_title": "bnpparibasopen",
         "channel_id": "UCeq1dcadnB4dekHvVWeCPSw",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -19,7 +19,7 @@
       {
         "channel_title": "ITF.Tennis",
         "channel_id": "UCsyvlpbK0BTEc3jec6nhPyQ",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -27,7 +27,7 @@
       {
         "channel_title": "LaverCup",
         "channel_id": "UC759rBUss3b39R0j6u_ECPA",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -35,7 +35,7 @@
       {
         "channel_title": "Microsoft",
         "channel_id": "UCFtEEv80fQVKkD4h1PF-Xqw",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 15,
         "last_hours": 24,
         "last_number": 5
@@ -43,7 +43,7 @@
       {
         "channel_title": "rolandgarros",
         "channel_id": "UCF3K1Jf8hjFW8qliei8fQ3A",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -51,7 +51,7 @@
       {
         "channel_title": "usta",
         "channel_id": "UC7joGi4V3-r9i5tmmw7dM6g",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -59,7 +59,7 @@
       {
         "channel_title": "usopen",
         "channel_id": "UCXbboag48Qlr78zzz6SkzkQ",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -67,7 +67,7 @@
       {
         "channel_title": "Wimbledon",
         "channel_id": "UCNa8NxMgSm7m4Ii9d4QGk1Q",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -75,7 +75,7 @@
       {
         "channel_title": "WTA",
         "channel_id": "UCaBIVVpHjq6j3tSyxwTE-8Q",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -83,7 +83,7 @@
       {
         "channel_title": "fox13seattle",
         "channel_id": "UC5bKZHg4PzURMOWcvanl6nA",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 10,
         "last_hours": 24,
         "last_number": 5
@@ -91,7 +91,7 @@
       {
         "channel_title": "KING5Seattle",
         "channel_id": "UCp1KrVaZDZ7BOI_QBuTWWmg",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 10,
         "last_hours": 24,
         "last_number": 5
@@ -99,7 +99,7 @@
       {
         "channel_title": "komonews",
         "channel_id": "UC__2_0RJ8XnHt2angfw6S1Q",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 10,
         "last_hours": 24,
         "last_number": 5
@@ -107,7 +107,7 @@
       {
         "channel_title": "ForbesBreakingNews",
         "channel_id": "UCg40OxZ1GYh3u3jBntB6DLg",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 10,
         "last_hours": 24,
         "last_number": 5
@@ -115,7 +115,7 @@
       {
         "channel_title": "wsj",
         "channel_id": "UCK7tptUDHh-RYDsdxO1-5QQ",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 10,
         "last_hours": 24,
         "last_number": 5
@@ -123,7 +123,7 @@
       {
         "channel_title": "AI.Uncovered",
         "channel_id": "UCUTF61UNExRdjmoK5mXwWfQ",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 20,
         "last_hours": 48,
         "last_number": 5
@@ -131,8 +131,24 @@
       {
         "channel_title": "yishushi",
         "channel_id": "UC5_qnc3r9Ln4nrGT0sWPgaw",
-        "min_minutes": 1,
+        "min_minutes": 2,
         "max_minutes": 5,
+        "last_hours": 48,
+        "last_number": 5
+      },
+      {
+        "channel_title": "TennisUp-es3zv",
+        "channel_id": "UC2m24Axa-Du8Oe_pewg_f-A",
+        "min_minutes": 2,
+        "max_minutes": 15,
+        "last_hours": 48,
+        "last_number": 5
+      },
+      {
+        "channel_title": "rolexparismasters",
+        "channel_id": "UCM1g2Kk852YMG9iEFeyhkMA",
+        "min_minutes": 2,
+        "max_minutes": 15,
         "last_hours": 48,
         "last_number": 5
       }
