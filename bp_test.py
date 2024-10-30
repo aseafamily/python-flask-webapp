@@ -12,6 +12,8 @@ test_bp = Blueprint('test', __name__)
 
 # List of YouTube Data API keys
 API_KEYS = [
+    'AIzaSyCBQC-t1rS7_AfTupodVZmAH9ey6eooCF0',
+    'AIzaSyAvwBviIPoESxTjciXlwNxeD2LQ_agjfs8',
     'AIzaSyCqJZrA4X0UJIqWXR1E_h3e48K2i3pvCuw',
     'AIzaSyBK-dnlZDveYyXoddWCxcWygFMalPsmH_0',
     'AIzaSyAU3SYYMw9ayggliC0fW7mNP2kjn6il9tc'
