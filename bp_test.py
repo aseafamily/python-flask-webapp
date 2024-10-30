@@ -9,6 +9,11 @@ from googleapiclient.discovery import build
 
 test_bp = Blueprint('test', __name__)
 
+key_magilkaTv = "AIzaSyAU3SYYMw9ayggliC0fW7mNP2kjn6il9tc"
+key_liveframe = "AIzaSyBK-dnlZDveYyXoddWCxcWygFMalPsmH_0"
+key_myproject = "AIzaSyCqJZrA4X0UJIqWXR1E_h3e48K2i3pvCuw"
+current_key = key_myproject
+
 @test_bp.route('/test/markdown', methods=['GET', 'POST'])
 def markdown_form():
     initial_content = "# Hello World\n\nThis is a simple **Hello World** markdown example.\n\n- Item 1\n- Item 2\n- Item 3\n\nEnjoy writing markdown with SimpleMDE!"
@@ -84,7 +89,7 @@ def format_duration(total_seconds):
     return "PT" + "".join(duration_parts)
 
 def get_video_details(video_ids):
-    youtube = build('youtube', 'v3', developerKey="AIzaSyAU3SYYMw9ayggliC0fW7mNP2kjn6il9tc")
+    youtube = build('youtube', 'v3', developerKey=current_key)
     video_details_request = youtube.videos().list(
         part='contentDetails,snippet',
         id=','.join(video_ids)
@@ -92,7 +97,7 @@ def get_video_details(video_ids):
     return video_details_request.execute()
 
 def get_last_five_regular_videos(channel_id, min_minutes=0, max_minutes=float('inf'), last_hours=0, last_number=5):
-    youtube = build('youtube', 'v3', developerKey="AIzaSyAU3SYYMw9ayggliC0fW7mNP2kjn6il9tc")
+    youtube = build('youtube', 'v3', developerKey=current_key)
     time_threshold = datetime.utcnow() - timedelta(hours=last_hours)
 
     # Request to retrieve the latest videos from the channel
