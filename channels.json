@@ -137,18 +137,74 @@
         "last_number": 5
       },
       {
-        "channel_title": "TennisUp-es3zv",
-        "channel_id": "UC2m24Axa-Du8Oe_pewg_f-A",
+        "channel_title": "rolexparismasters",
+        "channel_id": "UCM1g2Kk852YMG9iEFeyhkMA",
         "min_minutes": 2,
         "max_minutes": 15,
         "last_hours": 48,
         "last_number": 5
       },
       {
-        "channel_title": "rolexparismasters",
-        "channel_id": "UCM1g2Kk852YMG9iEFeyhkMA",
+        "channel_title": "YahooFinance",
+        "channel_id": "UCEAZeUIeJs0IjQiqTCdVSIg",
         "min_minutes": 2,
-        "max_minutes": 15,
+        "max_minutes": 10,
+        "last_hours": 24,
+        "last_number": 5
+      },
+      {
+        "channel_title": "FIFA",
+        "channel_id": "UCpcTrCXblq78GZrTUTLWeBw",
+        "min_minutes": 2,
+        "max_minutes": 10,
+        "last_hours": 24,
+        "last_number": 5
+      },
+      {
+        "channel_title": "Olympics",
+        "channel_id": "UCTl3QQTvqHFjurroKxexy2Q",
+        "min_minutes": 2,
+        "max_minutes": 10,
+        "last_hours": 24,
+        "last_number": 5
+      },
+      {
+        "channel_title": "CNET",
+        "channel_id": "UCOmcA3f_RrH6b9NmcNa4tdg",
+        "min_minutes": 2,
+        "max_minutes": 10,
+        "last_hours": 24,
+        "last_number": 5
+      },
+      {
+        "channel_title": "FinancialTimes",
+        "channel_id": "UCoUxsWakJucWg46KW5RsvPw",
+        "min_minutes": 2,
+        "max_minutes": 10,
+        "last_hours": 24,
+        "last_number": 5
+      },
+      {
+        "channel_title": "Technology News",
+        "channel_id": "UClnA6kw0Qb_Cn-ersL7xg7A",
+        "min_minutes": 2,
+        "max_minutes": 10,
+        "last_hours": 24,
+        "last_number": 5
+      },
+      {
+        "channel_title": "Sports News",
+        "channel_id": "UCEl0qh9X3kuL1RdFHng497Q",
+        "min_minutes": 2,
+        "max_minutes": 10,
+        "last_hours": 24,
+        "last_number": 5
+      },
+      {
+        "channel_title": "Science News",
+        "channel_id": "UC4WPFQWSvsDuUKsIjXrgCEw",
+        "min_minutes": 2,
+        "max_minutes": 10,
         "last_hours": 48,
         "last_number": 5
       }
