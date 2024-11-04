@@ -16,7 +16,14 @@ API_KEYS = [
     'AIzaSyAvwBviIPoESxTjciXlwNxeD2LQ_agjfs8',
     'AIzaSyCqJZrA4X0UJIqWXR1E_h3e48K2i3pvCuw',
     'AIzaSyBK-dnlZDveYyXoddWCxcWygFMalPsmH_0',
-    'AIzaSyAU3SYYMw9ayggliC0fW7mNP2kjn6il9tc'
+    'AIzaSyAU3SYYMw9ayggliC0fW7mNP2kjn6il9tc',
+    'AIzaSyByzU-kn4lFEFnDaz66sUr_Ky3Oia0gSes',
+    'AIzaSyCyp6WOJol8JQ1_6M0x4njkr9Y2nierC9E',
+    'AIzaSyCEdLlTKDpwfcsb2ydeYVkzBKH-KBReY7Q',
+    'AIzaSyA8Dm7MpI-XcNajSQ4zJJyJMpdNWVtz5Dw',
+    'AIzaSyAYipHYSpqqkKXiQ4av8C-0QTRVWW8WObo',
+    'AIzaSyDOibP9BHXARLC0yuAr85TkG1VPrSFx2Q8',
+    'AIzaSyAEXepoY2SQg9dx3DhIhIh-JcEznaFZOc0'
 ]
 current_api_key_index = 0
 
@@ -38,7 +45,7 @@ def rotate_api_key():
 def markdown_form():
     initial_content = "# Hello World\n\nThis is a simple **Hello World** markdown example.\n\n- Item 1\n- Item 2\n- Item 3\n\nEnjoy writing markdown with SimpleMDE!"
 
-    if request.method == 'POST':
+    if request.method == 'POST': 
         content = request.form['content']
         html_content = markdown2.markdown(content)
         return render_template('test_display_markdown.html', content=html_content)
