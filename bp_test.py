@@ -20,7 +20,14 @@ API_KEYS = [
 ]
 current_api_key_index = 0
 
+# Flag to check if the keys have been shuffled
+keys_shuffled = False
+
 def get_current_api_key():
+    global keys_shuffled
+    if not keys_shuffled:
+        random.shuffle(API_KEYS)  # Shuffle the API keys
+        keys_shuffled = True  # Set the flag to True after shuffling
     return API_KEYS[current_api_key_index]
 
 def rotate_api_key():
