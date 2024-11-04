@@ -49,8 +49,7 @@ def youtube_api():
 
     channels = load_channels(file_path)
     all_videos_info = []
-    total_duration_seconds = 0
-
+    
     if channels:
         for channel in channels:
             channel_id = channel['channel_id']
@@ -59,19 +58,16 @@ def youtube_api():
             last_hours = channel.get('last_hours', 0)
             last_number = channel.get('last_number', 5)
 
-            videos_info, total_duration = get_last_five_regular_videos(channel_id, min_minutes=min_minutes, max_minutes=max_minutes, last_hours=last_hours, last_number=last_number)
+            videos_info = get_last_five_regular_videos(channel_id, min_minutes=min_minutes, max_minutes=max_minutes, last_hours=last_hours, last_number=last_number)
             all_videos_info.extend(videos_info)
-            total_duration_seconds += total_duration  # Accumulate total duration
 
         # Shuffle the combined list of video information
         random.shuffle(all_videos_info)
         total_video_count = len(all_videos_info)
-        total_duration_iso = format_duration(total_duration_seconds)
-
+        
         return jsonify({
             "status": "success",
             "total_videos": total_video_count,
-            "total_duration": total_duration_iso,
             "videos": all_videos_info
         }), 200
     else:
@@ -125,7 +121,7 @@ def get_last_five_regular_videos(channel_id, min_minutes=0, max_minutes=float('i
 
     # Request to retrieve the latest videos from the channel
     request = youtube.search().list(
-        part='id',
+        part='id,snippet',  # Include snippet to get title and published date
         channelId=channel_id,
         maxResults=10,  # Request more than 5 to account for filtering out Shorts
         order='date',
@@ -143,38 +139,18 @@ def get_last_five_regular_videos(channel_id, min_minutes=0, max_minutes=float('i
         else:
             raise  # Raise other errors
 
-    video_ids = [item['id']['videoId'] for item in response['items'] if item['id']['kind'] == 'youtube#video']
-    
-    # Get details (including duration) of each video in a single request
-    if video_ids:
-        video_details_response = get_video_details(video_ids)
-    else:
-        return []
-
     regular_videos = []
-    total_duration_seconds = 0
     
-    for item in video_details_response['items']:
-        if 'duration' in item['contentDetails']:
-            duration = item['contentDetails']['duration']
-            total_seconds = parse_iso_duration(duration)
-            total_minutes = total_seconds / 60
-            
-            upload_time = item['snippet']['publishedAt']
-            upload_time = datetime.strptime(upload_time, "%Y-%m-%dT%H:%M:%SZ")
+    for item in response['items']:
+        if item['id']['kind'] == 'youtube#video':
+            video_info = {
+                'id': item['id']['videoId'],
+                'title': item['snippet']['title'],  # Get title from snippet
+                'published_at': item['snippet']['publishedAt']  # Get published date
+            }
+            regular_videos.append(video_info)
 
-            if (min_minutes <= total_minutes <= max_minutes) and (upload_time >= time_threshold):
-                video_info = {
-                    'id': item['id'],
-                    'title': item['snippet']['title'],
-                    'duration': duration,
-                    'published_at': upload_time.isoformat(),
-                    'channel_title': item['snippet']['channelTitle']
-                }
-                regular_videos.append(video_info)
-                total_duration_seconds += total_seconds  # Accumulate total duration
-
-    return regular_videos[:last_number], total_duration_seconds
+    return regular_videos[:last_number]  # Return the requested number of videos
 
 def load_channels(file_path):
     try:
