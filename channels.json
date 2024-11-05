@@ -153,23 +153,7 @@
         "last_number": 5
       },
       {
-        "channel_title": "Foxsoccer",
-        "channel_id": "UCooTLkxcpnTNx6vfOovfBFA",
-        "min_minutes": 2,
-        "max_minutes": 10,
-        "last_hours": 24,
-        "last_number": 5
-      },
-      {
-        "channel_title": "Olympics",
-        "channel_id": "UCTl3QQTvqHFjurroKxexy2Q",
-        "min_minutes": 2,
-        "max_minutes": 10,
-        "last_hours": 24,
-        "last_number": 5
-      },
-      {
-        "channel_title": "CNET",
+        "channel_title": "CNET", 
         "channel_id": "UCOmcA3f_RrH6b9NmcNa4tdg",
         "min_minutes": 2,
         "max_minutes": 10,
