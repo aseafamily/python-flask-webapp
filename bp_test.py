@@ -156,13 +156,17 @@ def get_last_five_regular_videos(channel_id, min_minutes=0, max_minutes=float('i
     regular_videos = []
     
     for item in response['items']:
-        if item['id']['kind'] == 'youtube#video':
-            video_info = {
-                'id': item['id']['videoId'],
-                'title': item['snippet']['title'],  # Get title from snippet
-                'published_at': item['snippet']['publishedAt']  # Get published date
-            }
-            regular_videos.append(video_info)
+        published_at_str = item['snippet']['publishedAt']
+        published_at = datetime.strptime(published_at_str, "%Y-%m-%dT%H:%M:%SZ")  # Parse the published date
+
+        if published_at >= time_threshold:
+            if item['id']['kind'] == 'youtube#video':
+                video_info = {
+                    'id': item['id']['videoId'],
+                    'title': item['snippet']['title'],  # Get title from snippet
+                    'published_at': item['snippet']['publishedAt']  # Get published date
+                }
+                regular_videos.append(video_info)
 
     return regular_videos[:last_number]  # Return the requested number of videos
 
