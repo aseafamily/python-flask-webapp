@@ -7,6 +7,7 @@ import random
 from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from azure.storage.fileshare import ShareFileClient
 
 test_bp = Blueprint('test', __name__)
 
@@ -58,10 +59,11 @@ def tennis_match_control():
 @test_bp.route('/api/youtube', methods=['GET'])
 def youtube_api():
     # Get the directory of the current file
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(current_dir, 'channels.json')  # Construct the full path
+    #current_dir = os.path.dirname(os.path.abspath(__file__))
+    #file_path = os.path.join(current_dir, 'channels.json')  # Construct the full path
 
-    channels = load_channels(file_path)
+    #channels = load_channels_local(file_path)
+    channels = load_channels() 
     all_videos_info = []
     
     if channels:
@@ -71,9 +73,13 @@ def youtube_api():
             max_minutes = channel.get('max_minutes', float('inf'))
             last_hours = channel.get('last_hours', 0)
             last_number = channel.get('last_number', 5)
+            is_active = channel.get('is_active', True)  # Default value is True
 
-            videos_info = get_last_five_regular_videos(channel_id, min_minutes=min_minutes, max_minutes=max_minutes, last_hours=last_hours, last_number=last_number)
-            all_videos_info.extend(videos_info)
+            if is_active:  # Check if the channel is active
+                videos_info = get_last_five_regular_videos(channel_id, min_minutes=min_minutes, max_minutes=max_minutes, last_hours=last_hours, last_number=last_number)
+                all_videos_info.extend(videos_info)
+            else:
+                print(f"Channel {channel_id} is not active, skipping.")
 
         # Shuffle the combined list of video information
         random.shuffle(all_videos_info)
@@ -86,6 +92,27 @@ def youtube_api():
         }), 200
     else:
         return jsonify({"status": "error", "message": "No channels loaded."}), 404
+
+def load_channels():
+    """Load and return the configuration from Azure Blob Storage."""
+    connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    file_share_name = "bhmfiles"
+    directory_name = "youtube"  # Updated directory name
+    filename = "channels.json"   # Updated file name
+
+    file_path = f"{directory_name}/{filename}"
+
+    file_client = ShareFileClient.from_connection_string(
+        connection_string, file_share_name, file_path)
+
+    # Download the blob data
+    download = file_client.download_file()
+    downloaded_bytes = download.readall()
+    file_content = downloaded_bytes.decode('utf-8')
+
+    # Parse and return the JSON data
+    data = json.loads(file_content)
+    return data.get('channels', [])
 
 def parse_iso_duration(duration):
     pattern = re.compile(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?')
@@ -170,7 +197,7 @@ def get_last_five_regular_videos(channel_id, min_minutes=0, max_minutes=float('i
 
     return regular_videos[:last_number]  # Return the requested number of videos
 
-def load_channels(file_path):
+def load_channels_local(file_path):
     try:
         with open(file_path, 'r') as file:
             data = json.load(file)
