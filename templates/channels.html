@@ -84,11 +84,10 @@
     <table>
         <thead>
             <tr>
-                <th>Channel Title</th>
-                <th>ID</th>
-                <th>Last Hours</th>
-                <th>Last Number</th>
-                <th>Is Active</th>
+                <th>Title</th>
+                <th>Period</th>
+                <th>Count</th>
+                <th>Active</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -96,7 +95,6 @@
         {% for channel in channels %}
             <tr>
                 <td>{{ channel.channel_title }}</td>
-                <td>{{ channel.channel_id }}</td>
                 <td>{{ channel.last_hours }}</td>
                 <td>{{ channel.last_number }}</td>
                 <td>{{ channel.is_active }}</td>
