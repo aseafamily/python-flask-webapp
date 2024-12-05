@@ -237,8 +237,8 @@ def channels():
         new_channel = {
             'channel_title': request.form['title'],
             'channel_id': request.form['id'],  # Keep as string
-            'last_hours': request.form['last_hours'],
-            'last_number': request.form['last_number'],
+            'last_hours': int(request.form['last_hours']),
+            'last_number': int(request.form['last_number']),
             'is_active': request.form.get('is_active') == 'on'
         }
         channels_data = load_channels()  # Function to load channels.json
@@ -259,8 +259,8 @@ def update_channel(channel_id):
     if request.method == 'POST':
         # Update channel details
         channel['channel_title'] = request.form['title']
-        channel['last_hours'] = request.form['last_hours']
-        channel['last_number'] = request.form['last_number']
+        channel['last_hours'] = int(request.form['last_hours'])
+        channel['last_number'] = int(request.form['last_number'])
         # Check if is_active is in the form data
         channel['is_active'] = request.form.get('is_active') == 'on'  # Set to True if checked, False otherwise
         save_channels(channels_data)
