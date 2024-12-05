@@ -94,7 +94,7 @@
         <tbody>
         {% for channel in channels %}
             <tr>
-                <td>{{ channel.channel_title }}</td>
+                <td><a href="https://www.youtube.com/channel/{{ channel.channel_id }}" target="_blank">{{ channel.channel_title }}</a></td>
                 <td>{{ channel.last_hours }}</td>
                 <td>{{ channel.last_number }}</td>
                 <td>{{ channel.is_active }}</td>
