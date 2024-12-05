@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, abort
 import markdown2
 import os
 import json
@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from azure.storage.fileshare import ShareFileClient
+from flask_login import login_required
 
 test_bp = Blueprint('test', __name__)
 
@@ -208,3 +209,69 @@ def load_channels_local(file_path):
     except json.JSONDecodeError:
         print("Error decoding JSON.")
         return []
+
+def save_channels(channels_data):
+    """Save the channels data to a JSON file."""
+    connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    file_share_name = "bhmfiles"
+    directory_name = "youtube"
+    filename = "channels.json"
+
+    file_path = f"{directory_name}/{filename}"
+
+    file_client = ShareFileClient.from_connection_string(
+        connection_string, file_share_name, file_path)
+
+    # Convert channels data to JSON format
+    data_to_save = {"channels": channels_data}
+    json_data = json.dumps(data_to_save, indent=4)
+
+    # Upload the JSON data to Azure Blob Storage
+    file_client.upload_file(json_data)
+
+@test_bp.route('/channels', methods=['GET', 'POST'])
+@login_required
+def channels():
+    if request.method == 'POST':
+        # Handle adding a new channel
+        new_channel = {
+            'channel_title': request.form['title'],
+            'channel_id': request.form['id'],  # Keep as string
+            'last_hours': request.form['last_hours'],
+            'last_number': request.form['last_number'],
+            'is_active': request.form.get('is_active') == 'on'
+        }
+        channels_data = load_channels()  # Function to load channels.json
+        channels_data.append(new_channel)
+        save_channels(channels_data)  # Function to save channels.json
+        return redirect(url_for('test.channels'))
+
+    channels_data = load_channels()  # Load existing channels
+    channels_data.sort(key=lambda c: c['channel_title'].lower())  # Sort channels by title (case insensitive)
+    return render_template('channels.html', channels=channels_data)
+
+@test_bp.route('/channels/update/<string:channel_id>', methods=['GET', 'POST'])  # Change to string
+@login_required
+def update_channel(channel_id):
+    channels_data = load_channels()
+    channel = next((c for c in channels_data if c['channel_id'] == channel_id), None)  # Keep as string
+
+    if request.method == 'POST':
+        # Update channel details
+        channel['channel_title'] = request.form['title']
+        channel['last_hours'] = request.form['last_hours']
+        channel['last_number'] = request.form['last_number']
+        # Check if is_active is in the form data
+        channel['is_active'] = request.form.get('is_active') == 'on'  # Set to True if checked, False otherwise
+        save_channels(channels_data)
+        return redirect(url_for('test.channels'))
+
+    return render_template('channel_update.html', channel=channel)
+
+@test_bp.route('/channels/delete/<string:channel_id>', methods=['POST'])  # Change to string
+@login_required
+def delete_channel(channel_id):
+    channels_data = load_channels()
+    channels_data = [c for c in channels_data if c['channel_id'] != channel_id]  # Keep as string
+    save_channels(channels_data)
+    return redirect(url_for('test.channels'))
