@@ -1,5 +1,6 @@
 <html></html>
 <head>
+    <meta http-equiv="refresh" content="600">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
     <style>
@@ -85,6 +86,24 @@
     </div>
     <!-- from: https://masonry.desandro.com/  data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 250 } -->
     <div class="grid">
+        {% for item in items %}
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: #e2f6d3;">
+                {% if item.image_url %}
+                <div class="img-container">
+                    <img src="{{ item.image_url }}" alt="{{ item.title }}" />
+                </div>
+                {% endif %}
+                <div class="text-container">
+                    <a href="{{ item.url }}" target="_blank">{{ item.title }}</a>
+                </div>
+                <div class="time-container">
+                    {{ item.pub_date }} - {{ item.channel_name }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!--
         <div class="grid-item">
             <div class="grid-content" style="background-color: #e2f6d3;">
                 <div class="img-container">
@@ -98,38 +117,7 @@
                 </div>
             </div>
         </div>
-        <div class="grid-item">
-            <div class="grid-content" style="background-color: #efeff1;">
-                <div class="img-container">
-                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
-                </div>
-                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula.</div>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="grid-content" style="background-color: #f39f76;">
-                <div class="img-container">
-                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
-                </div>
-                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula. Proin luctus lorem nec nunc vehicula, a cursus arcu congue.</div>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="grid-content" style="background-color: #e9e3d4;">
-                <div class="img-container">
-                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
-                </div>
-                <div class="text-container">Lorem ipsum dolor sit amet.</div>
-            </div>
-        </div>
-        <div class="grid-item">
-            <div class="grid-content" style="background-color: lightskyblue;">
-                <div class="img-container">
-                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
-                </div>
-                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula. Proin luctus lorem nec nunc vehicula, a cursus arcu congue. In hac habitasse platea dictumst. Integer nec dolor sit amet nisl euismod aliquam. Nullam accumsan velit at facilisis tempus.</div>
-            </div>
-        </div>
+        -->
     </div>
 
     
