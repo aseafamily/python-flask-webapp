@@ -6,7 +6,7 @@
     <style>
         .grid-item 
         { 
-            width: 250px;
+            width: 330px;
             background: transparent;
         }
         .grid-item--width2 { width: 388px; }
@@ -34,7 +34,7 @@
             color: #c4c7c5;
             font-family: "Google Sans",sans-serif;
             font-weight: 400;
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             text-decoration: none;
         }
 
@@ -64,9 +64,10 @@
         <script>
             function setGridItemWidth() {
                 var deviceWidth = window.innerWidth; // Get the browser width
-                var columnWidth = 250; // Set the desired width for each column
+                var columnWidth = 300; // Set the desired width for each column
                 var columns = Math.floor((deviceWidth - 16) / columnWidth); // Calculate the number of columns
                 var finalWidth = (deviceWidth - 16) / columns; // Calculate grid item width
+                finalWidth = finalWidth -10;
 
                 $('.grid-item').css('width', finalWidth + 'px'); // Set the width
 
