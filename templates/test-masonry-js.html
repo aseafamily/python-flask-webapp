@@ -41,10 +41,31 @@
                 });
                 $grid.masonry('layout');
             }
+
+            function setGridItemWidth() {
+                var deviceWidth = window.innerWidth; // Get the browser width
+                var columnWidth = 250; // Set the desired width for each column
+                var columns = Math.floor((deviceWidth - 16) / columnWidth); // Calculate the number of columns
+                var finalWidth = (deviceWidth - 16) / columns; // Calculate grid item width
+
+                $('.grid-item').css('width', finalWidth + 'px'); // Set the width
+
+                var $grid = $('.grid').masonry({
+                    // options
+                    itemSelector: '.grid-item',
+                    columnWidth: finalWidth
+                });
+                $grid.masonry('layout');
+            }
+
+            $(document).ready(function() {
+                setGridItemWidth(); // Set width on page load
+                $(window).resize(setGridItemWidth); // Update width on window resize
+            });
         </script>
     </div>
-    <!-- from: https://masonry.desandro.com/ -->
-    <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 250 }'>
+    <!-- from: https://masonry.desandro.com/  data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 250 } -->
+    <div class="grid">
         <div class="grid-item">
             <div class="grid-content" style="background-color: #e2f6d3;">
                 <div class="img-container">
