@@ -15,8 +15,10 @@ RSS_FEEDS = [
     'https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml',
     'http://feeds.bbci.co.uk/news/technology/rss.xml',
     'http://feeds.bbci.co.uk/news/business/rss.xml',
-    'http://feeds.bbci.co.uk/news/rss.xml',
-    'http://feeds.bbci.co.uk/news/world/rss.xml'
+    'http://feeds.bbci.co.uk/news/world/rss.xml',
+    'https://news.google.com/rss/search?q=tennis&hl=en-US&gl=US&ceid=US:en',
+    'https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=finance&hl=en-US&gl=US&ceid=US:en'
     # Add more RSS feed URLs as needed
 ]
 
