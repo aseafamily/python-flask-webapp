@@ -1,0 +1,138 @@
+<html></html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+    <style>
+        .grid-item 
+        { 
+            width: 250px;
+            background: transparent;
+        }
+        .grid-item--width2 { width: 388px; }
+        .grid-content
+        {
+            margin: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #131314 !important;
+        }
+
+        .img-container img
+        {
+            width: 100%;
+        }
+
+        .text-container
+        {
+            padding: 10px;
+        }
+
+        .text-container a
+        {
+            color: #c4c7c5;
+            font-family: "Google Sans",sans-serif;
+            font-weight: 400;
+            font-size: 1.25rem;
+            text-decoration: none;
+        }
+
+        .time-container
+        {
+            color: #c4c7c5;
+            font-family: "Google Sans",sans-serif;
+            font-weight: 400;
+            font-size: 0.75rem;
+            line-height: 1.3;
+            padding: 5px;   
+        }
+
+        .time-divider
+        {
+            border:none;
+            height: 3px;
+            width: 3px;
+            border-radius: 1.5px;
+            margin: 0 4px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body style="background-color: #202124;">
+    <div>
+        <script>
+            function setGridItemWidth() {
+                var deviceWidth = window.innerWidth; // Get the browser width
+                var columnWidth = 250; // Set the desired width for each column
+                var columns = Math.floor((deviceWidth - 16) / columnWidth); // Calculate the number of columns
+                var finalWidth = (deviceWidth - 16) / columns; // Calculate grid item width
+
+                $('.grid-item').css('width', finalWidth + 'px'); // Set the width
+
+                var $grid = $('.grid').masonry({
+                    // options
+                    itemSelector: '.grid-item',
+                    columnWidth: finalWidth
+                });
+                $grid.masonry('layout');
+            }
+
+            $(document).ready(function() {
+                setGridItemWidth(); // Set width on page load
+                $(window).resize(setGridItemWidth); // Update width on window resize
+            });
+        </script>
+    </div>
+    <!-- from: https://masonry.desandro.com/  data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 250 } -->
+    <div class="grid">
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: #e2f6d3;">
+                <div class="img-container">
+                    <img src="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/3dc5/live/0319eff0-c74f-11ef-b840-8f0273a4db14.jpg" />
+                </div>
+                <div class="text-container">
+                    <a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
+                </div>
+                <div class="time-container">
+                    10 minutes ago - CNN
+                </div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: #efeff1;">
+                <div class="img-container">
+                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+                </div>
+                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula.</div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: #f39f76;">
+                <div class="img-container">
+                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+                </div>
+                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula. Proin luctus lorem nec nunc vehicula, a cursus arcu congue.</div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: #e9e3d4;">
+                <div class="img-container">
+                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+                </div>
+                <div class="text-container">Lorem ipsum dolor sit amet.</div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div class="grid-content" style="background-color: lightskyblue;">
+                <div class="img-container">
+                    <img src="https://photographylife.com/wp-content/uploads/2023/05/Nikon-Z8-Official-Samples-00002.jpg" />
+                </div>
+                <div class="text-container">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur laoreet diam eget neque sodales, ut commodo lorem vehicula. Proin luctus lorem nec nunc vehicula, a cursus arcu congue. In hac habitasse platea dictumst. Integer nec dolor sit amet nisl euismod aliquam. Nullam accumsan velit at facilisis tempus.</div>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+
+</html>
