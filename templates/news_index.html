@@ -1,6 +1,6 @@
 <html></html>
 <head>
-    <meta http-equiv="refresh" content="3600">
+    <meta http-equiv="refresh" content="600">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
     <style>
@@ -40,7 +40,7 @@
 
         .grid-item-wide .text-container a
         {
-            font-size: 4rem;
+            font-size: 3rem;
         }
 
         .time-container
@@ -133,7 +133,7 @@
         }
 
         // Timer to update items every minute
-        setInterval(updateItems, 60 * 1000); // 60000 milliseconds = 1 minute
+        //setInterval(updateItems, 10 * 1000); // 60000 milliseconds = 1 minute
 
         function setGridItemWidth() {
             var deviceWidth = window.innerWidth; // Get the browser width
@@ -142,16 +142,16 @@
             var finalWidth = (deviceWidth - 16) / columns; // Calculate grid item width
             finalWidth = finalWidth -10;
 
-            $('.grid-item').css('width', columnWidth + 'px'); // Set the width
+            $('.grid-item').css('width', finalWidth + 'px'); // Set the width
 
             var $grid = $('.grid').masonry({
                 // options
                 itemSelector: '.grid-item',
-                columnWidth: columnWidth
+                columnWidth: finalWidth
             });
             
             $('.grid-item-wide').each(function() {
-                //this.style.setProperty('width', (finalWidth * 2) + 'px', 'important');
+                this.style.setProperty('width', (finalWidth * 2) + 'px', 'important');
             });
 
             $grid.masonry('layout');
