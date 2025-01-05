@@ -1,6 +1,6 @@
 <html></html>
 <head>
-    <meta http-equiv="refresh" content="600">
+    <meta http-equiv="refresh" content="3600">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
     <style>
@@ -38,6 +38,11 @@
             text-decoration: none;
         }
 
+        .grid-item-wide .text-container a
+        {
+            font-size: 4rem;
+        }
+
         .time-container
         {
             color: #c4c7c5;
@@ -60,68 +65,106 @@
     </style>
 </head>
 <body style="background-color: #202124;">
-    <div>
-        <script>
-            function setGridItemWidth() {
-                var deviceWidth = window.innerWidth; // Get the browser width
-                var columnWidth = 300; // Set the desired width for each column
-                var columns = Math.floor((deviceWidth - 16) / columnWidth); // Calculate the number of columns
-                var finalWidth = (deviceWidth - 16) / columns; // Calculate grid item width
-                finalWidth = finalWidth -10;
+    <div class="grid" id="news-grid">     
+    </div>
 
-                $('.grid-item').css('width', finalWidth + 'px'); // Set the width
+    <script>
+        // Pass the items from Flask to JavaScript as a JSON object
+        const items = {{ items | tojson }};
 
-                var $grid = $('.grid').masonry({
-                    // options
-                    itemSelector: '.grid-item',
-                    columnWidth: finalWidth
-                });
-                $grid.masonry('layout');
-            }
+        // Function to generate grid items
+        function generateGridItems() {
+            const grid = document.getElementById('news-grid');
+            
+            // Clear existing content
+            grid.innerHTML = ''; 
 
-            $(document).ready(function() {
-                setGridItemWidth(); // Set width on page load
-                $(window).resize(setGridItemWidth); // Update width on window resize
+            // Generate new grid items
+            items.forEach((item, index) => {
+                const gridItem = document.createElement('div');
+                gridItem.className = 'grid-item';
+
+                // Apply 'grid-item-wide' class to the first item
+                if (index === 0) {
+                    gridItem.classList.add('grid-item-wide');
+                }
+
+                const gridContent = document.createElement('div');
+                gridContent.className = 'grid-content';
+
+                if (item.image_url) {
+                    const imgContainer = document.createElement('div');
+                    imgContainer.className = 'img-container';
+                    const img = document.createElement('img');
+                    img.src = item.image_url;
+                    img.alt = item.title;
+                    imgContainer.appendChild(img);
+                    gridContent.appendChild(imgContainer);
+                }
+
+                const textContainer = document.createElement('div');
+                textContainer.className = 'text-container';
+                const link = document.createElement('a');
+                link.href = item.url;
+                link.target = '_blank';
+                link.textContent = item.title;
+                textContainer.appendChild(link);
+                gridContent.appendChild(textContainer);
+
+                const timeContainer = document.createElement('div');
+                timeContainer.className = 'time-container';
+                timeContainer.textContent = `${item.pub_date} - ${item.channel_name}`;
+                gridContent.appendChild(timeContainer);
+
+                gridItem.appendChild(gridContent);
+                grid.appendChild(gridItem);
             });
-        </script>
-    </div>
-    <!-- from: https://masonry.desandro.com/  data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 250 } -->
-    <div class="grid">
-        {% for item in items %}
-        <div class="grid-item">
-            <div class="grid-content" style="background-color: #e2f6d3;">
-                {% if item.image_url %}
-                <div class="img-container">
-                    <img src="{{ item.image_url }}" alt="{{ item.title }}" />
-                </div>
-                {% endif %}
-                <div class="text-container">
-                    <a href="{{ item.url }}" target="_blank">{{ item.title }}</a>
-                </div>
-                <div class="time-container">
-                    {{ item.pub_date }} - {{ item.channel_name }}
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-        <!--
-        <div class="grid-item">
-            <div class="grid-content" style="background-color: #e2f6d3;">
-                <div class="img-container">
-                    <img src="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/3dc5/live/0319eff0-c74f-11ef-b840-8f0273a4db14.jpg" />
-                </div>
-                <div class="text-container">
-                    <a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
-                </div>
-                <div class="time-container">
-                    10 minutes ago - CNN
-                </div>
-            </div>
-        </div>
-        -->
-    </div>
+        }
+
+        // Function to update the items array
+        function updateItems() {
+            if (items.length > 0) {
+                // Move the first item to the end of the array
+                const firstItem = items.shift(); // Remove the first item
+                items.push(firstItem); // Add it to the end
+                generateGridItems(); // Regenerate the grid
+                setGridItemWidth();
+            }
+        }
+
+        // Timer to update items every minute
+        setInterval(updateItems, 60 * 1000); // 60000 milliseconds = 1 minute
+
+        function setGridItemWidth() {
+            var deviceWidth = window.innerWidth; // Get the browser width
+            var columnWidth = 300; // Set the desired width for each column
+            var columns = Math.floor((deviceWidth - 16) / columnWidth); // Calculate the number of columns
+            var finalWidth = (deviceWidth - 16) / columns; // Calculate grid item width
+            finalWidth = finalWidth -10;
+
+            $('.grid-item').css('width', finalWidth + 'px'); // Set the width
+
+            var $grid = $('.grid').masonry({
+                // options
+                itemSelector: '.grid-item',
+                columnWidth: finalWidth
+            });
+            
+            $('.grid-item-wide').each(function() {
+                this.style.setProperty('width', (finalWidth * 2) + 'px', 'important');
+            });
+
+            $grid.masonry('layout');
+        }
+
+        // Generate the grid items on page load
+        $(document).ready(function() {
+            generateGridItems();
+            setGridItemWidth(); // Set width on page load
+            $(window).resize(setGridItemWidth); // Update width on window resize
+        });
+    </script>
 
     
 </body>
-
 </html>

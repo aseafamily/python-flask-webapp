@@ -1,0 +1,132 @@
+<html>
+<head>
+    <meta http-equiv="refresh" content="600"> <!-- Refresh every 600 seconds (10 minutes) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: #202124;
+        }
+
+        .container {
+            display: flex;
+            flex: 1; /* Take up remaining height */
+            height: calc(100% - 40px); /* Subtract height of bottom section */
+        }
+
+        .left-section {
+            flex: 1; /* Take up remaining width and height */
+            background-color: #f0f0f0; /* Optional background color */
+        }
+
+        .right-section {
+            width: 240px; /* Fixed width */
+            background-color: #e2f6d3; /* Optional background color */
+            overflow-y: auto;
+        }
+
+        .bottom-section {
+            height: 40px; /* Fixed height */
+            background-color: #ccc; /* Optional background color */
+            width: 100%; /* Full width */
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none; /* Remove border */
+        }
+    </style>
+</head>
+<body style="background-color: #202124;">
+    <div class="container">
+        <div class="left-section">
+            <iframe id="news-iframe" src=""></iframe> <!-- Replace with your iframe source -->
+        </div>
+        <div class="right-section">
+            <!-- You can add content here for the right section -->
+            <ul id="news-list"></ul>
+        </div>
+    </div>
+    <div class="bottom-section">
+        <!-- Content for the bottom section -->
+        Bottom Section Content
+    </div>
+
+    <script>
+        // Pass the items from Flask to JavaScript
+        const items = {{ items | tojson }};
+        
+        // Function to update the iframe and the list
+        function updateDisplay() {
+            if (items.length > 0) {
+                let currentItem = items[0];
+
+                // Check if the URL is a Google News URL
+                if (currentItem.url.includes("news.google.com")) {
+                    // Call the /news/dg endpoint to decode the URL
+                    fetch(`/news/dg?url=${encodeURIComponent(currentItem.url)}`)
+                        .then(response => {
+                            if (response.ok) {
+                                return response.text(); // Get the decoded URL as text
+                            } else {
+                                throw new Error('Failed to decode URL');
+                            }
+                        })
+                        .then(decodedUrl => {
+                            // Set the iframe source to the decoded URL
+                            document.getElementById('news-iframe').src = decodedUrl;
+
+                            // Update currentItem with the decoded URL
+                            currentItem.url = decodedUrl; // Replace existing URL
+                            items[0] = currentItem; // Update the first item in the array
+                            updateNewsList(); // Update the news list
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Fallback to the original URL if decoding fails
+                            document.getElementById('news-iframe').src = currentItem.url;
+                            updateNewsList(); // Update the news list
+                        });
+                } else {
+                    // If it's not a Google News URL, set the iframe source directly
+                    document.getElementById('news-iframe').src = currentItem.url;
+                    updateNewsList(); // Update the news list
+                }
+            }
+        }
+
+        // Function to update the news list
+        function updateNewsList() {
+            const newsList = document.getElementById('news-list');
+            newsList.innerHTML = ''; // Clear the list
+            items.forEach((item, index) => {
+                if (index > 0) { // Skip the first item
+                    const listItem = document.createElement('li');
+                    listItem.textContent = item.title;
+                    newsList.appendChild(listItem);
+                }
+            });
+        }
+
+        // Timer to rotate items every minute
+        setInterval(() => {
+            if (items.length > 0) {
+                // Move the first item to the end of the array
+                const firstItem = items.shift(); // Remove the first item
+                items.push(firstItem); // Add it to the end
+
+                // Update the display
+                updateDisplay();
+            }
+        }, 60000); // 60000 milliseconds = 1 minute
+
+        // Initial display setup
+        updateDisplay();
+    </script>
+</body>
+</html>

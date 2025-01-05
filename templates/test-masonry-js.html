@@ -55,6 +55,11 @@
                     itemSelector: '.grid-item',
                     columnWidth: finalWidth
                 });
+
+                $('.grid-item-wide').each(function() {
+                    this.style.setProperty('width', (finalWidth * 2) + 'px', 'important');
+                });
+
                 $grid.masonry('layout');
             }
 
@@ -66,7 +71,7 @@
     </div>
     <!-- from: https://masonry.desandro.com/  data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 250 } -->
     <div class="grid">
-        <div class="grid-item">
+        <div class="grid-item grid-item-wide">
             <div class="grid-content" style="background-color: #e2f6d3;">
                 <div class="img-container">
                     <img src="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/3dc5/live/0319eff0-c74f-11ef-b840-8f0273a4db14.jpg" />
