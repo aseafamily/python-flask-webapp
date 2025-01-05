@@ -8,20 +8,19 @@ from collections import Counter
 import feedparser
 import random
 import requests
-from googlenewsdecoder import new_decoderv1
 
 news_bp = Blueprint('news', __name__)
 
 RSS_FEEDS = [
     #'https://www.seattletimes.com/eastside/feed/',
     'https://news.google.com/rss/search?q=tennis&hl=en-US&gl=US&ceid=US:en',
-    'https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en',
+    #'https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en',
     'https://feeds.bbci.co.uk/sport/tennis/rss.xml',
     'https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml',
-    'http://feeds.bbci.co.uk/news/technology/rss.xml',
-    'http://feeds.bbci.co.uk/news/business/rss.xml',
-    'http://feeds.bbci.co.uk/news/world/rss.xml',
-    'https://news.google.com/rss/search?q=finance&hl=en-US&gl=US&ceid=US:en'
+    #'http://feeds.bbci.co.uk/news/technology/rss.xml',
+    #'http://feeds.bbci.co.uk/news/business/rss.xml',
+    #'http://feeds.bbci.co.uk/news/world/rss.xml',
+    #'https://news.google.com/rss/search?q=finance&hl=en-US&gl=US&ceid=US:en'
     # Add more RSS feed URLs as needed
 ]
 
@@ -38,36 +37,6 @@ def time_ago(pub_date):
         return f"{hours} hours ago"
     else:
         return pub_date.strftime('%Y-%m-%d %H:%M:%S')  # Fallback to a standard format
-
-def get_final_url(url):
-    # Check if the URL is from Google News
-    if "news.google.com" in url:
-        try:
-            decoded_url = new_decoderv1(url, interval=1)
-            if decoded_url.get("status"):
-                return decoded_url["decoded_url"]
-            else:
-                return None
-        except Exception as e:
-            return None
-    return url  # Return the original URL if it's not from Google News
-
-@news_bp.route('/news/dg')
-def decode_google_news_id():
-    # Get the URL from the query string parameter
-    url = request.args.get('url')
-
-    if not url:
-        return 'No url provided', 400  # Return plain text with status code 400
-
-    try:
-        decoded_url = new_decoderv1(url, interval=5)
-        if decoded_url.get("status"):
-            return decoded_url["decoded_url"], 200  # Return the decoded URL with status code 200
-        else:
-            return 'Failed to decode URL', 500  # Return plain text with status code 500
-    except Exception as e:
-        return str(e), 500  # Return the error message as plain text
 
 @news_bp.route('/news')
 def index():
