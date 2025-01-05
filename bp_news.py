@@ -14,13 +14,13 @@ news_bp = Blueprint('news', __name__)
 RSS_FEEDS = [
     #'https://www.seattletimes.com/eastside/feed/',
     'https://news.google.com/rss/search?q=tennis&hl=en-US&gl=US&ceid=US:en',
-    #'https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en',
+    'https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en',
     'https://feeds.bbci.co.uk/sport/tennis/rss.xml',
     'https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml',
-    #'http://feeds.bbci.co.uk/news/technology/rss.xml',
-    #'http://feeds.bbci.co.uk/news/business/rss.xml',
-    #'http://feeds.bbci.co.uk/news/world/rss.xml',
-    #'https://news.google.com/rss/search?q=finance&hl=en-US&gl=US&ceid=US:en'
+    'http://feeds.bbci.co.uk/news/technology/rss.xml',
+    'http://feeds.bbci.co.uk/news/business/rss.xml',
+    'http://feeds.bbci.co.uk/news/world/rss.xml',
+    'https://news.google.com/rss/search?q=finance&hl=en-US&gl=US&ceid=US:en'
     # Add more RSS feed URLs as needed
 ]
 
